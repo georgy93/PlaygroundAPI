@@ -22,12 +22,12 @@ It has no dependencies on other application layers. The application entities and
 
 
 Application Core Types
-• Entities (business model classes that are persisted (POCOs)) and Aggregates
-• Interfaces (contracts)
-• Services (use cases)
-• DTOs (has only data)
-• Specifications (validation)
-• Exceptions
+â€¢ Entities (business model classes that are persisted (POCOs)) and Aggregates
+â€¢ Interfaces (contracts)
+â€¢ Services (use cases)
+â€¢ DTOs (has only data)
+â€¢ Specifications (validation)
+â€¢ Exceptions
 
 |                   |  DTO | Value Object  | POCO / Entity   |
 | -------------     | ---- | ------------- | ----            |
@@ -71,9 +71,9 @@ the use of the Repository design pattern.
   Generally, if we can move services into Application Core (without adding dependencies to this project), we should do so.
 
 Infrastructure Types
-• EF Core types (DbContext, Migrations)
-• Data access implementation types (Repositories)
-• Infrastructure-specific services (FileLogger, SmtpNotifier, etc.)
+â€¢ EF Core types (DbContext, Migrations)
+â€¢ Data access implementation types (Repositories)
+â€¢ Infrastructure-specific services (FileLogger, SmtpNotifier, etc.)
 
 
 Infrastructure logic
@@ -150,9 +150,9 @@ After everything becomes green the environment is ready.
 Another optional command is ```minikube addons enable metrics-server```, which when executed, will show Memory/CPU usage for the available Pods in the Minikube dashboard.
 
 more usefull commands:
-```kubectl top pods```                                    # Show metrics for all pods
-```kubectl top pod POD_NAME --containers```               # Show metrics for a given pod and its containers
-```kubectl top pod POD_NAME --sort-by=cpu```              # Show metrics for a given pod and sort it by 'cpu' or 'memory'
-```kubectl describe pods```                               # show info for pods
-```kubectl top nodes```                                   # Show metrics for all nodes
-```kubectl describe nodes```                              # show info for nodes
+```kubectl top pods```                                    # Show metrics for all pods__
+```kubectl top pod POD_NAME --containers```               # Show metrics for a given pod and its containers__
+```kubectl top pod POD_NAME --sort-by=cpu```              # Show metrics for a given pod and sort it by 'cpu' or 'memory'__
+```kubectl describe pods```                               # show info for pods__
+```kubectl top nodes```                                   # Show metrics for all nodes__
+```kubectl describe nodes```                              # show info for nodes__
