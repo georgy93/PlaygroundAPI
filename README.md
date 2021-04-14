@@ -149,7 +149,7 @@ After everything becomes green the environment is ready.
 
 Another optional command is ```minikube addons enable metrics-server```, which when executed, will show Memory/CPU usage for the available Pods in the Minikube dashboard.
 
-more usefull commands:
+more usefull commands:  
 ```kubectl top pods```                                    # Show metrics for all pods  
 ```kubectl top pod POD_NAME --containers```               # Show metrics for a given pod and its containers  
 ```kubectl top pod POD_NAME --sort-by=cpu```              # Show metrics for a given pod and sort it by 'cpu' or 'memory'  
