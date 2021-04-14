@@ -70,20 +70,20 @@ the use of the Repository design pattern.
   If we find that we have services defined in Infrastructure that do not depend on any infrastructure-related types, see if we can move them into our Application Core project. 
   Generally, if we can move services into Application Core (without adding dependencies to this project), we should do so.
 
-Infrastructure Types
-• EF Core types (DbContext, Migrations)
-• Data access implementation types (Repositories)
-• Infrastructure-specific services (FileLogger, SmtpNotifier, etc.)
+Infrastructure Types:  
+• EF Core types (DbContext, Migrations)  
+• Data access implementation types (Repositories)  
+• Infrastructure-specific services (FileLogger, SmtpNotifier, etc.)  
 
 
-Infrastructure logic
-- InMemory Data Cache
-- EF Core DbContext, Migrations
--  Database interaction
-- Service implementations (from Application core)
-- Other WEB API Clients
-- services with network calls and etc.
-- Pub/Sub with Message Brokers (RabbitMQ / Kafka / etc.)
+Infrastructure logic:  
+- InMemory Data Cache  
+- EF Core DbContext, Migrations  
+-  Database interaction  
+- Service implementations (from Application core)  
+- Other WEB API Clients  
+- services with network calls and etc.  
+- Pub/Sub with Message Brokers (RabbitMQ / Kafka / etc.)  
 <br/>
 
 ### WebUI / Host
