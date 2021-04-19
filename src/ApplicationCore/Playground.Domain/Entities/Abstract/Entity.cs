@@ -1,19 +1,30 @@
 ﻿namespace Playground.Domain.Entities.Abstract
 {
+    using MediatR;
     using System.Collections.Generic;
 
     public abstract class Entity<TKey> : IEntity<TKey>
         where TKey : IEqualityComparer<TKey>
     {
+        private readonly List<INotification> _domainEvents = new();
+
         private int? _requestedHashCode;
 
         public virtual TKey Id { get; protected set; }
+
+        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 
         /// <summary>
         /// Checks whether the entity was just now created. Returns true if the entity was created now and has not yet received an Id.
         /// </summary>
         /// <returns></returns>
         public bool IsTransient() => Equals(Id, default);
+
+        public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
+
+        public void RemoveDomainEvent(INotification eventItem) => _domainEvents.Remove(eventItem);
+
+        public void ClearDomainEvents() => _domainEvents.Clear();
 
         public override bool Equals(object other)
         {
