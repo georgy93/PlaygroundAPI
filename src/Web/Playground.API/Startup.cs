@@ -1,6 +1,7 @@
 namespace Playground.API
 {
     using Application;
+    using Behavior.Middlewares;
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ namespace Playground.API
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Persistence;
+    using Swagger;
 
     public class Startup
     {
@@ -40,11 +42,16 @@ namespace Playground.API
                 app.UseDeveloperExceptionPage();
             }
 
+            // The order of the middleware is considered so it must be paid attention!
             app.UseRouting()
-                .UseEndpoints(endpoints =>
-                {
-                    endpoints.MapControllers();
-                });
+               .UseCors("AllowAll")
+               .UseAuthentication()
+               .UseSwagger(Configuration)
+               .UseMiddleware<GlobalExceptionHandlingMiddleware>()
+               .UseEndpoints(endpoints =>
+               {
+                   endpoints.MapControllers();
+               });
         }
     }
 }
