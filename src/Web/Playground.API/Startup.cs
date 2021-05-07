@@ -43,10 +43,10 @@ namespace Playground.API
             }
 
             // The order of the middleware is considered so it must be paid attention!
-            app.UseRouting()
-               .UseCors("AllowAll")
-               .UseAuthentication()
+            app.UseCors("AllowAll")
                .UseSwagger(Configuration)
+               .UseAuthentication()
+               .UseRouting()
                .UseMiddleware<GlobalExceptionHandlingMiddleware>()
                .UseEndpoints(endpoints =>
                {

@@ -1,18 +1,16 @@
 ﻿namespace Playground.API.Swagger
 {
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Net.Http.Headers;
     using Microsoft.OpenApi.Models;
     using Swashbuckle.AspNetCore.Filters;
     using System;
-    using System.Collections.Generic;
     using System.IO;
-    using System.Net.Http.Headers;
     using System.Reflection;
 
     public static class SwaggerSetup
     {
-        private const string Bearer = "Bearer";
         public static IServiceCollection AddSwagger(this IServiceCollection services) => services
             .AddSwaggerGen(opt =>
             {
@@ -23,7 +21,7 @@
                     Version = "v1"
                 });
                 opt.ExampleFilters();
-                opt.AddSecurityDefinition(Bearer, new OpenApiSecurityScheme()
+                opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
                 {
                     Description = "JWT Authorization header using the bearer scheme",
                     Name = HeaderNames.Authorization,
@@ -47,7 +45,7 @@
             {
                 Reference = new OpenApiReference()
                 {
-                    Id = Bearer,
+                    Id = JwtBearerDefaults.AuthenticationScheme,
                     Type = ReferenceType.SecurityScheme
                 }
             };
