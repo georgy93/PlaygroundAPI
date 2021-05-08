@@ -1,15 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+	<PackageReference Include="Refit.HttpClientFactory" Version="6.0.38" />
+	<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.9.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApplicationCore\Playground.Application\Playground.Application.csproj" />
+    <ProjectReference Include="..\Playground.Messaging.Kafka\Playground.Messaging.Kafka.csproj" />
+    <ProjectReference Include="..\Playground.Messaging.RabbitMq\Playground.Messaging.RabbitMq.csproj" />
   </ItemGroup>
 
 </Project>

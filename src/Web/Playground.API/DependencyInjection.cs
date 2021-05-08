@@ -9,7 +9,7 @@
     public static class DependencyInjection
     {
         public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration config) => services
-            .AddPresentationSettings(config)
+            .AddPresentationConfigurations(config)
             .AddCustomWebApi()
             .AddHttpContextAccessor()
             .AddSwagger();
@@ -18,6 +18,7 @@
         {
             services.AddControllers(opts =>
             {
+                //opts.EnableEndpointRouting = false;
                 //opts.Filters.Add<ModelValidationFilter>();
             })
             // .AddNewtonsoftJson()
@@ -46,7 +47,7 @@
                  });
         }
 
-        private static IServiceCollection AddPresentationSettings(this IServiceCollection services, IConfiguration config) => services
+        private static IServiceCollection AddPresentationConfigurations(this IServiceCollection services, IConfiguration config) => services
             .Configure<ErrorHandlingConfiguration>(config.GetSection("errorHandlingSettings"));
     }
 }

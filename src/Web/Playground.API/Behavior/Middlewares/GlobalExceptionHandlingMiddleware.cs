@@ -49,7 +49,7 @@
             catch (Exception ex)
             {
                 var logData = new { context.Request.Path, Error = ex };
-                //_logger.LogError(buisnessEx, logData.Stringify());
+                _logger.LogError(ex, logData.Stringify());
 
                 await TrySetResponseAsync(context, ex, StatusCodes.Status500InternalServerError);
             }

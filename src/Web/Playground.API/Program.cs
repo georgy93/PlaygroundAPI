@@ -7,6 +7,7 @@ namespace Playground.API
     using Persistence.EntityFramework.Extensions;
     using Serilog;
     using System;
+    using System.Reflection;
     using System.Threading.Tasks;
     using Utils.Helpers;
 
@@ -41,7 +42,11 @@ namespace Playground.API
             .UseSerilog()
             .ConfigureWebHostDefaults(webBuilder =>
             {
-                webBuilder.UseStartup<Startup>();
+                webBuilder.UseKestrel();
+                webBuilder.UseUrls("http://*:5000");
+                webBuilder.UseIISIntegration();
+                // for multiple startups
+                webBuilder.UseStartup(Assembly.GetEntryAssembly().FullName);
             })
             .Build();
 

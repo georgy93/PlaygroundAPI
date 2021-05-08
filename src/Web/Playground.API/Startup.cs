@@ -25,7 +25,7 @@ namespace Playground.API
 
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
-        public void ConfigureServices(IServiceCollection services)
+        public virtual void ConfigureServices(IServiceCollection services)
         {
             services
                   .AddApplication()
@@ -40,7 +40,12 @@ namespace Playground.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                //  IdentityModelEventSource.ShowPII = true;
             }
+            //else
+            //{
+            //    app.UseHsts();
+            //}
 
             // The order of the middleware is considered so it must be paid attention!
             app.UseCors("AllowAll")

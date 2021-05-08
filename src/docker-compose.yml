@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  playground.api:
+    container_name: Playground.API
+    image: ${DOCKER_REGISTRY-}playgroundapi
+    build:
+      context: .
+      dockerfile: Web\Playground.API\Dockerfile
+    ports:
+      - "5000:80"
+      - "5001:443"
+    restart: on-failure
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=sqlserver;Database=PlaygroundDB;User Id=sa; Password=1234!qwerty;MultipleActiveResultSets=true
+    networks: 
+      - myapi-network
+    depends_on:
+      - data
+      - messages
+
+  sqlServer:
+    container_name: SQLServer
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports: 
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=1234!qwerty
+    volumes: 
+      - sqldata:/var/opt/mssql 
+    networks: 
+      - myapi-network
+
+  # add for mongo and kafka
+      
+  rabbitMessages:
+    container_name: rabbitMQ
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    hostname: "rabbitmq"
+    environment:
+      - rabbitmq_default_user=guest
+      - rabbitmq_default_pass=guest
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnesia
+    networks: 
+      - myapi-network
+
+networks:
+  myapi-network:
+
+volumes:
+  sqldata:
+  rabbitmq:
