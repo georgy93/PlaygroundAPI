@@ -1,10 +1,15 @@
 ﻿namespace Playground.API.Controllers
 {
+    using Application.Common;
     using MediatR;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading;
     using System.Threading.Tasks;
 
+    [ApiController]
+    [ProducesErrorResponseType(typeof(ErrorResponse))]
+    [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public abstract class BaseController : ControllerBase
     {
         private IMediator GetMediator() => HttpContext.Features.Get<IMediator>();

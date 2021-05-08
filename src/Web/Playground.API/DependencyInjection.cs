@@ -1,39 +1,52 @@
 ﻿namespace Playground.API
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Settings;
     using Swagger;
 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddPresentation(this IServiceCollection services) => services
+        public static IServiceCollection AddPresentation(this IServiceCollection services, IConfiguration config) => services
+            .AddPresentationSettings(config)
             .AddCustomWebApi()
             .AddHttpContextAccessor()
             .AddSwagger();
 
         private static IServiceCollection AddCustomWebApi(this IServiceCollection services)
         {
-            services.AddControllers();
-
-            services.Configure<ApiBehaviorOptions>(options =>
+            services.AddControllers(opts =>
             {
-                // if we use [ApiController] it will internally use its own ModelState filter
-                // and we will not reach our custom Validation Filter
-                options.SuppressModelStateInvalidFilter = true;
-            });
+                //opts.Filters.Add<ModelValidationFilter>();
+            })
+            // .AddNewtonsoftJson()
+            // .AddFluentValidation(mvcConfig =>
+            // {
+            //  mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
+            // })
+            ;
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowAll",
-                    builder => builder
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
-                        .AllowAnyHeader()
-                    //.AllowCredentials(); // causes exception
-                    );
-            });
-
-            return services;
+            return services
+                 .Configure<ApiBehaviorOptions>(options =>
+                 {
+                     // if we use [ApiController] it will internally use its own ModelState filter
+                     // and we will not reach our custom Validation Filter
+                     options.SuppressModelStateInvalidFilter = true;
+                 })
+                 .AddCors(options =>
+                 {
+                     options.AddPolicy("AllowAll",
+                         builder => builder
+                             .AllowAnyOrigin()
+                             .AllowAnyMethod()
+                             .AllowAnyHeader()
+                         //.AllowCredentials(); // causes exception
+                         );
+                 });
         }
+
+        private static IServiceCollection AddPresentationSettings(this IServiceCollection services, IConfiguration config) => services
+            .Configure<ErrorHandlingConfiguration>(config.GetSection("errorHandlingSettings"));
     }
 }
