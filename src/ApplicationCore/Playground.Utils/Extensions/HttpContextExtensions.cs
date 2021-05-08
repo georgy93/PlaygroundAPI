@@ -1,4 +1,4 @@
-﻿namespace Playground.API.Behavior.Extensions
+﻿namespace Playground.Utils.Extensions
 {
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -13,13 +13,20 @@
         private static readonly RouteData EmptyRouteData = new();
         private static readonly ActionDescriptor EmptyActionDescriptor = new();
 
-        public static Task WriteResultAsync<TResult>(this HttpContext context, IActionResultExecutor<TResult> resultExecutor, TResult result)
-            where TResult : IActionResult
+        public static async Task WriteResultAsync<TResult>(this HttpContext context,
+                                                     IActionResultExecutor<ObjectResult> resultExecutor,
+                                                     TResult result,
+                                                     int statusCode = StatusCodes.Status500InternalServerError)
         {
             var routeData = context.GetRouteData() ?? EmptyRouteData;
             var actionContext = new ActionContext(context, routeData, EmptyActionDescriptor);
+            var objectResult = new ObjectResult(result)
+            {
+                StatusCode = statusCode,
+                DeclaredType = typeof(TResult)
+            };
 
-            return resultExecutor.ExecuteAsync(actionContext, result);
+            await resultExecutor.ExecuteAsync(actionContext, objectResult);
         }
     }
 }

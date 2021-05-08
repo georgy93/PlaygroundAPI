@@ -2,7 +2,8 @@
 {
     using System;
 
-    public class BusinessException : ApplicationException
+    public abstract class BusinessException : ApplicationException
     {
+        public abstract int HttpStatusCode { get; }
     }
 }

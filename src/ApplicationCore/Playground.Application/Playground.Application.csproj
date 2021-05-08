@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Playground.Domain\Playground.Domain.csproj" />
+    <ProjectReference Include="..\Playground.Utils\Playground.Utils.csproj" />
   </ItemGroup>
 
 </Project>

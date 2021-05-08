@@ -7,14 +7,14 @@ namespace Playground.API
     using Persistence.EntityFramework.Extensions;
     using Serilog;
     using System;
-    using System.IO;
     using System.Threading.Tasks;
+    using Utils.Helpers;
 
     public static class Program
     {
         public static async Task Main(string[] args)
         {
-            var configuration = GetConfiguration();
+            var configuration = ConfigurationHelper.BuildConfigurationRoot(args);
 
             InitLogger(configuration);
             Log.Information("Starting up");
@@ -47,18 +47,9 @@ namespace Playground.API
 
         private static void InitLogger(IConfiguration configuration) => Log.Logger = new LoggerConfiguration()
             .Enrich
-            .FromLogContext()
-            .WriteTo
-            .Console()
+            .FromLogContext()            
             .ReadFrom
             .Configuration(configuration)
-            .CreateLogger();
-
-        // TODO get the better method
-        private static IConfiguration GetConfiguration() => new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-            .AddEnvironmentVariables()
-            .Build();
+            .CreateLogger();    
     }
 }
