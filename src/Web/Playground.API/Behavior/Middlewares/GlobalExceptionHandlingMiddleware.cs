@@ -2,6 +2,7 @@
 {
     using Application.Common;
     using Domain.Exceptions;
+    using Domain.Exceptions.Serialization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -16,21 +17,21 @@
     public class GlobalExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly ILogger _logger;
-        private readonly IOptionsMonitor<ErrorHandlingConfiguration> _config;
+        private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
+        private readonly IOptionsMonitor<ErrorHandlingSettings> _errorHandlingSettings;
         private readonly IActionResultExecutor<ObjectResult> _executor;
-        // private readonly BusinessExceptionContractResolver _businessExceptionContractResolver;
+        private readonly BusinessExceptionContractResolver _businessExceptionContractResolver;
 
         public GlobalExceptionHandlingMiddleware(RequestDelegate next,
-                                                 IOptionsMonitor<ErrorHandlingConfiguration> config,
+                                                 IOptionsMonitor<ErrorHandlingSettings> errorHandlingSettings,
                                                  IActionResultExecutor<ObjectResult> executor,
                                                  ILogger<GlobalExceptionHandlingMiddleware> logger)
         {
             _next = next;
-            _config = config;
+            _errorHandlingSettings = errorHandlingSettings;
             _executor = executor;
             _logger = logger;
-            // _contractResolver = new BusinessExceptionContractResolver();
+            _businessExceptionContractResolver = new BusinessExceptionContractResolver();
         }
 
         public async Task Invoke(HttpContext context)
@@ -42,7 +43,7 @@
             catch (BusinessException buisnessEx)
             {
                 var logData = new { context.Request.Path, Error = buisnessEx };
-                //_logger.LogError(buisnessEx, logData.Stringify(_businessExceptionContractResolver));
+                _logger.LogError(buisnessEx, logData.Stringify(_businessExceptionContractResolver));
 
                 await TrySetResponseAsync(context, buisnessEx, buisnessEx.HttpStatusCode);
             }
@@ -80,7 +81,7 @@
                 //   description = businessException.Description;
             }
 
-            return new(errorCode, description, _config.CurrentValue.ShowDetails ? exception : null);
+            return new(errorCode, description, _errorHandlingSettings.CurrentValue.ShowDetails ? exception : null);
         }
     }
 }

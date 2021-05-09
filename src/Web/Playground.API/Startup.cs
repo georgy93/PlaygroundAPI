@@ -35,7 +35,7 @@ namespace Playground.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public virtual void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -48,7 +48,9 @@ namespace Playground.API
             //}
 
             // The order of the middleware is considered so it must be paid attention!
-            app.UseCors("AllowAll")
+            app.UseHttpsRedirection()
+               .UseCors("AllowAll")
+               .UseStaticFiles()
                .UseSwagger(Configuration)
                .UseAuthentication()
                .UseRouting()
@@ -58,5 +60,27 @@ namespace Playground.API
                    endpoints.MapControllers();
                });
         }
+
+        #region One Startup different configurations for specific environments
+
+        public void ConfigureDevelopmentServices2(IServiceCollection services)
+        {
+            _ = services;
+            // if I use only one Startup.cs and I want to have different ConfigureServices method:
+            // ConfigureDevelopmentServices
+            // ConfigureStagingServices
+            // ConfigureProductiontServices
+        }
+
+        // remove 2 from the name of the method and run in development
+        public void ConfigureDevelopment2(IApplicationBuilder app)
+        {
+            _ = app;
+            // if I use only one Startup.cs and I want to have different Configure method:
+            // ConfigureDevelopment
+            // ConfigureStaging
+            // ConfigureProduction
+        }
+        #endregion
     }
 }

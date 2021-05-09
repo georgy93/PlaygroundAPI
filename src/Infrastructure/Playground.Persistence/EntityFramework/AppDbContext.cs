@@ -1,15 +1,16 @@
 ﻿namespace Playground.Persistence.EntityFramework
 {
     using Application.Interfaces;
+    using Domain.Entities;
     using Extensions;
     using MediatR;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
-    using Playground.Domain.Entities.Abstract;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class AppDbContext : DbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly IMediator _mediator;
         private readonly IDateTimeService _dateTimeService;
@@ -61,5 +62,5 @@
 
             base.OnModelCreating(modelBuilder);
         }
-    }    
+    }
 }

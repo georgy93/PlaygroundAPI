@@ -1,4 +1,4 @@
-﻿namespace Playground.Infrastructure.Identity
+﻿namespace Playground.Infrastructure.Identity.Services
 {
     using Application.Interfaces;
     using Microsoft.AspNetCore.Http;

@@ -2,13 +2,16 @@
 {
     using Common.Services;
     using Interfaces;
+    using MediatR;
     using Microsoft.Extensions.DependencyInjection;
 
     public static class DependencyInjection
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            return services.AddSingleton<IDateTimeService, DateTimeService>();
+            return services
+                .AddMediatR(typeof(DependencyInjection))
+                .AddSingleton<IDateTimeService, DateTimeService>();
         }
     }
 }

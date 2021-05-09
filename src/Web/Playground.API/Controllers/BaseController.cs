@@ -7,7 +7,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    [ApiController]
+    [ApiController] // this will return automatically error response when model state is invalid
+    // We can tackle it by adding this configuration
+    // services.Configure<ApiBehaviorOptions>(options => { options.SuppressModelStateInvalidFilter = true; });
     [ProducesErrorResponseType(typeof(ErrorResponse))]
     [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
     public abstract class BaseController : ControllerBase

@@ -1,9 +1,10 @@
 ﻿namespace Playground.API
 {
+    using Behavior.Settings;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Settings;
+    using Playground.Infrastructure.Identity;
     using Swagger;
 
     public static class DependencyInjection
@@ -48,6 +49,9 @@
         }
 
         private static IServiceCollection AddPresentationConfigurations(this IServiceCollection services, IConfiguration config) => services
-            .Configure<ErrorHandlingConfiguration>(config.GetSection("errorHandlingSettings"));
+            .Configure<ErrorHandlingSettings>(config.GetSection(nameof(ErrorHandlingSettings)))
+            .Configure<JwtSettings>(config.GetSection(nameof(JwtSettings)))
+            //.Configure<MongoDbSettings>(config.GetSection(nameof(MongoDbSettings)))
+            .Configure<ApiKeySettings>(config.GetSection(nameof(ApiKeySettings)));
     }
 }

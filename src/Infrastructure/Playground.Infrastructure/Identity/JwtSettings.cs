@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class JwtConfiguration
+    public class JwtSettings
     {
         public string Secret { get; set; }
 
