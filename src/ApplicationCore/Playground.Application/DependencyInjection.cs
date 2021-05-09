@@ -1,7 +1,5 @@
 ﻿namespace Playground.Application
 {
-    using Common.Services;
-    using Interfaces;
     using MediatR;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -10,8 +8,7 @@
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
             return services
-                .AddMediatR(typeof(DependencyInjection))
-                .AddSingleton<IDateTimeService, DateTimeService>();
+                .AddMediatR(typeof(DependencyInjection));
         }
     }
 }

@@ -14,7 +14,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
-    public class IdentityService : IIdentityService
+    internal class IdentityService : IIdentityService
     {
         private readonly ILogger<IdentityService> _logger;
         private readonly IAuthenticationGateway _authenticationGateWay;

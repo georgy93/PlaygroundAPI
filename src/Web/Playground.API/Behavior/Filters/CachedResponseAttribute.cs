@@ -1,5 +1,6 @@
 ﻿namespace Playground.API.Behavior.Filters
 {
+    using Application.Interfaces;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
@@ -30,7 +31,7 @@
                 // Before action
 
                 string cacheKey = context.HttpContext.Request.GenerateCacheKeyFromRequest();
-                string cachedResponse = _cacheService.GetCacheResponse(cacheKey);
+                string cachedResponse = _cacheService.GetCachedResponse(cacheKey);
 
                 if (_cacheService.IsValidResponse(cachedResponse))
                 {

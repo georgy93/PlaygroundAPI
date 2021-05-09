@@ -1,6 +1,6 @@
 ﻿namespace Playground.Infrastructure.Identity
 {
-    public static class IdentityErrors
+    internal static class IdentityErrors
     {
         public const string InvalidToken = "Invalid Token";
         public const string UserDoesNotExist = "User does not exist";
