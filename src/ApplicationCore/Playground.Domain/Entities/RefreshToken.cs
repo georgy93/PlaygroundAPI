@@ -1,11 +1,10 @@
-﻿namespace Playground.Infrastructure.Identity.Models
+﻿namespace Playground.Domain.Entities
 {
-    using Domain.Entities;
-    using Domain.Entities.Abstract;
+    using Abstract;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    internal class RefreshToken : Entity<int>
+    public class RefreshToken : Entity<int>
     {
         public override int Id { get; protected set; }
 

@@ -17,6 +17,8 @@
         private readonly IDateTimeService _dateTimeService;
         private readonly ICurrentUserService _currentUserService;
 
+        protected AppDbContext() { }
+
         public AppDbContext(DbContextOptions options) : base(options) { }
 
         public AppDbContext(DbContextOptions options, IMediator mediator, IDateTimeService dateTimeService, ICurrentUserService currentUserService) : base(options)
@@ -26,7 +28,7 @@
             _currentUserService = currentUserService;
         }
 
-        protected AppDbContext() { }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
