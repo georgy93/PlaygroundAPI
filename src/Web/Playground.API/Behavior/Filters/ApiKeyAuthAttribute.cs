@@ -25,14 +25,10 @@
 
             public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
             {
-                // before
-
                 if (AuthenticationKeyIsValid(context))
                     await next();
                 else
                     context.Result = new UnauthorizedResult();
-
-                //after
             }
 
             private bool AuthenticationKeyIsValid(ActionExecutingContext context) =>

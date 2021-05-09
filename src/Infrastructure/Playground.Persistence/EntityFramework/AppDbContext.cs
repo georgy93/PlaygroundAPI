@@ -2,6 +2,7 @@
 {
     using Application.Interfaces;
     using Domain.Entities;
+    using Domain.Entities.Abstract;
     using Extensions;
     using MediatR;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -29,20 +30,21 @@
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            //foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
-            //{
-            //    switch (entry.State)
-            //    {
-            //        case EntityState.Added:
-            //            entry.Entity.CreatedBy = _currentUserService.UserId;
-            //            entry.Entity.Created = _dateTimeProvider.Now;
-            //            break;
-            //        case EntityState.Modified:
-            //            entry.Entity.LastModifiedBy = _currentUserService.UserId;
-            //            entry.Entity.LastModified = _dateTimeProvider.Now;
-            //            break;
-            //    }
-            //}
+            foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedBy = _currentUserService.UserId;
+                        entry.Entity.Created = _dateTimeService.Now;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                        entry.Entity.LastModified = _dateTimeService.Now;
+                        break;
+                }
+            }
+
             // Dispatch Domain Events collection. 
             // Choices:
             // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  

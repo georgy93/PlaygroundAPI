@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using System;
     using System.Threading.Tasks;
+    using Utils.Extensions;
 
     [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
     public class CachedResponseAttribute : TypeFilterAttribute
@@ -30,8 +31,8 @@
             {
                 // Before action
 
-                string cacheKey = context.HttpContext.Request.GenerateCacheKeyFromRequest();
-                string cachedResponse = _cacheService.GetCachedResponse(cacheKey);
+                var cacheKey = context.HttpContext.GenerateCacheKeyFromRequest();
+                var cachedResponse = _cacheService.GetCachedResponse(cacheKey);
 
                 if (_cacheService.IsValidResponse(cachedResponse))
                 {
@@ -50,14 +51,11 @@
             }
         }
 
-        private static ContentResult CreateOkContentResult(string data)
+        private static ContentResult CreateOkContentResult(string data) => new()
         {
-            return new ContentResult()
-            {
-                Content = data,
-                ContentType = "application/json",
-                StatusCode = StatusCodes.Status200OK
-            };
-        }
+            Content = data,
+            ContentType = "application/json",
+            StatusCode = StatusCodes.Status200OK
+        };
     }
 }

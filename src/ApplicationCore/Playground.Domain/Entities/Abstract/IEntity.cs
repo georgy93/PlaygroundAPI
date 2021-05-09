@@ -1,8 +1,8 @@
 ﻿namespace Playground.Domain.Entities.Abstract
 {
-    using System.Collections.Generic;
+    using System;
 
-    public interface IEntity<TKey> where TKey : IEqualityComparer<TKey>
+    public interface IEntity<TKey> : IEquatable<Entity<TKey>>
     {
         TKey Id { get; }
 

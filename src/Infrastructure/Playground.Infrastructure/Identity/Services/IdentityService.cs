@@ -73,15 +73,12 @@
         public async Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request)
         {
             var validatedToken = GetPrincipalFromToken(request.Token);
-
             if (validatedToken is null)
                 return AuthenticationResult.Fail(IdentityErrors.InvalidToken);
 
-            var expiryDateUnix = long.Parse(
-                validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 
-            var expiryDateTimeUtc = new DateTime(
-                year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, DateTimeKind.Utc)
+            var expiryDateTimeUtc = new DateTime(year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
 
             if (expiryDateTimeUtc > DateTime.UtcNow)
@@ -109,7 +106,8 @@
 
             await _authenticationGateWay.UpdateRefreshToken(storedRefreshToken);
 
-            var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
+            var userId = validatedToken.Claims.Single(x => x.Type == "id").Value;
+            var user = await _userManager.FindByIdAsync(userId);
 
             return await GenerateAuthenticationResultForUserAsync(user);
         }
@@ -135,7 +133,6 @@
 
         private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(ApplicationUser user)
         {
-            // beutify
             var claims = new List<Claim>()
             {
                 new (JwtRegisteredClaimNames.Sub, user.Email),
@@ -174,7 +171,7 @@
         }
 
         private static bool IsJwtWithValidSecurityAlgorithm(SecurityToken validatedToken) => validatedToken
-            is JwtSecurityToken jwtSecurityToken 
+            is JwtSecurityToken jwtSecurityToken
             && jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase);
     }
 }

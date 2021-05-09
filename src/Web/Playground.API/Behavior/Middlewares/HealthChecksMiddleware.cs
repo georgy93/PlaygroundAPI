@@ -4,7 +4,7 @@
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Http;
-    using Newtonsoft.Json;
+    using System.Text.Json;
 
     public static class HealthChecksMiddleware
     {
@@ -14,7 +14,7 @@
                 ResponseWriter = async (context, report) =>
                 {
                     context.Response.ContentType = "application/json";
-                    var hcReport = JsonConvert.SerializeObject(HealthCheckHelper.CreateHealthCheckResponse(report));
+                    var hcReport = JsonSerializer.Serialize(HealthCheckHelper.CreateHealthCheckResponse(report));
 
                     await context.Response.WriteAsync(hcReport);
                 }

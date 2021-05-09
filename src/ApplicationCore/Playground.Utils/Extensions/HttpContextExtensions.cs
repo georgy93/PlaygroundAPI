@@ -5,6 +5,8 @@
     using Microsoft.AspNetCore.Mvc.Abstractions;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.AspNetCore.Routing;
+    using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
 
     // TODO use the better method
@@ -27,6 +29,20 @@
             };
 
             await resultExecutor.ExecuteAsync(actionContext, objectResult);
+        }
+
+        public static string GenerateCacheKeyFromRequest(this HttpContext context)
+        {
+            var keyBuilder = new StringBuilder();
+
+            keyBuilder.Append($"{context.Request.Path}");
+
+            foreach (var (key, value) in context.Request.Query.OrderBy(x => x.Key))
+            {
+                keyBuilder.Append($"|{key}-{value}");
+            }
+
+            return keyBuilder.ToString();
         }
     }
 }

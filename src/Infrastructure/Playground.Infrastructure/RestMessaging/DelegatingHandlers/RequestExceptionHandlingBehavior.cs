@@ -3,9 +3,9 @@
     using Microsoft.Extensions.Logging;
     using System;
     using System.Net.Http;
-    using System.Text.Json;
     using System.Threading;
     using System.Threading.Tasks;
+    using Utils.Extensions;
 
     internal class RequestExceptionHandlingBehavior : DelegatingHandler
     {
@@ -20,23 +20,21 @@
         {
             try
             {
-                // await so that exceptions are unwrapped
-                return await base.SendAsync(request, cancellationToken);
+                return await base.SendAsync(request, cancellationToken);  // await so that exceptions are unwrapped
             }
             catch (Exception ex)
             {
-                var log = JsonSerializer.Serialize(new
+                var logData = new
                 {
                     Uri = request.RequestUri,
                     HttpMethod = request.Method,
                     Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
-                },
-                new JsonSerializerOptions() { WriteIndented = true });
+                };
 
-                _logger.LogError(ex, log);
+                _logger.LogError(ex, logData.Stringify());
 
                 // TODO: throw new ServiceNotAvailableException(request.RequestUri);
-                throw new Exception();
+                throw new Exception("error", ex);
             }
         }
     }

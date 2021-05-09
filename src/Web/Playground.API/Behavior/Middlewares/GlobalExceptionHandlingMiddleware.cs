@@ -75,7 +75,7 @@
             var errorCode = "InternalServerError";
             var description = "InternalServerError";
 
-            if (exception is BusinessException businessException)
+            if (exception is BusinessException)
             {
                 //  errorCode = businessException.ErrorCode;
                 //   description = businessException.Description;

@@ -2,9 +2,8 @@
 {
     using Application.Interfaces;
     using Microsoft.Extensions.Caching.Memory;
-    using Newtonsoft.Json;
     using System;
-    using System.Threading.Tasks;
+    using System.Text.Json;
 
     internal class ResponseCacheInMemoryService : IResponseCacheService
     {
@@ -24,14 +23,11 @@
             if (response is null)
                 return;
 
-            Task.Run(() => // TODO: use MS json
-            {
-                var serialzedResponse = JsonConvert.SerializeObject(response);
+            var serialzedResponse = JsonSerializer.Serialize(response);
 
-                _memoryCache.Set(key, serialzedResponse, new MemoryCacheEntryOptions()
-                {
-                    AbsoluteExpirationRelativeToNow = timeToLive
-                });
+            _memoryCache.Set(key, serialzedResponse, new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = timeToLive
             });
         }
     }

@@ -3,8 +3,7 @@
     using MediatR;
     using System.Collections.Generic;
 
-    public abstract class Entity<TKey> : IEntity<TKey>
-        where TKey : IEqualityComparer<TKey>
+    public abstract class Entity<TKey> : IEntity<TKey>, IDomainEntity
     {
         private readonly List<INotification> _domainEvents = new();
 
@@ -26,21 +25,7 @@
 
         public void ClearDomainEvents() => _domainEvents.Clear();
 
-        public override bool Equals(object other)
-        {
-            if (other is null or not Entity<TKey>)
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
-
-            if (GetType() != other.GetType())
-                return false;
-
-            var otherEntity = (Entity<TKey>)other;
-
-            return !otherEntity.IsTransient() && !IsTransient() && Equals(otherEntity.Id, Id);
-        }
+        public override bool Equals(object other) => Equals(other as Entity<TKey>);
 
         public override int GetHashCode()
         {
@@ -53,10 +38,24 @@
             return _requestedHashCode.Value;
         }
 
+        public bool Equals(Entity<TKey> other)
+        {
+            if (other is null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (GetType() != other.GetType())
+                return false;
+
+            return !other.IsTransient() && !IsTransient() && Equals(other.Id, Id);
+        }
+
         public static bool operator ==(Entity<TKey> left, Entity<TKey> right) => Equals(left, null)
             ? Equals(right, null)
             : left.Equals(right);
 
-        public static bool operator !=(Entity<TKey> left, Entity<TKey> right) => !(left == right);
+        public static bool operator !=(Entity<TKey> left, Entity<TKey> right) => !(left == right); // use !(left == right) instead of (left != right) because of the == operator !!!
     }
 }

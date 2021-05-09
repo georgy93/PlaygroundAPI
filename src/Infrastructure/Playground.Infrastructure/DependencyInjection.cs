@@ -9,7 +9,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
     using Polly;
     using Polly.Extensions.Http;
@@ -22,18 +21,20 @@
 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration config) => services
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) => services
             .AddMemoryCache()
-            .AddCustomAuthentication(config)
+            .AddCustomAuthentication(configuration)
             .AddCustomAuthorization()
             .AddServices()
             .AddBackgroundServices()
             .AddGateways();
 
-        private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration config)
+        private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
-            var serviceProvider = services.BuildServiceProvider();
-            var jwtSettings = serviceProvider.GetRequiredService<IOptions<JwtSettings>>().Value;
+            var jwtSettings = new JwtSettings();
+            var jwtSettingsConfig = configuration.GetSection(nameof(JwtSettings));
+
+            jwtSettingsConfig.Bind(jwtSettings);
 
             var tokenValidationParameters = new TokenValidationParameters()
             {
@@ -58,30 +59,27 @@
             });
 
             return services
-                .Configure<JwtSettings>(config.GetSection(nameof(JwtSettings)))
+                .Configure<JwtSettings>(jwtSettingsConfig)
                 .AddSingleton(tokenValidationParameters)
                 .AddScoped<IIdentityService, IdentityService>();
         }
 
-        private static IServiceCollection AddCustomAuthorization(this IServiceCollection services)
-        {
-            return services
-                .AddSingleton<IAuthorizationHandler, WorksForCompanyHandler>()
-                .AddAuthorizationCore(options =>
+        private static IServiceCollection AddCustomAuthorization(this IServiceCollection services) => services
+            .AddSingleton<IAuthorizationHandler, WorksForCompanyHandler>()
+            .AddAuthorizationCore(options =>
+            {
+                options.AddPolicy(AuthorizationPolicies.MustWorkForMe, policy =>
                 {
-                    options.AddPolicy(AuthorizationPolicies.MustWorkForMe, policy =>
-                    {
-                        policy.AddRequirements(new WorksForCompanyRequirement("me.com"));
-                    });
+                    policy.AddRequirements(new WorksForCompanyRequirement("me.com"));
                 });
-        }
+            });
 
         private static IServiceCollection AddServices(this IServiceCollection services) => services
             .AddSingleton<IResponseCacheService, ResponseCacheInMemoryService>()
             .AddTransient<IDateTimeService, DateTimeService>();
 
         private static IServiceCollection AddBackgroundServices(this IServiceCollection services) => services
-           .AddHostedService<SomeBgService>();
+            .AddHostedService<SomeBgService>();
 
         private static IServiceCollection AddGateways(this IServiceCollection services)
         {
@@ -99,7 +97,8 @@
                     .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromMilliseconds(60)))
                 .AddPolicyHandler(HttpPolicyExtensions
                     .HandleTransientHttpError()
-                   .CircuitBreakerAsync(3, TimeSpan.FromSeconds(1)));
+                    .CircuitBreakerAsync(3, TimeSpan.FromSeconds(1))
+                );
 
             return services
                 .AddTransient<RequestExceptionHandlingBehavior>()

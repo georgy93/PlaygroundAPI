@@ -3,6 +3,7 @@
     using Application.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Utils.Extensions;
 
     public class RemoveCachedResponseAttribute : TypeFilterAttribute
     {
@@ -19,7 +20,7 @@
 
             public override void OnActionExecuting(ActionExecutingContext context)
             {
-                var key = context.HttpContext.Request.GenerateCacheKeyFromRequest();
+                var key = context.HttpContext.GenerateCacheKeyFromRequest();
 
                 _cacheService.RemoveCacheResponse(key);
             }

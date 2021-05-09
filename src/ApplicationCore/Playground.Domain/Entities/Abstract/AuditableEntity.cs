@@ -1,10 +1,8 @@
 ﻿namespace Playground.Domain.Entities.Abstract
 {
     using System;
-    using System.Collections.Generic;
 
-    public abstract class AuditableEntity<TKey> : Entity<TKey>
-         where TKey : IEqualityComparer<TKey>
+    public abstract class AuditableEntity<TKey> : Entity<TKey>, IAuditableEntity
     {
         public string CreatedBy { get; set; }
 
