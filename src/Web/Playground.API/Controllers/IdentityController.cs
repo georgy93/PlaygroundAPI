@@ -6,6 +6,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
 
+    [Route("identity")]
     [Produces("application/json")]
     [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(AuthFailedResponse), StatusCodes.Status400BadRequest)]

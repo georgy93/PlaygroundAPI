@@ -3,6 +3,7 @@
     using Behavior.Filters;
     using Microsoft.AspNetCore.Mvc;
 
+    [Route("secret")]
     [ApiKeyAuth]
     public class SecretController : BaseController
     {

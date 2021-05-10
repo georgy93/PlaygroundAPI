@@ -4,7 +4,7 @@
     using System.Linq;
     using System.Reflection;
 
-    public static class EntitiesConfiguration
+    internal static class EntitiesConfigurator
     {
         /// <summary>
         /// Configures all mappings for database entities

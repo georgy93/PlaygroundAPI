@@ -11,6 +11,7 @@
     using MongoDB.Bson;
     using MongoDB.Driver;
     using MongoDB.Driver.Core.Events;
+    using System;
     using System.Diagnostics;
 
     public static class DependencyInjection
@@ -36,7 +37,7 @@
                          });
                    },
                    contextLifetime: ServiceLifetime.Scoped //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
-               )  
+               )
                .AddIdentity<ApplicationUser, IdentityRole>()
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<AppDbContext>();
@@ -60,41 +61,39 @@
 
         private static IServiceCollection AddMongoDatabase(this IServiceCollection services, IConfiguration config)
         {
+            var mongoConnectionString = config.GetConnectionString("MongoConnection");
+
+            services
+                .AddHealthChecks()
+                .AddMongoDb(mongoConnectionString, timeout: TimeSpan.FromSeconds(3));
+
             return services.AddSingleton(provider =>
             {
-                var mongoConfig = provider.GetRequiredService<IOptions<MongoDbSettings>>();
-                EntitiesConfiguration.Apply(); // apply before creating mongo connection
+                EntitiesConfigurator.Apply(); // apply before creating mongo connection
 
-                return new MongoClient(mongoConfig.Value.ConnectionString).GetDatabase(mongoConfig.Value.DatabaseName);
+                var mongoConfig = provider.GetRequiredService<IOptions<MongoDbSettings>>();
+                var settings = MongoClientSettings.FromConnectionString(mongoConnectionString);
+
+                if (mongoConfig.Value.SubscribeToEvents)
+                {
+                    settings.ClusterConfigurator = cb =>  // cb.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode
+                    {
+                        cb.Subscribe<CommandStartedEvent>(e =>
+                        {
+                            Debug.WriteLine($"{e.CommandName} - {e.Command.ToJson()}");
+                        })
+                        .Subscribe<CommandSucceededEvent>(e =>
+                        {
+                            Debug.WriteLine($"{e.CommandName} - {e.Reply.ToJson()}");
+                        });
+                    };
+                }
+
+                return new MongoClient(settings).GetDatabase(mongoConfig.Value.DatabaseName);
             })
             // .AddSingleton(typeof(IMongoRepository<>), typeof(MongoRepository<>))
             // .AddSingleton(typeof(IMongoReadOnlyRepository<>), typeof(MongoReadOnlyRepository<>))
             .Configure<MongoDbSettings>(config.GetSection(nameof(MongoDbSettings)));
-        }
-
-        private static IServiceCollection AddMongoDatabaseWithEventLogs(this IServiceCollection services)
-        {
-            // merge with upper
-            return services.AddSingleton(provider =>
-            {
-                var mongoConfig = provider.GetRequiredService<IOptions<MongoDbSettings>>();
-                EntitiesConfiguration.Apply(); // apply before creating mongo connection
-
-                var settings = MongoClientSettings.FromConnectionString(mongoConfig.Value.ConnectionString);
-                settings.ClusterConfigurator = cb =>
-                {
-                    cb.Subscribe<CommandStartedEvent>(e =>
-                    {
-                        Debug.WriteLine($"{e.CommandName} - {e.Command.ToJson()}");
-                    })
-                    .Subscribe<CommandSucceededEvent>(e =>
-                    {
-                        Debug.WriteLine($"{e.CommandName} - {e.Reply.ToJson()}");
-                    });
-                };
-
-                return new MongoClient(settings).GetDatabase(mongoConfig.Value.DatabaseName);
-            });
         }
     }
 }

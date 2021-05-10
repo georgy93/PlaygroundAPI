@@ -1,9 +1,9 @@
 ﻿namespace Playground.Persistence.Mongo
 {
-    public class MongoDbSettings
+    internal class MongoDbSettings
     {
-        public string ConnectionString { get; set; }
-
         public string DatabaseName { get; set; }
+
+        public bool SubscribeToEvents { get; set; }
     }
 }

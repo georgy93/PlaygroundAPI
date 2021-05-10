@@ -17,19 +17,19 @@
     internal class IdentityService : IIdentityService
     {
         private readonly ILogger<IdentityService> _logger;
-        private readonly IAuthenticationGateway _authenticationGateWay;
+       // private readonly IAuthenticationGateway _authenticationGateWay;
         private readonly IOptionsMonitor<JwtSettings> _jwtSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
         public IdentityService(ILogger<IdentityService> logger,
-                               IAuthenticationGateway authenticationGateWay,
+                              // IAuthenticationGateway authenticationGateWay,
                                IOptionsMonitor<JwtSettings> jwtSettings,
                                UserManager<ApplicationUser> userManager,
                                TokenValidationParameters tokenValidationParameters)
         {
             _logger = logger;
-            _authenticationGateWay = authenticationGateWay;
+            //_authenticationGateWay = authenticationGateWay;
             _jwtSettings = jwtSettings;
             _userManager = userManager;
             _tokenValidationParameters = tokenValidationParameters;
@@ -84,27 +84,27 @@
             if (expiryDateTimeUtc > DateTime.UtcNow)
                 return AuthenticationResult.Fail(IdentityErrors.TokenHasntExpiredYet);
 
-            var storedRefreshToken = await _authenticationGateWay.GetRefreshToken(request.RefreshToken);
-            if (storedRefreshToken is null)
-                return AuthenticationResult.Fail(IdentityErrors.TokenDoesNotExist);
+            //var storedRefreshToken = await _authenticationGateWay.GetRefreshToken(request.RefreshToken);
+            //if (storedRefreshToken is null)
+            //    return AuthenticationResult.Fail(IdentityErrors.TokenDoesNotExist);
 
-            if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
-                return AuthenticationResult.Fail(IdentityErrors.TokenHasExpired);
+            //if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
+            //    return AuthenticationResult.Fail(IdentityErrors.TokenHasExpired);
 
-            if (storedRefreshToken.Invalidated)
-                return AuthenticationResult.Fail(IdentityErrors.RefreshTokenIsInvalidated);
+            //if (storedRefreshToken.Invalidated)
+            //    return AuthenticationResult.Fail(IdentityErrors.RefreshTokenIsInvalidated);
 
-            if (storedRefreshToken.Used)
-                return AuthenticationResult.Fail(IdentityErrors.RefreshedTokenIsAlreadyUsed);
+            //if (storedRefreshToken.Used)
+            //    return AuthenticationResult.Fail(IdentityErrors.RefreshedTokenIsAlreadyUsed);
 
-            var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+            //var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            if (storedRefreshToken.JwtId is not jti)
-                return AuthenticationResult.Fail(IdentityErrors.RefreshTokenDoesNotMatchJWT);
+            //if (storedRefreshToken.JwtId is not jti)
+            //    return AuthenticationResult.Fail(IdentityErrors.RefreshTokenDoesNotMatchJWT);
 
-            storedRefreshToken.Used = true;
+            //storedRefreshToken.Used = true;
 
-            await _authenticationGateWay.UpdateRefreshToken(storedRefreshToken);
+            //await _authenticationGateWay.UpdateRefreshToken(storedRefreshToken);
 
             var userId = validatedToken.Claims.Single(x => x.Type == "id").Value;
             var user = await _userManager.FindByIdAsync(userId);
@@ -163,7 +163,7 @@
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
-            await _authenticationGateWay.AddRefreshToken(refreshToken);
+           // await _authenticationGateWay.AddRefreshToken(refreshToken);
 
             var tokenString = tokenHandler.WriteToken(token);
 
