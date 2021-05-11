@@ -21,12 +21,11 @@
                 //opts.EnableEndpointRouting = false;
                 //opts.Filters.Add<ModelValidationFilter>();
             })
-            // .AddNewtonsoftJson()
-            // .AddFluentValidation(mvcConfig =>
-            // {
-            //  mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
-            // })
-            ;
+            .AddNewtonsoftJson();
+             //.AddFluentValidation(mvcConfig =>
+             //{
+             //    mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
+             //});
 
             return services
                  .Configure<ApiBehaviorOptions>(options =>

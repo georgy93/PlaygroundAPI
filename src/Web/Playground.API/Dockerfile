@@ -1,8 +1,5 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-#Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM statement may need to be changed.
-#For more information, please see https://aka.ms/containercompat
-
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
@@ -10,7 +7,6 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-
 COPY ["Web/Playground.API/Playground.API.csproj", "Web/Playground.API/"]
 COPY ["Infrastructure/Playground.Infrastructure/Playground.Infrastructure.csproj", "Infrastructure/Playground.Infrastructure/"]
 COPY ["Infrastructure/Playground.Messaging.Kafka/Playground.Messaging.Kafka.csproj", "Infrastructure/Playground.Messaging.Kafka/"]
@@ -19,7 +15,6 @@ COPY ["ApplicationCore/Playground.Utils/Playground.Utils.csproj", "ApplicationCo
 COPY ["ApplicationCore/Playground.Domain/Playground.Domain.csproj", "ApplicationCore/Playground.Domain/"]
 COPY ["Infrastructure/Playground.Messaging.RabbitMq/Playground.Messaging.RabbitMq.csproj", "Infrastructure/Playground.Messaging.RabbitMq/"]
 COPY ["Infrastructure/Playground.Persistence/Playground.Persistence.csproj", "Infrastructure/Playground.Persistence/"]
-
 RUN dotnet restore "Web/Playground.API/Playground.API.csproj"
 COPY . .
 WORKDIR "/src/Web/Playground.API"

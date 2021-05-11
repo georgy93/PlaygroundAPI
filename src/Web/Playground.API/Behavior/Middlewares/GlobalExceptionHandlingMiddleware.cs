@@ -81,7 +81,12 @@
                 //   description = businessException.Description;
             }
 
-            return new(errorCode, description, _errorHandlingSettings.CurrentValue.ShowDetails ? exception : null);
+            return new()
+            {
+                ErrorCode = errorCode,
+                Description = description,
+                Exception = _errorHandlingSettings.CurrentValue.ShowDetails ? exception : null
+            };
         }
     }
 }

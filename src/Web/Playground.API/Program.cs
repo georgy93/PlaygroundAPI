@@ -43,7 +43,7 @@ namespace Playground.API
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseKestrel();
-                webBuilder.UseUrls("http://*:5000");
+                //webBuilder.UseUrls("http://*:80", "https://*:443");
                 webBuilder.UseIISIntegration();
                 // for multiple startups
                 webBuilder.UseStartup(Assembly.GetEntryAssembly().FullName);

@@ -42,15 +42,16 @@ namespace Playground.API
                 app.UseDeveloperExceptionPage();
                 //  IdentityModelEventSource.ShowPII = true;
             }
-            //else
-            //{
-            //    app.UseHsts();
-            //}
+            else
+            {
+                app.UseHsts();
+            }
 
             // The order of the middleware is considered so it must be paid attention!
             app.UseHttpsRedirection()
                .UseCors("AllowAll")
                .UseStaticFiles()
+               .UseHealthChecks()
                .UseSwagger(Configuration)
                .UseAuthentication()
                .UseRouting()
