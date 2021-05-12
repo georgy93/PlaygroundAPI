@@ -8,12 +8,13 @@
 
     public static class HealthChecksMiddleware
     {
-        public static IApplicationBuilder UseHealthChecks(this IApplicationBuilder app) => app
-            .UseHealthChecks("/health", new HealthCheckOptions()
+        public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app, PathString healthCheckPath) => app
+            .UseHealthChecks(healthCheckPath, new HealthCheckOptions()
             {
                 ResponseWriter = async (context, report) =>
                 {
                     context.Response.ContentType = "application/json";
+
                     var hcReport = JsonSerializer.Serialize(HealthCheckHelper.CreateHealthCheckResponse(report));
 
                     await context.Response.WriteAsync(hcReport);

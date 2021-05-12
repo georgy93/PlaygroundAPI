@@ -51,10 +51,11 @@ namespace Playground.API
             app.UseHttpsRedirection()
                .UseCors("AllowAll")
                .UseStaticFiles()
-               .UseHealthChecks()
                .UseSwagger(Configuration)
-               .UseAuthentication()
+               .UseCustomHealthChecks("/health")               
                .UseRouting()
+               .UseAuthentication()
+               //.UseAuthorization()               
                .UseMiddleware<GlobalExceptionHandlingMiddleware>()
                .UseEndpoints(endpoints =>
                {

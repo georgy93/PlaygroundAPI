@@ -46,16 +46,16 @@
                 ValidateLifetime = true
             };
 
-            services.AddAuthentication(x =>
+            services.AddAuthentication(auth =>
             {
-                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;                
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(x =>
+            .AddJwtBearer(jwt =>
             {
-                x.SaveToken = true;
-                x.TokenValidationParameters = tokenValidationParameters;
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = tokenValidationParameters;
             });
 
             return services

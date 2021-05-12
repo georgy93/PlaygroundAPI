@@ -13,6 +13,7 @@ namespace Playground.API
 
     public static class Program
     {
+        // Run as HTTPS https://tomssl.com/how-to-run-asp-net-core-3-1-over-https-in-docker-using-linux-containers/
         public static async Task Main(string[] args)
         {
             var configuration = ConfigurationHelper.BuildConfigurationRoot(args);
