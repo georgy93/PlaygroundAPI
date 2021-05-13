@@ -48,12 +48,12 @@ namespace Playground.API
             }
 
             // The order of the middleware is considered so it must be paid attention!
-            app.UseHttpsRedirection()
-               .UseCors("AllowAll")
+            app.UseSwagger(Configuration)
+               .UseHttpsRedirection()
                .UseStaticFiles()
-               .UseSwagger(Configuration)
-               .UseCustomHealthChecks("/health")               
                .UseRouting()
+               .UseCors("AllowAll")
+               .UseCustomHealthChecks("/health")
                .UseAuthentication()
                //.UseAuthorization()               
                .UseMiddleware<GlobalExceptionHandlingMiddleware>()

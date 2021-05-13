@@ -40,53 +40,61 @@
             {
                 await _next(context);
             }
-            catch (BusinessException buisnessEx)
+            catch (BusinessException businessEx)
             {
-                var logData = new { context.Request.Path, Error = buisnessEx };
-                _logger.LogError(buisnessEx, logData.Stringify(_businessExceptionContractResolver));
-
-                await TrySetResponseAsync(context, buisnessEx, buisnessEx.HttpStatusCode);
+                await HandleBusinessExceptionAsync(context, businessEx);
             }
             catch (Exception ex)
             {
-                var logData = new { context.Request.Path, Error = ex };
-                _logger.LogError(ex, logData.Stringify());
-
-                await TrySetResponseAsync(context, ex, StatusCodes.Status500InternalServerError);
+                await HandleExceptionAsync(context, ex);
             }
         }
 
-        private async Task TrySetResponseAsync(HttpContext context, Exception exception, int statusCode)
+        private async Task HandleBusinessExceptionAsync(HttpContext context, BusinessException businessException)
+        {
+            var logData = new { context.Request.Path, Error = businessException };
+
+            _logger.LogError(businessException, logData.Stringify(_businessExceptionContractResolver));
+
+            ReThrowIfResponseHasStarted(context, businessException);
+
+            var errorResponse = CreateErrorResponse(businessException);
+
+            await context.WriteResultAsync(_executor, errorResponse, businessException.HttpStatusCode);
+        }
+
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        {
+            _logger.LogError(exception, context.Request.Path);
+
+            ReThrowIfResponseHasStarted(context, exception);
+
+            var errorResponse = CreateDefaultErrorResponse(exception);
+
+            await context.WriteResultAsync(_executor, errorResponse, StatusCodes.Status500InternalServerError);
+        }
+
+        private void ReThrowIfResponseHasStarted(HttpContext context, Exception exception)
         {
             if (context.Response.HasStarted)
             {
-                _logger.LogError($"Cannot handle error. The response has already started.");
-
+                _logger.LogWarning($"Cannot handle error. The response has already started.");
                 ExceptionDispatchInfo.Throw(exception);
             }
-
-            var errorResponse = CreateErrorResponse(exception);
-
-            await context.WriteResultAsync(_executor, errorResponse, statusCode);
         }
 
-        private ErrorResponse CreateErrorResponse(Exception exception)
+        private ErrorResponse CreateErrorResponse(BusinessException businessException) => new()
         {
-            var errorCode = "InternalServerError";
-            var description = "InternalServerError";
+            //ErrorCode = businessException.ErrorCode,
+            //Description = businessException.Message,
+            Exception = _errorHandlingSettings.CurrentValue.ShowDetails ? businessException : null
+        };
 
-            if (exception is BusinessException)
-            {
-                //  errorCode = businessException.ErrorCode;
-                //   description = businessException.Description;
-            }
-
-            return new()
-            {
-                ErrorCode = errorCode,
-                Description = description,
-                Exception = _errorHandlingSettings.CurrentValue.ShowDetails ? exception : null
-            };
-        }
+        private ErrorResponse CreateDefaultErrorResponse(Exception exception) => new()
+        {
+            ErrorCode = "InternalServerError",
+            Description = "InternalServerError",
+            Exception = _errorHandlingSettings.CurrentValue.ShowDetails ? exception : null
+        };
     }
 }
