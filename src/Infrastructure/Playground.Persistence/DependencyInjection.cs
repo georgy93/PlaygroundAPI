@@ -6,13 +6,13 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
     using Mongo;
     using MongoDB.Bson;
     using MongoDB.Driver;
     using MongoDB.Driver.Core.Events;
     using System;
-    using System.Diagnostics;
 
     public static class DependencyInjection
     {
@@ -76,17 +76,13 @@
 
                 if (mongoConfig.Value.SubscribeToEvents)
                 {
-                    settings.ClusterConfigurator = cb =>  // cb.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode
-                    {
-                        cb.Subscribe<CommandStartedEvent>(e =>
-                        {
-                            Debug.WriteLine($"{e.CommandName} - {e.Command.ToJson()}");
-                        })
-                        .Subscribe<CommandSucceededEvent>(e =>
-                        {
-                            Debug.WriteLine($"{e.CommandName} - {e.Reply.ToJson()}");
-                        });
-                    };
+                    var logger = provider.GetRequiredService<ILogger<MongoClient>>();
+
+                    settings.ClusterConfigurator = clusterBuilder =>  // TODO: clusterBuilder.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode                    
+                        clusterBuilder
+                        .Subscribe<CommandStartedEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Command.ToJson()}"))
+                        .Subscribe<CommandSucceededEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Reply.ToJson()}"))
+                        .Subscribe<CommandFailedEvent>(e => logger.LogError($"{e.CommandName} - {e.Failure.ToJson()}"));
                 }
 
                 return new MongoClient(settings).GetDatabase(mongoConfig.Value.DatabaseName);

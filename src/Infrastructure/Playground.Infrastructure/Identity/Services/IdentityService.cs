@@ -84,6 +84,7 @@
             if (expiryDateTimeUtc > DateTime.UtcNow)
                 return AuthenticationResult.Fail(IdentityErrors.TokenHasntExpiredYet);
 
+            // TODO Uncomment when ready
             //var storedRefreshToken = await _authenticationGateWay.GetRefreshToken(request.RefreshToken);
             //if (storedRefreshToken is null)
             //    return AuthenticationResult.Fail(IdentityErrors.TokenDoesNotExist);

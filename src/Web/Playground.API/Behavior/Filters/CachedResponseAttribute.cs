@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using System;
+    using System.Net.Mime;
     using System.Threading.Tasks;
     using Utils.Extensions;
 
@@ -51,10 +52,11 @@
             }
         }
 
+        // TODO: Use other return type
         private static ContentResult CreateOkContentResult(string data) => new()
         {
             Content = data,
-            ContentType = "application/json",
+            ContentType = MediaTypeNames.Application.Json,
             StatusCode = StatusCodes.Status200OK
         };
     }
