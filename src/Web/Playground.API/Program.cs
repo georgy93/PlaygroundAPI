@@ -39,7 +39,7 @@ namespace Playground.API
         }
 
         public static IHost CreateHost(string[] args) => Host
-            .CreateDefaultBuilder(args)
+            .CreateDefaultBuilder(args)            
             .UseSerilog()
             .ConfigureWebHostDefaults(webBuilder =>
             {

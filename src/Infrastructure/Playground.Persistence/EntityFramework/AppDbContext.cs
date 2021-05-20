@@ -11,6 +11,10 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Add-Migration Initial
+    /// Update-Database
+    /// </summary>
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
         private readonly IMediator _mediator;

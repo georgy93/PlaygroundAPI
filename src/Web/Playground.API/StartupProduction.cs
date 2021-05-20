@@ -23,11 +23,11 @@
             base.ConfigureServices(services);
         }
 
-        public override void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public override void Configure(IApplicationBuilder app)
         {
             Debug.WriteLine($"Hello from {nameof(Configure)} in {nameof(StartupProduction)}");
 
-            base.Configure(app, env);
+            base.Configure(app);
         }
     }
 }

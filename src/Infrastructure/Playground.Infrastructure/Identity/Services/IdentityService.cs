@@ -38,8 +38,8 @@
         public async Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest request)
         {
             var email = request.Email;
-            var existingUser = await _userManager.FindByEmailAsync(email);
 
+            var existingUser = await _userManager.FindByEmailAsync(email);
             if (existingUser is not null)
                 return AuthenticationResult.Fail(IdentityErrors.EmailIsAlreadyTakenByAnotherUser);
 
