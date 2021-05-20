@@ -1,9 +1,12 @@
 ﻿namespace Playground.Domain.Entities.Abstract
 {
     using MediatR;
+    using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public abstract class Entity<TKey> : IEntity<TKey>, IDomainEntity
+        where TKey : IEquatable<TKey>
     {
         private readonly List<INotification> _domainEvents = new();
 
@@ -11,6 +14,7 @@
 
         public virtual TKey Id { get; protected set; }
 
+        [NotMapped] // TODO: exclude from else where??
         public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 
         /// <summary>
@@ -25,10 +29,9 @@
 
         public void ClearDomainEvents() => _domainEvents.Clear();
 
-        public override bool Equals(object other) => Equals(other as Entity<TKey>);
-
         public override int GetHashCode()
         {
+            // TODO: unchecked????
             if (IsTransient())
                 return base.GetHashCode();
 
@@ -38,16 +41,18 @@
             return _requestedHashCode.Value;
         }
 
-        public bool Equals(Entity<TKey> other)
+        public override bool Equals(object obj)
         {
-            if (other is null)
+            if (obj == null || !(obj is Entity<TKey>))
                 return false;
 
-            if (ReferenceEquals(this, other))
+            if (ReferenceEquals(this, obj))
                 return true;
 
-            if (GetType() != other.GetType())
+            if (GetType() != obj.GetType())
                 return false;
+
+            var other = (Entity<TKey>)obj;
 
             return !other.IsTransient() && !IsTransient() && Equals(other.Id, Id);
         }

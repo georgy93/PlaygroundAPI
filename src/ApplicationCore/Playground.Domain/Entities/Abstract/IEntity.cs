@@ -2,7 +2,7 @@
 {
     using System;
 
-    public interface IEntity<TKey> : IEquatable<Entity<TKey>>
+    public interface IEntity<TKey> where TKey : IEquatable<TKey>
     {
         TKey Id { get; }
 
