@@ -4,7 +4,7 @@
 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddRabbitMQ(this IServiceCollection services)
+        public static IServiceCollection AddRabbitMqMessaging(this IServiceCollection services)
         {
             //services
             //    .AddHealthChecks()

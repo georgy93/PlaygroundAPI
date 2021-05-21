@@ -3,6 +3,7 @@
     using System;
 
     public abstract class AuditableEntity<TKey> : Entity<TKey>, IAuditableEntity
+        where TKey : IEquatable<TKey>
     {
         public string CreatedBy { get; set; }
 

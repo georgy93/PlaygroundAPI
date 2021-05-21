@@ -5,6 +5,8 @@
     using Authorization;
     using Identity;
     using Identity.Services;
+    using Messaging.Kafka;
+    using Messaging.RabbitMq;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Configuration;
@@ -27,7 +29,9 @@
             .AddCustomAuthorization()
             .AddServices()
             .AddBackgroundServices()
-            .AddGateways();
+            .AddGateways()
+            .AddKafkaMessaging()
+            .AddRabbitMqMessaging();
 
         private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
@@ -79,7 +83,8 @@
             .AddTransient<IDateTimeService, DateTimeService>();
 
         private static IServiceCollection AddBackgroundServices(this IServiceCollection services) => services
-            .AddHostedService<SomeBgService>();
+            .AddHostedService<KafkaConsumerBackgroundService>()
+            .AddHostedService<KafkaProducerBackgroundService>();
 
         private static IServiceCollection AddGateways(this IServiceCollection services)
         {

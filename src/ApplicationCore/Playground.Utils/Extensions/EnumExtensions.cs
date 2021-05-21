@@ -10,7 +10,7 @@
         {
             var attribute = value.GetAttribute<DescriptionAttribute>();
 
-            return attribute == null ? value.ToString() : attribute.Description;
+            return attribute is null ? value.ToString() : attribute.Description;
         }
 
         private static T GetAttribute<T>(this Enum value) where T : Attribute
