@@ -40,7 +40,7 @@ namespace Playground.API
             if (Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //  IdentityModelEventSource.ShowPII = true;
+                // IdentityModelEventSource.ShowPII = true;
             }
             else
             {

@@ -9,20 +9,20 @@
     {
         public static async Task DispatchDomainEventsAsync(this AppDbContext appDbContext, IMediator mediator)
         {
-            var domainEntities = appDbContext
+            var domainEntitiesWithPendingEvents = appDbContext
                 .ChangeTracker
                 .Entries<IDomainEntity>()
                 .Where(x => x.Entity.DomainEvents.Any());
 
-            var domainEvents = domainEntities
+            var domainEvents = domainEntitiesWithPendingEvents
                 .SelectMany(x => x.Entity.DomainEvents)
                 .ToList();
 
-            domainEntities
+            domainEntitiesWithPendingEvents
                 .ToList()
                 .ForEach(entity => entity.Entity.ClearDomainEvents());
 
-            foreach (var domainEvent in domainEvents)
+            foreach (INotification domainEvent in domainEvents)
                 await mediator.Publish(domainEvent);
         }
     }
