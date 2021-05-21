@@ -34,7 +34,7 @@
 
         public DbSet<RefreshToken> RefreshTokens { get; init; }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
             AuditEntities();
 
@@ -48,7 +48,9 @@
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            return await base.SaveChangesAsync(cancellationToken);
+            await base.SaveChangesAsync(cancellationToken);
+
+            return true;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
