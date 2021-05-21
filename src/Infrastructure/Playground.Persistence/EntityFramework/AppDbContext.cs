@@ -25,7 +25,8 @@
 
         public AppDbContext(DbContextOptions options) : base(options) { }
 
-        public AppDbContext(DbContextOptions options, IMediator mediator, IDateTimeService dateTimeService, ICurrentUserService currentUserService) : base(options)
+        public AppDbContext(DbContextOptions options, IMediator mediator, IDateTimeService dateTimeService, ICurrentUserService currentUserService)
+            : base(options)
         {
             _mediator = mediator;
             _dateTimeService = dateTimeService;
@@ -36,8 +37,6 @@
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
-            AuditEntities();
-
             // Dispatch Domain Events collection. 
             // Choices:
             // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
@@ -45,6 +44,8 @@
             // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
             // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
             await this.DispatchDomainEventsAsync(_mediator);
+
+            AuditEntities();
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
