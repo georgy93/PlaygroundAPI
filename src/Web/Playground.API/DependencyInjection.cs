@@ -1,5 +1,6 @@
 ﻿namespace Playground.API
 {
+    using Behavior.Filters;
     using Behavior.Settings;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
@@ -19,7 +20,7 @@
             services.AddControllers(opts =>
             {
                 //opts.EnableEndpointRouting = false;
-                //opts.Filters.Add<ModelValidationFilter>();
+                opts.Filters.Add<ModelValidationFilter>();
             })
             .AddNewtonsoftJson();
              //.AddFluentValidation(mvcConfig =>

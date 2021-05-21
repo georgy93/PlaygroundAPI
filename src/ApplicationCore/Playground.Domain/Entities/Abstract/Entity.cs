@@ -43,7 +43,7 @@
 
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is Entity<TKey>))
+            if (obj is null or not Entity<TKey>)
                 return false;
 
             if (ReferenceEquals(this, obj))
