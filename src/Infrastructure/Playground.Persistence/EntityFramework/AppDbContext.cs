@@ -40,6 +40,10 @@
 
         public DbSet<RefreshToken> RefreshTokens { get; init; }
 
+        public bool HasActiveTransaction => _currentTransaction is not null;
+
+        public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
+
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
             // Dispatch Domain Events collection. 
@@ -68,7 +72,7 @@
 
         public async Task<IDbContextTransaction> BeginTransactionAsync()
         {
-            if (_currentTransaction is not null)
+            if (!HasActiveTransaction)
                 return null;
 
             _currentTransaction = await Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
@@ -139,7 +143,7 @@
 
         private void DisposeTransactionIfExist()
         {
-            if (_currentTransaction is not null)
+            if (HasActiveTransaction)
             {
                 _currentTransaction.Dispose();
                 _currentTransaction = null;
