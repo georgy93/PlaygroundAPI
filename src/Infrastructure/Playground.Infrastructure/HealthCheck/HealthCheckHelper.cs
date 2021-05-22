@@ -12,9 +12,11 @@
             {
                 Component = x.Key,
                 Status = x.Value.Status.ToString(),
-                Description = x.Value.Description
+                Description = x.Value.Description,
+                Duration = x.Value.Duration,
+                Error = x.Value.Exception
             }),
-            Duration = report.TotalDuration
+            TotalDuration = report.TotalDuration
         };
     }
 }

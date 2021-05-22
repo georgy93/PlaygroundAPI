@@ -54,7 +54,7 @@
         {
             var logData = new { context.Request.Path, Error = businessException };
 
-            _logger.LogError(businessException, logData.Stringify(_businessExceptionContractResolver));
+            _logger.LogError(businessException, logData.Beautify(_businessExceptionContractResolver));
 
             ReThrowIfResponseHasStarted(context, businessException);
 

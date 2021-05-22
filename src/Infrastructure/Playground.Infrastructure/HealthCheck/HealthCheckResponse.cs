@@ -10,6 +10,6 @@
 
         public IEnumerable<HealthCheck> Checks { get; init; } = Enumerable.Empty<HealthCheck>();
 
-        public TimeSpan Duration { get; init; }
+        public TimeSpan TotalDuration { get; init; }
     }
 }

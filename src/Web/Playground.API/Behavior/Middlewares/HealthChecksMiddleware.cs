@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
     using Microsoft.AspNetCore.Http;
     using System.Net.Mime;
-    using System.Text.Json;
+    using Utils.Extensions;
 
     public static class HealthChecksMiddleware
     {
@@ -16,7 +16,7 @@
                 {
                     context.Response.ContentType = MediaTypeNames.Application.Json;
 
-                    var hcReport = JsonSerializer.Serialize(HealthCheckHelper.CreateHealthCheckResponse(report));
+                    var hcReport = HealthCheckHelper.CreateHealthCheckResponse(report).Beautify();
 
                     await context.Response.WriteAsync(hcReport);
                 }

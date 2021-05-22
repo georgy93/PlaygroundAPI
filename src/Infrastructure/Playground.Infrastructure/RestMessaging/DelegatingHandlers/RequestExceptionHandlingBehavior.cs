@@ -31,7 +31,7 @@
                     Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
                 };
 
-                _logger.LogError(ex, logData.Stringify());
+                _logger.LogError(ex, logData.Beautify());
 
                 // TODO: throw new ServiceNotAvailableException(request.RequestUri);
                 throw new Exception("error", ex);
