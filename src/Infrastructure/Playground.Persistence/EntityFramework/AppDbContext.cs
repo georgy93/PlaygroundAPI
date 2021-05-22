@@ -58,11 +58,14 @@
 
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
             // performed through the DbContext will be committed
-            await SaveChangesAsync(cancellationToken);
+            var result = await SaveChangesAsync(cancellationToken);
 
-            return true;
+            return result > 0;
         }
 
+        /// <summary>
+        /// Call this only when we are saving outbox messages or persisting operations that have not produced domain events
+        /// </summary>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             AuditEntities();
