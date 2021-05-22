@@ -55,7 +55,7 @@ namespace Playground.API
                .UseCors("AllowAll")
                .UseCustomHealthChecks("/health")
                .UseAuthentication()
-               //.UseAuthorization()               
+               .UseAuthorization()
                .UseMiddleware<GlobalExceptionHandlingMiddleware>()
                .UseEndpoints(endpoints =>
                {

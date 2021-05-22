@@ -68,6 +68,13 @@
         /// </summary>
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
+            // Concurrency:
+            // https://www.learnentityframeworkcore.com/concurrency
+            // https://stackoverflow.com/questions/33928136/mongodb-optimistic-concurrency-control-with-net
+            // https://docs.microsoft.com/en-us/ef/core/saving/concurrency
+            // https://dotnetcoretutorials.com/2020/07/17/rowversion-vs-concurrencytoken-in-entityframework-efcore/
+            // https://github.com/mikeckennedy/optimistic_concurrency_mongodb_dotnet/blob/master/src/MongoDB.Kennedy/ConcurrentDataContext.cs
+
             AuditEntities();
 
             return await base.SaveChangesAsync(cancellationToken);
@@ -103,7 +110,7 @@
             }
             finally
             {
-                DisposeTransactionIfExist();
+                DisposeTransaction();
             }
         }
 
@@ -115,7 +122,7 @@
             }
             finally
             {
-                DisposeTransactionIfExist();
+                DisposeTransaction();
             }
         }
 
@@ -144,7 +151,7 @@
             }
         }
 
-        private void DisposeTransactionIfExist()
+        private void DisposeTransaction()
         {
             if (HasActiveTransaction)
             {

@@ -21,11 +21,5 @@
         protected Task<TResponse> QueryAsync<TResponse>(IRequest<TResponse> request) => GetMediator().Send(request, HttpContext.RequestAborted);
 
         protected Task<TResponse> CommandAsync<TResponse>(IRequest<TResponse> request) => GetMediator().Send(request, CancellationToken.None);
-
-        [HttpGet("ct")]
-        public async Task MapRequestAbortedToCancellationTokenParameter(CancellationToken cancellationToken)
-        {
-            await Task.Delay(10000, cancellationToken);
-        }
     }
 }
