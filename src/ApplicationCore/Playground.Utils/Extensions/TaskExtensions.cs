@@ -14,13 +14,14 @@
             using var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             var completedTask = await Task.WhenAny(originalTask, Task.Delay(Timeout.Infinite, tokenSource.Token));
-            if (completedTask != originalTask)
-                throw new OperationCanceledException();
+            if (completedTask == originalTask)
+            {
+                tokenSource.Cancel(); // cancel the delay task
 
-            tokenSource.Cancel();
+                await originalTask; // unwrap the result
+            }
 
-            // unwrap the result
-            await originalTask;
+            throw new OperationCanceledException();
         }
     }
 }
