@@ -6,20 +6,21 @@
 
     public static class TaskExtensions
     {
-        public static async Task WaitAsync(this Task task, CancellationToken cancellationToken)
+        public static async Task WaitAsync(this Task originalTask, CancellationToken cancellationToken)
         {
-            if (task.IsCompleted)
+            if (originalTask.IsCompleted)
                 return;
 
             using var tokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-            var completedTask = await Task.WhenAny(task, Task.Delay(Timeout.Infinite, tokenSource.Token));
-            if (completedTask != task)
+            var completedTask = await Task.WhenAny(originalTask, Task.Delay(Timeout.Infinite, tokenSource.Token));
+            if (completedTask != originalTask)
                 throw new OperationCanceledException();
 
             tokenSource.Cancel();
 
-            await task;
+            // unwrap the result
+            await originalTask;
         }
     }
 }
