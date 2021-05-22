@@ -1,4 +1,4 @@
-# MyApi
+# Playground API
 
 A playground API
 
