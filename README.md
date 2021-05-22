@@ -36,7 +36,7 @@ Application Core Types
 | Has own Identity  | no   |  no           | yes/no          |
 
 #### Domain
-This will contain all entities, enums, exceptions, interfaces, types and logic specific to the domain layer.
+This will contain all entities, value objects, enums, exceptions, interfaces, types and logic specific to the domain layer.
 #### Application
 This layer contains all application logic and coordinates business actions. It also defines interfaces that are implemented by outside layers.
 For example, if the application need to access a notification service, a new interface would be added to application and an implementation would be created within infrastructure.
