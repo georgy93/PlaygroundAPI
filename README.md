@@ -102,16 +102,16 @@ The project is developed under Kubernetes environment. In order to run a local K
 These instructions will get us a copy of the project up and running on our local machine for development and testing purposes.
 
 ### Prerequisites
-+ [Enable Hyper-V](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v) on our machine
-+ Install [Minikube](https://minikube.sigs.k8s.io/docs/start/) by first installing  [Chocolatey](https://chocolatey.org/)
- 1. Open a power shell command window as an admin
- 2. Copy and paste the following command and then execute it
+1. [Enable Hyper-V](https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/quick-start/enable-hyper-v) on our machine
+2. Install [Minikube](https://minikube.sigs.k8s.io/docs/start/) by first installing  [Chocolatey](https://chocolatey.org/)
+ + Open a power shell command window as an admin
+ + Copy and paste the following command and then execute it
 ```
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 ```
- 3. After Chocolatey is installed open new power shell window, copy and paste the next command ```choco install minikube``` and execute it.
+ + After Chocolatey is installed open new power shell window, copy and paste the next command ```choco install minikube``` and execute it.
 
-+ Services running in K8S (and Minikube respectively) are not visible to the outside world. In order to expose them for our development purposes, or just running the tests locally,
+3. Services running in K8S (and Minikube respectively) are not visible to the outside world. In order to expose them for our development purposes, or just running the tests locally,
 we need to install [Kubefwd](https://kubefwd.com/).
 Installing kubefwd requires executing the following 3 commands in power shell window:
 ```
@@ -120,7 +120,7 @@ Invoke-Expression (New-Object System.Net.WebClient).DownloadString('https://get.
 scoop install kubefwd
 ```
 
-+ At last we need to configure Environment Variables for ```kubectl``` and ```kubefwd```, so that when we execute power shell commands they are recognized.
+4. At last we need to configure Environment Variables for ```kubectl``` and ```kubefwd```, so that when we execute power shell commands they are recognized.
 To do so,  open Environment Variables menu and in the System Variables section add the followings:
 
 Variable  | Value
