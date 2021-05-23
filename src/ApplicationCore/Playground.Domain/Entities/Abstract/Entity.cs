@@ -5,6 +5,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    /// <summary>
+    /// Use only for aggregates ???
+    /// </summary>
     public abstract class Entity<TKey> : IEntity<TKey>, IDomainEntity
         where TKey : IEquatable<TKey>
     {
@@ -21,7 +24,7 @@
         /// Checks whether the entity was just now created. Returns true if the entity was created now and has not yet received an Id.
         /// </summary>
         /// <returns></returns>
-        public bool IsTransient() => Equals(Id, default);
+        public bool IsTransient() => Equals(Id, default(TKey));
 
         public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
 

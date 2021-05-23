@@ -38,7 +38,11 @@
             _currentUserService = currentUserService;
         }
 
+
         public DbSet<RefreshToken> RefreshTokens { get; init; }
+
+        public DbSet<VersionedEntity> VersionedEntities { get; init; }
+
 
         public bool HasActiveTransaction => _currentTransaction is not null;
 
