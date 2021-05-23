@@ -1,6 +1,8 @@
 ﻿namespace Playground.Infrastructure.Services.Background
 {
     using Confluent.Kafka;
+    using Domain.ValueObjects;
+    using Messaging.Kafka.Serialization.Json;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using System;
@@ -11,23 +13,26 @@
     {
         private readonly ILogger<KafkaConsumerBackgroundService> _logger;
         private readonly string _topic;
-        private readonly IConsumer<Null, int> _consumer;
-
+        private readonly IConsumer<Null, Ping> _consumer;
+        
         public KafkaConsumerBackgroundService(ILogger<KafkaConsumerBackgroundService> logger)
         {
             var consumerConfig = new ConsumerConfig
             {
                 EnableAutoCommit = false,
                 BootstrapServers = "kafka:9092",
-                GroupId = $"numbersConsumer-{Guid.NewGuid()}",
+                GroupId = $"PongConsumer-{Guid.NewGuid()}",
                 AutoOffsetReset = AutoOffsetReset.Earliest,
                 FetchWaitMaxMs = 1,
                 FetchErrorBackoffMs = 1, // retry immediately in case of fetch error
             };
 
-            _consumer = new ConsumerBuilder<Null, int>(consumerConfig).Build();
+            _consumer = new ConsumerBuilder<Null, Ping>(consumerConfig)
+                .SetValueDeserializer(new JsonMessageDeserializer<Ping>())
+                .Build();
+
             _logger = logger;
-            _topic = "numbers";
+            _topic = "ping-pong";
         }
 
         public int MessagesConsumed { get; private set; }
@@ -75,11 +80,13 @@
             }
         }
 
-        private void HandleResult(int number)
+        private void HandleResult(Ping ping)
         {
             try
             {
-                _logger.LogInformation($"{DateTime.Now}: Received {number}");
+                var delayMs = DateTime.Now.Subtract(ping.CreatedAt).TotalSeconds;
+
+                _logger.LogInformation($"Pong for {ping.Number} after {delayMs} ms delay");
             }
             catch (Exception ex)
             {

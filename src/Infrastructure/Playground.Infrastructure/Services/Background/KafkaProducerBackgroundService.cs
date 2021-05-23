@@ -1,6 +1,8 @@
 ﻿namespace Playground.Infrastructure.Services.Background
 {
     using Confluent.Kafka;
+    using Domain.ValueObjects;
+    using Messaging.Kafka.Serialization.Json;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
     using System;
@@ -11,9 +13,9 @@
     {
         private readonly Random rnd = new();
         private readonly string _topic;
-        private readonly IProducer<Null, int> _producer;
+        private readonly IProducer<Null, Ping> _producer;
         private readonly ILogger<KafkaProducerBackgroundService> _logger;
-
+        
         public KafkaProducerBackgroundService(ILogger<KafkaProducerBackgroundService> logger)
         {
             _logger = logger;
@@ -21,17 +23,18 @@
             var cfg = new ProducerConfig
             {
                 BootstrapServers = "kafka:9092",
-                ClientId = "NumbersProducer",
+                ClientId = "PingProducer",
                 LingerMs = 0,
                 Acks = Acks.None,
                 EnableDeliveryReports = false // fire & forget config
             };
 
-            _producer = new ProducerBuilder<Null, int>(cfg)
+            _producer = new ProducerBuilder<Null, Ping>(cfg)
+                .SetValueSerializer(new JsonMessageSerializer<Ping>())
                 .SetErrorHandler((_, error) => Console.WriteLine(error.Reason))
                 .Build();
 
-            _topic = "numbers";
+            _topic = "ping-pong";
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(async () =>
@@ -54,15 +57,15 @@
 
         private async Task StartProducerLoopAsync(CancellationToken cancellationToken)
         {
-            var publishIntervalMs = 6000;
-
             while (!cancellationToken.IsCancellationRequested)
             {
-                await _producer.ProduceAsync(_topic, new Message<Null, int> { Value = rnd.Next(0, 101) }, cancellationToken);
+                var ping = new Ping(rnd.Next(1, 101), DateTime.UtcNow);
+
+                await _producer.ProduceAsync(_topic, new Message<Null, Ping> { Value = ping }, cancellationToken);
 
                 _producer.Poll(TimeSpan.FromSeconds(0));
 
-                await Task.Delay(publishIntervalMs, cancellationToken);
+                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }
         }
     }

@@ -6,7 +6,7 @@
     using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
-    /// Use only for aggregates ???
+    /// Use only for aggregates, because of the domain events ???
     /// </summary>
     public abstract class Entity<TKey> : IEntity<TKey>, IDomainEntity
         where TKey : IEquatable<TKey>

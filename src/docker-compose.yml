@@ -93,7 +93,7 @@ services:
     environment:
       KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_ADVERTISED_PORT: "9092"
-      KAFKA_CREATE_TOPICS: "numbers:1:1"
+      KAFKA_CREATE_TOPICS: "ping-pong:1:1"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       #HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
       #HOSTNAME_COMMAND: curl http://169.254.169.254/latest/meta-data/public-hostname
@@ -103,7 +103,7 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: OUTSIDE
     healthcheck:        
-        test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --topic numbers --describe"]
+        test: ["CMD-SHELL", "kafka-topics.sh --bootstrap-server 127.0.0.1:9092 --topic ping-pong --describe"]
         interval: 15s
         timeout: 10s
         retries: 5
