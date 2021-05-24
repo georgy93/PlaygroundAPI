@@ -23,10 +23,10 @@
                 opts.Filters.Add<ModelValidationFilter>();
             })
             .AddNewtonsoftJson();
-             //.AddFluentValidation(mvcConfig =>
-             //{
-             //    mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
-             //});
+            //.AddFluentValidation(mvcConfig =>
+            //{
+            //    mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
+            //});
 
             return services
                  .Configure<ApiBehaviorOptions>(options =>

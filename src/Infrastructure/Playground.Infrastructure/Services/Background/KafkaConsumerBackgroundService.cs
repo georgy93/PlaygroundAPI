@@ -14,7 +14,7 @@
         private readonly ILogger<KafkaConsumerBackgroundService> _logger;
         private readonly string _topic;
         private readonly IConsumer<Null, Ping> _consumer;
-        
+
         public KafkaConsumerBackgroundService(ILogger<KafkaConsumerBackgroundService> logger)
         {
             var consumerConfig = new ConsumerConfig

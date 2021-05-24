@@ -15,7 +15,7 @@
         private readonly string _topic;
         private readonly IProducer<Null, Ping> _producer;
         private readonly ILogger<KafkaProducerBackgroundService> _logger;
-        
+
         public KafkaProducerBackgroundService(ILogger<KafkaProducerBackgroundService> logger)
         {
             _logger = logger;

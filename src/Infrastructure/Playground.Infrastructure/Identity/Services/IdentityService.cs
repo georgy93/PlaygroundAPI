@@ -17,13 +17,13 @@
     internal class IdentityService : IIdentityService
     {
         private readonly ILogger<IdentityService> _logger;
-       // private readonly IAuthenticationGateway _authenticationGateWay;
+        // private readonly IAuthenticationGateway _authenticationGateWay;
         private readonly IOptionsMonitor<JwtSettings> _jwtSettings;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly TokenValidationParameters _tokenValidationParameters;
 
         public IdentityService(ILogger<IdentityService> logger,
-                              // IAuthenticationGateway authenticationGateWay,
+                               // IAuthenticationGateway authenticationGateWay,
                                IOptionsMonitor<JwtSettings> jwtSettings,
                                UserManager<ApplicationUser> userManager,
                                TokenValidationParameters tokenValidationParameters)
@@ -164,7 +164,7 @@
                 ExpiryDate = DateTime.UtcNow.AddMonths(6)
             };
 
-           // await _authenticationGateWay.AddRefreshToken(refreshToken);
+            // await _authenticationGateWay.AddRefreshToken(refreshToken);
 
             var tokenString = tokenHandler.WriteToken(token);
 

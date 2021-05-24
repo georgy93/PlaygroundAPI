@@ -53,7 +53,7 @@
             services.AddAuthentication(auth =>
             {
                 auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;                
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(jwt =>

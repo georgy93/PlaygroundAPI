@@ -39,7 +39,7 @@ namespace Playground.API
         }
 
         public static IHost CreateHost(string[] args) => Host
-            .CreateDefaultBuilder(args)            
+            .CreateDefaultBuilder(args)
             .UseSerilog()
             .ConfigureWebHostDefaults(webBuilder =>
             {
@@ -53,9 +53,9 @@ namespace Playground.API
 
         private static void InitLogger(IConfiguration configuration) => Log.Logger = new LoggerConfiguration()
             .Enrich
-            .FromLogContext()            
+            .FromLogContext()
             .ReadFrom
             .Configuration(configuration)
-            .CreateLogger();    
+            .CreateLogger();
     }
 }

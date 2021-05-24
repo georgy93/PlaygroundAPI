@@ -6,7 +6,7 @@
 
     internal class CurrentUserService : ICurrentUserService
     {
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor) => UserId = 
+        public CurrentUserService(IHttpContextAccessor httpContextAccessor) => UserId =
             httpContextAccessor
             .HttpContext
             .User

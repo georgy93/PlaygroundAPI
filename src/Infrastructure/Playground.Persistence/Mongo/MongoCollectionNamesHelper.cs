@@ -14,7 +14,7 @@
         {
             var type = typeof(TEntity);
 
-            return _collectionNames.TryGetValue(type, out var collectionName) 
+            return _collectionNames.TryGetValue(type, out var collectionName)
                 ? collectionName
                 : type.Name + "s";
         }
