@@ -26,7 +26,8 @@
                 ClientId = "PingProducer",
                 LingerMs = 0,
                 Acks = Acks.None,
-                EnableDeliveryReports = false // fire & forget config
+                EnableDeliveryReports = false, // fire & forget config
+                EnableBackgroundPoll = true
             };
 
             _producer = new ProducerBuilder<Null, Ping>(cfg)
@@ -62,8 +63,6 @@
                 var ping = new Ping(rnd.Next(1, 101), DateTime.UtcNow);
 
                 await _producer.ProduceAsync(_topic, new Message<Null, Ping> { Value = ping }, cancellationToken);
-
-                _producer.Poll(TimeSpan.FromSeconds(0));
 
                 await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }

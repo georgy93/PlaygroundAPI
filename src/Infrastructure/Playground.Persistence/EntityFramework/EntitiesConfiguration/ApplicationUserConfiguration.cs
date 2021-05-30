@@ -8,7 +8,12 @@
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
-            builder.HasOne(x => x.Address);
+            //Address value object persisted as owned entity type supported since EF Core 2.0
+            builder
+                .OwnsOne(o => o.Address, a =>
+                {
+                    a.WithOwner();
+                });
         }
     }
 }
