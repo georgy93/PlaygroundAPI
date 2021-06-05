@@ -10,6 +10,6 @@
 
         void RemoveCacheResponse(string key);
 
-        public bool IsValidResponse(string response) => !string.IsNullOrEmpty(response);
+        public static bool IsValidResponse(string response) => !string.IsNullOrEmpty(response);
     }
 }
