@@ -13,7 +13,7 @@
             //};
             //IConnection conn = factory.CreateConnection();
 
-            var hcConnectionFactory = new ConnectionFactory()
+            var hcConnectionFactory = new ConnectionFactory
             {
                 UserName = "guest",
                 Password = "guest",

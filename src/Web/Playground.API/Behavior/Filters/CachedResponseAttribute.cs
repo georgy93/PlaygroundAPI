@@ -10,7 +10,7 @@
     using Utils.Extensions;
 
     [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
-    public class CachedResponseAttribute : TypeFilterAttribute
+    public sealed class CachedResponseAttribute : TypeFilterAttribute
     {
         public CachedResponseAttribute(int timeToLiveSeconds) : base(typeof(CachedResponseAttributeImplementation))
         {
@@ -35,7 +35,7 @@
                 var cacheKey = context.HttpContext.GenerateCacheKeyFromRequest();
                 var cachedResponse = _cacheService.GetCachedResponse(cacheKey);
 
-                if (_cacheService.IsValidResponse(cachedResponse))
+                if (IResponseCacheService.IsValidResponse(cachedResponse))
                 {
                     context.Result = CreateOkContentResult(cachedResponse);
                     return;

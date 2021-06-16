@@ -8,7 +8,7 @@
     using System.Threading.Tasks;
 
     [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
-    public class ApiKeyAuthAttribute : TypeFilterAttribute
+    public sealed class ApiKeyAuthAttribute : TypeFilterAttribute
     {
         public ApiKeyAuthAttribute() : base(typeof(ApiKeyAuthAttributeImplementation)) { }
 
@@ -33,7 +33,7 @@
 
             private bool AuthenticationKeyIsValid(ActionExecutingContext context) =>
                 context.HttpContext.Request.Headers.TryGetValue(ApiKeyHeaderName, out var potentialApiKey)
-                && _apiKeySettings.Value.Equals(potentialApiKey);
+                && _apiKeySettings.Value.Key.Equals(potentialApiKey);
         }
     }
 }

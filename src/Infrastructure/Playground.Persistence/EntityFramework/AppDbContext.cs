@@ -50,26 +50,24 @@
 
         public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
         {
-            // Dispatch Domain Events collection. 
+            // Dispatch Domain Events collection.
             // Choices:
-            // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including  
+            // A) Right BEFORE committing data (EF SaveChanges) into the DB will make a single transaction including
             // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
-            // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions. 
-            // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers. 
+            // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions.
+            // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers.
             await this.DispatchDomainEventsAsync(_mediator);
 
             AuditEntities();
 
-            // After executing this line all the changes (from the Command Handler and Domain Event Handlers) 
+            // After executing this line all the changes (from the Command Handler and Domain Event Handlers)
             // performed through the DbContext will be committed
             var result = await SaveChangesAsync(cancellationToken);
 
             return result > 0;
         }
 
-        /// <summary>
-        /// Call this only when we are saving outbox messages or persisting operations that have not produced domain events
-        /// </summary>
+        // Call this only when we are saving outbox messages or persisting operations that have not produced domain events
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             // Concurrency:
@@ -151,6 +149,8 @@
                         entry.Entity.LastModifiedBy = _currentUserService.UserId;
                         entry.Entity.LastModified = _dateTimeService.Now;
                         break;
+                    default:
+                        continue;
                 }
             }
         }

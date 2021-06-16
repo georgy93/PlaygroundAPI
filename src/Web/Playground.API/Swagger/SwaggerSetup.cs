@@ -14,14 +14,14 @@
         public static IServiceCollection AddSwagger(this IServiceCollection services) => services
             .AddSwaggerGen(opt =>
             {
-                opt.SwaggerDoc("v1", new OpenApiInfo()
+                opt.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Playground API",
                     Description = "This is just a playground application",
                     Version = "v1"
                 });
                 opt.ExampleFilters();
-                opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme()
+                opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
                 {
                     Description = "JWT Authorization header using the bearer scheme",
                     Name = HeaderNames.Authorization,
@@ -41,9 +41,9 @@
 
         private static OpenApiSecurityRequirement CreateSecurityRequirement()
         {
-            var securityScheme = new OpenApiSecurityScheme()
+            var securityScheme = new OpenApiSecurityScheme
             {
-                Reference = new OpenApiReference()
+                Reference = new OpenApiReference
                 {
                     Id = JwtBearerDefaults.AuthenticationScheme,
                     Type = ReferenceType.SecurityScheme

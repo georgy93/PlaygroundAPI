@@ -18,7 +18,7 @@
 
             var validationError = context.ModelState.First();
 
-            context.Result = new BadRequestObjectResult(new ErrorResponse()
+            context.Result = new BadRequestObjectResult(new ErrorResponse
             {
                 ErrorCode = validationError.Key,
                 Description = validationError.Value.Errors[0].ErrorMessage

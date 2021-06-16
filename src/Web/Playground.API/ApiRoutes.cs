@@ -17,6 +17,14 @@
         //    public const string Create = PostsControllerBase;
         //}
 
+        public static class Secret
+        {
+            private const string SecretControlerBase = Base + "/secret";
+
+            public const string Get = SecretControlerBase + "/get";
+            public const string CancellationTokenMap = SecretControlerBase + "/ct";
+        }
+
         public static class Identity
         {
             private const string IdentityControlerBase = Base + "/identity";

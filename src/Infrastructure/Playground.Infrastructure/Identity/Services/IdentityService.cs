@@ -43,7 +43,7 @@
             if (existingUser is not null)
                 return AuthenticationResult.Fail(IdentityErrors.EmailIsAlreadyTakenByAnotherUser);
 
-            var newUser = new ApplicationUser()
+            var newUser = new ApplicationUser
             {
                 Id = Guid.NewGuid().ToString(),
                 Email = email,
@@ -134,7 +134,7 @@
 
         private async Task<AuthenticationResult> GenerateAuthenticationResultForUserAsync(ApplicationUser user)
         {
-            var claims = new List<Claim>()
+            var claims = new List<Claim>
             {
                 new (JwtRegisteredClaimNames.Sub, user.Email),
                 new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -147,7 +147,7 @@
             claims.AddRange(userClaims);
 
             var key = Encoding.ASCII.GetBytes(_jwtSettings.CurrentValue.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor()
+            var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
                 Expires = DateTime.UtcNow.AddHours(_jwtSettings.CurrentValue.TokenLifetime.Minutes),
@@ -156,7 +156,7 @@
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var refreshToken = new RefreshToken()
+            var refreshToken = new RefreshToken
             {
                 JwtId = token.Id,
                 UserId = user.Id,

@@ -26,9 +26,9 @@
             {
                 var logData = new
                 {
-                    Uri = request.RequestUri,
                     HttpMethod = request.Method,
-                    Body = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
+                    Uri = request.RequestUri,
+                    RequestPayload = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
                 };
 
                 _logger.LogError(ex, logData.Beautify());

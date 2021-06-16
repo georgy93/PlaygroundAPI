@@ -5,11 +5,11 @@
     using Microsoft.AspNetCore.Mvc.Filters;
     using Utils.Extensions;
 
-    public class RemoveCachedResponseAttribute : TypeFilterAttribute
+    public sealed class RemoveCachedResponseAttribute : TypeFilterAttribute
     {
         public RemoveCachedResponseAttribute() : base(typeof(RemoveCachedResponseImplementationAttribute)) { }
 
-        public class RemoveCachedResponseImplementationAttribute : ActionFilterAttribute
+        public sealed class RemoveCachedResponseImplementationAttribute : ActionFilterAttribute
         {
             private readonly IResponseCacheService _cacheService;
 

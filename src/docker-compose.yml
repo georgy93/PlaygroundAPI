@@ -22,11 +22,13 @@ services:
         condition: service_healthy
     links:
       - sqlServer
-      - mongoDb
-      - rabbitMq
+      #- mongoDb
+      #- rabbitMq
       - kafka
+      #- elasticsearch
     networks: 
       - myapi-network
+      #- elastic
 
   sqlServer:
     container_name: sqlServer
@@ -41,34 +43,34 @@ services:
     networks: 
       - myapi-network
 
-  mongoDb:
-    container_name: mongoDb
-    image: mongo:latest
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: rootpass
-      MONGO_INITDB_DATABASE: PlaygroundDB
-    ports:
-      - 27017:27017
-    volumes:
-      - mongodb_data_container:/data/db
-    networks: 
-      - myapi-network
+  #mongoDb:
+  #  container_name: mongoDb
+  #  image: mongo:latest
+  #  environment:
+  #    MONGO_INITDB_ROOT_USERNAME: root
+  #    MONGO_INITDB_ROOT_PASSWORD: rootpass
+  #    MONGO_INITDB_DATABASE: PlaygroundDB
+  #  ports:
+  #    - 27017:27017
+  #  volumes:
+  #    - mongodb_data_container:/data/db
+  #  networks: 
+  #    - myapi-network
       
-  rabbitMq:
-    container_name: rabbitMq
-    image: rabbitmq:3-management
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    hostname: "rabbitmq"
-    environment:
-      - RABBITMQ_DEFAULT_USER=guest
-      - RABBITMQ_DEFAULT_PASS=guest
-    volumes:
-      - rabbitmq:/var/lib/rabbitmq/mnesia
-    networks: 
-      - myapi-network
+  #rabbitMq:
+  #  container_name: rabbitMq
+  #  image: rabbitmq:3-management
+  #  ports:
+  #    - "5672:5672"
+  #    - "15672:15672"
+  #  hostname: "rabbitmq"
+  #  environment:
+  #    - RABBITMQ_DEFAULT_USER=guest
+  #    - RABBITMQ_DEFAULT_PASS=guest
+  #  volumes:
+  #    - rabbitmq:/var/lib/rabbitmq/mnesia
+  #  networks: 
+  #    - myapi-network
 
   zookeeper:
     container_name: zookeeper
@@ -112,10 +114,48 @@ services:
     networks: 
       - myapi-network
 
+  #elasticsearch:
+  #  image: docker.elastic.co/elasticsearch/elasticsearch:7.13.0
+  #  container_name: elasticsearch
+  #  environment:
+  #    - node.name=elasticsearch
+  #    - cluster.name=es-docker-cluster
+  #    - cluster.initial_master_nodes=es01
+  #    - bootstrap.memory_lock=true
+  #    - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+  #  ulimits:
+  #    memlock:
+  #      soft: -1
+  #      hard: -1
+  #  volumes:
+  #    - data01:/usr/share/elasticsearch/data
+  #  ports:
+  #    - 9200:9200
+  #  networks:
+  #    - myapi-network
+  #    - elastic
+
+  #kibana:
+  #  image: docker.elastic.co/kibana/kibana:7.13.0
+  #  container_name: kibana
+  #  ports:
+  #    - 5601:5601
+  #  environment:
+  #    ELASTICSEARCH_URL: http://elasticsearch:9200
+  #    ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+  #  depends_on:
+  #    - elasticsearch 
+  #  networks:
+  #    - elastic
+
 networks:
   myapi-network:
+  #elastic:
+  #  driver: bridge
 
 volumes:
   sqldata:
-  rabbitmq:
-  mongodb_data_container:
+  #rabbitmq:
+  #mongodb_data_container:
+  #data01:
+  #  driver: local

@@ -18,7 +18,7 @@
     {
         public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration config) => services
             .AddEntityFramework(config)
-            .AddMongoDatabase(config)
+            //.AddMongoDatabase(config)
             .AddDataStoresHealthChecks();
 
         private static IServiceCollection AddEntityFramework(this IServiceCollection services, IConfiguration config)
@@ -33,7 +33,7 @@
                          sqlServerOptionsAction: sqlServerContextBuilder =>
                          {
                              sqlServerContextBuilder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
-                             //sqlServerContextBuilder.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                             // sqlServerContextBuilder.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                          });
                    },
                    contextLifetime: ServiceLifetime.Scoped //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
@@ -78,7 +78,7 @@
                 {
                     var logger = provider.GetRequiredService<ILogger<MongoClient>>();
 
-                    settings.ClusterConfigurator = clusterBuilder =>  // TODO: clusterBuilder.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode                    
+                    settings.ClusterConfigurator = clusterBuilder =>  // TODO: clusterBuilder.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode               
                         clusterBuilder
                         .Subscribe<CommandStartedEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Command.ToJson()}"))
                         .Subscribe<CommandSucceededEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Reply.ToJson()}"))

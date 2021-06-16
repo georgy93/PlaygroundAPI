@@ -6,7 +6,6 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    [Route("secret")]
     [ApiKeyAuth]
     [AllowAnonymous]
     public class SecretController : BaseController
@@ -16,11 +15,12 @@
         {
         }
 
-        [HttpGet("get")]
+        [HttpGet(ApiRoutes.Secret.Get)]
         public IActionResult GetSecret() => Ok("I have no secrets");
 
-        [HttpGet("ct")]
-        public async Task MapRequestAbortedToCancellationTokenParameter(CancellationToken cancellationToken)
+        // TODO: Move this 
+        [HttpGet(ApiRoutes.Secret.CancellationTokenMap)]
+        public async Task MapRequestAbortedToCancellationTokenParameterAsync(CancellationToken cancellationToken)
         {
             await Task.Delay(10000, cancellationToken);
         }

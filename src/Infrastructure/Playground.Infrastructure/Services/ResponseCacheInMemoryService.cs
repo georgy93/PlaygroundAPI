@@ -25,7 +25,7 @@
 
             var serialzedResponse = JsonSerializer.Serialize(response);
 
-            _memoryCache.Set(key, serialzedResponse, new MemoryCacheEntryOptions()
+            _memoryCache.Set(key, serialzedResponse, new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = timeToLive
             });

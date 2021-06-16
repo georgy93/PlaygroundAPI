@@ -30,8 +30,8 @@
             .AddServices()
             .AddBackgroundServices()
             .AddGateways()
-            .AddKafkaMessaging()
-            .AddRabbitMqMessaging();
+            .AddKafkaMessaging();
+            //.AddRabbitMqMessaging();
 
         private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {

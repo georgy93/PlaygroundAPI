@@ -25,7 +25,7 @@
 
                 await dbContext.Database.MigrateAsync();
 
-                if (seedAsync is not null)
+                if (seedAsync != null)
                     await seedAsync(dbContext, services);
 
                 logger.LogInformation($"Migrated database associated with context {dbContextName}");
