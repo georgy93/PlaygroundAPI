@@ -161,7 +161,7 @@
                 JwtId = token.Id,
                 UserId = user.Id,
                 CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddMonths(6)
+                ExpiryDate = DateTime.UtcNow.AddHours(2)
             };
 
             // await _authenticationGateWay.AddRefreshToken(refreshToken);

@@ -1,4 +1,7 @@
-﻿namespace Playground.Infrastructure.Identity
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("Playground.IntegrationTests")]
+namespace Playground.Infrastructure.Identity
 {
     internal static class IdentityErrors
     {

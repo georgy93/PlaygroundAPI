@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Newtonsoft.Json.Serialization;
     using Swagger;
 
     public static class DependencyInjection
@@ -22,7 +23,10 @@
                 //opts.EnableEndpointRouting = false;
                 opts.Filters.Add<ModelValidationFilter>();
             })
-            .AddNewtonsoftJson();
+            .AddNewtonsoftJson(jsonOptions =>
+            {
+                jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
             //.AddFluentValidation(mvcConfig =>
             //{
             //    mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
