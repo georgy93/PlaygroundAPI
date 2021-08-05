@@ -1,4 +1,4 @@
-namespace Playground.IntegrationTests
+namespace Playground.IntegrationTests.Configuration
 {
     using API;
     using Microsoft.AspNetCore.Hosting;

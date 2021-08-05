@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApplicationCore\Playground.Application\Playground.Application.csproj" />
+    <ProjectReference Include="..\..\ApplicationCore\Playground.FluentValidations\Playground.FluentValidations.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Playground.Infrastructure\Playground.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Playground.Persistence\Playground.Persistence.csproj" />
   </ItemGroup>

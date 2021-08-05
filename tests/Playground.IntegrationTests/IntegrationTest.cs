@@ -1,17 +1,15 @@
 ﻿namespace Playground.IntegrationTests
 {
     using API;
+    using Configuration;
     using Infrastructure.Identity.Models;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Mvc.Testing;
     using System;
-    using System.Net;
     using System.Net.Http;
     using System.Net.Http.Headers;
     using System.Net.Http.Json;
-    using System.Net.Mime;
     using System.Threading.Tasks;
-    using Xunit;
 
     public abstract class IntegrationTest : IDisposable
     {

@@ -2,6 +2,8 @@
 {
     using Behavior.Filters;
     using Behavior.Settings;
+    using FluentValidation.AspNetCore;
+    using FluentValidations;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -26,11 +28,11 @@
             .AddNewtonsoftJson(jsonOptions =>
             {
                 jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            })
+            .AddFluentValidation(mvcConfig =>
+            {
+                mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
             });
-            //.AddFluentValidation(mvcConfig =>
-            //{
-            //    mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
-            //});
 
             return services
                  .Configure<ApiBehaviorOptions>(options =>

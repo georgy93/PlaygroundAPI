@@ -7,7 +7,7 @@
     using System.Reflection;
     using Xunit;
 
-    public class ControllerEndPointsTests
+    public class ControllerEndpointsTests
     {
         [Fact]
         public void SecretController_Should_Contain_Correct_Endpoints()
