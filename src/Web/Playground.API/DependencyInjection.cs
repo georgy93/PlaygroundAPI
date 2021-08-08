@@ -22,7 +22,6 @@
         {
             services.AddControllers(opts =>
             {
-                //opts.EnableEndpointRouting = false;
                 opts.Filters.Add<ModelValidationFilter>();
             })
             .AddNewtonsoftJson(jsonOptions =>

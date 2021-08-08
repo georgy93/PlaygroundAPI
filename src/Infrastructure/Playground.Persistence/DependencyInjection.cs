@@ -70,7 +70,8 @@
         {
             services
                 .AddHealthChecks()
-                .AddDbContextCheck<AppDbContext>();
+                .AddDbContextCheck<AppDbContext>()
+                .AddDbContextCheck<IntegrationEventLogDbContext>();
 
             return services;
         }

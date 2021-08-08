@@ -34,4 +34,8 @@
     <ProjectReference Include="..\..\ApplicationCore\Playground.Domain\Playground.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="EntityFramework\Migrations\" />
+  </ItemGroup>
+
 </Project>

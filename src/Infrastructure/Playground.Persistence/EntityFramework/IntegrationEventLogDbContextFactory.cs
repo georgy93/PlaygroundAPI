@@ -3,7 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Design;
 
-    public class IntegrationEventLogDbContextDesignTimeFactory : IDesignTimeDbContextFactory<IntegrationEventLogDbContext>
+    public class IntegrationEventLogDbContextFactory : IDesignTimeDbContextFactory<IntegrationEventLogDbContext>
     {
         public IntegrationEventLogDbContext CreateDbContext(string[] args)
         {

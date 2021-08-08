@@ -19,7 +19,7 @@ namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogD
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Playground.Application.Common.Messages.IntegrationEventLogEntry", b =>
+            modelBuilder.Entity("Playground.Application.Common.Integration.IntegrationEventLogEntry", b =>
                 {
                     b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd()
@@ -47,7 +47,7 @@ namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogD
 
                     b.HasKey("EventId");
 
-                    b.ToTable("IntegrationEventLog", "integrationEventLog");
+                    b.ToTable("IntegrationEventLog", "integration");
                 });
 #pragma warning restore 612, 618
         }

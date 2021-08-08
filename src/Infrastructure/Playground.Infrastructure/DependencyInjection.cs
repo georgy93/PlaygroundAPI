@@ -14,6 +14,7 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Playground.Messaging.Kafka;
+    using Playground.Messaging.RabbitMq;
     using Polly;
     using Polly.Extensions.Http;
     using Refit;
@@ -32,7 +33,7 @@
             .AddBackgroundServices()
             .AddGateways()
             .AddKafkaMessaging()
-            //.AddRabbitMqMessaging();
+            .AddRabbitMqMessaging(configuration)
             .AddIntegrationEventsMessaging();
 
         private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)

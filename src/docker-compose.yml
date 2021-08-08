@@ -23,7 +23,7 @@ services:
     links:
       - sqlServer
       #- mongoDb
-      #- rabbitMq
+      - rabbitMq
       - kafka
       #- elasticsearch
     networks: 
@@ -57,20 +57,20 @@ services:
   #  networks: 
   #    - myapi-network
       
-  #rabbitMq:
-  #  container_name: rabbitMq
-  #  image: rabbitmq:3-management
-  #  ports:
-  #    - "5672:5672"
-  #    - "15672:15672"
-  #  hostname: "rabbitmq"
-  #  environment:
-  #    - RABBITMQ_DEFAULT_USER=guest
-  #    - RABBITMQ_DEFAULT_PASS=guest
-  #  volumes:
-  #    - rabbitmq:/var/lib/rabbitmq/mnesia
-  #  networks: 
-  #    - myapi-network
+  rabbitMq:
+    container_name: rabbitMq
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    hostname: "rabbitmq"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq/mnesia
+    networks: 
+      - myapi-network
 
   zookeeper:
     container_name: zookeeper
@@ -155,7 +155,7 @@ networks:
 
 volumes:
   sqldata:
-  #rabbitmq:
+  rabbitmq:
   #mongodb_data_container:
   #data01:
   #  driver: local

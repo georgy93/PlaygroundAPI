@@ -8,11 +8,11 @@ namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogD
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "integrationEventLog");
+                name: "integration");
 
             migrationBuilder.CreateTable(
                 name: "IntegrationEventLog",
-                schema: "integrationEventLog",
+                schema: "integration",
                 columns: table => new
                 {
                     EventId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -33,7 +33,7 @@ namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogD
         {
             migrationBuilder.DropTable(
                 name: "IntegrationEventLog",
-                schema: "integrationEventLog");
+                schema: "integration");
         }
     }
 }

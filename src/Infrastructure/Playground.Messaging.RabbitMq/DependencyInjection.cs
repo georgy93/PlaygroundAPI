@@ -1,31 +1,38 @@
 ﻿namespace Playground.Messaging.RabbitMq
 {
+    using Abstract;
+    using Concrete;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
-    using RabbitMQ.Client;
+    using Microsoft.Extensions.Logging;
+    using Microsoft.Extensions.Options;
 
     public static class DependencyInjection
     {
-        public static IServiceCollection AddRabbitMqMessaging(this IServiceCollection services)
+        public static IServiceCollection AddRabbitMqMessaging(this IServiceCollection services, IConfiguration configuration)
         {
-            //var factory = new ConnectionFactory
-            //{
-            //    Uri = new System.Uri("amqp://user:pass@hostName:port/vhost")
-            //};
-            //IConnection conn = factory.CreateConnection();
-
-            var hcConnectionFactory = new ConnectionFactory
-            {
-                UserName = "guest",
-                Password = "guest",
-                HostName = "rabbitmq",
-                ClientProvidedName = "RabbitMqHealthCheck"
-            };
-
             services
                 .AddHealthChecks()
-                .AddRabbitMQ(sp => hcConnectionFactory);
+                .AddRabbitMQ(sp =>
+                {
+                    var rabbitMqSettings = sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
+                    var connectionFactory = rabbitMqSettings.ToConnectionFactory();
 
-            return services;
+                    connectionFactory.ClientProvidedName = $"{rabbitMqSettings.ClientProvidedConnectionName}_HealthCheck";
+
+                    return connectionFactory;
+                });
+
+            return services
+                .Configure<RabbitMqSettings>(configuration.GetSection(nameof(RabbitMqSettings)))
+                .AddSingleton<IRabbitMQPersistentConnection, DefaultRabbitMQPersistentConnection>(sp =>
+                {
+                    var rabbitMqSettings = sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
+                    var connectionFactory = rabbitMqSettings.ToConnectionFactory();
+                    var logger = sp.GetRequiredService<ILogger<DefaultRabbitMQPersistentConnection>>();
+
+                    return new DefaultRabbitMQPersistentConnection(connectionFactory, logger, rabbitMqSettings.CreateConnectionRetryCount);
+                });
         }
     }
 }

@@ -10,7 +10,7 @@ using Playground.Persistence.EntityFramework;
 namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogDbContextMigrations
 {
     [DbContext(typeof(IntegrationEventLogDbContext))]
-    [Migration("20210808074648_InitialCreate")]
+    [Migration("20210808184952_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogD
                 .HasAnnotation("ProductVersion", "5.0.8")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Playground.Application.Common.Messages.IntegrationEventLogEntry", b =>
+            modelBuilder.Entity("Playground.Application.Common.Integration.IntegrationEventLogEntry", b =>
                 {
                     b.Property<Guid>("EventId")
                         .ValueGeneratedOnAdd()
@@ -49,7 +49,7 @@ namespace Playground.Persistence.EntityFramework.Migrations.IntegrationEventLogD
 
                     b.HasKey("EventId");
 
-                    b.ToTable("IntegrationEventLog", "integrationEventLog");
+                    b.ToTable("IntegrationEventLog", "integration");
                 });
 #pragma warning restore 612, 618
         }

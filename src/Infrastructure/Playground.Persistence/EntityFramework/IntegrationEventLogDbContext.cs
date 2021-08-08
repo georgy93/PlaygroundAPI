@@ -5,6 +5,10 @@
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using System;
 
+    /// <summary>
+    /// PM Console: Add-Migration InitialCreate -Context IntegrationEventLogDbContext -OutputDir EntityFramework\Migrations\IntegrationEventLogDbContextMigrations
+    /// https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers?tabs=vs
+    /// </summary>
     public class IntegrationEventLogDbContext : DbContext
     {
         public const string DEFAULT_SCHEMA = "integration";
