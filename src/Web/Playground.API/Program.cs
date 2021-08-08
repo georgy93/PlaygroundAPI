@@ -29,6 +29,8 @@ namespace Playground.API
                 var host = CreateHost(args);
 
                 await host.MigrateDataBaseAsync<AppDbContext>();
+                await host.MigrateDataBaseAsync<IntegrationEventLogDbContext>();
+
                 await host.RunAsync();
             }
             catch (Exception ex)

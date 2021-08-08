@@ -18,7 +18,7 @@
         [HttpGet(ApiRoutes.Secret.Get)]
         public IActionResult GetSecret() => Ok("I have no secrets");
 
-        // TODO: Move this 
+        // TODO: Move this
         [HttpGet(ApiRoutes.Secret.CancellationTokenMap)]
         public async Task MapRequestAbortedToCancellationTokenParameterAsync(CancellationToken cancellationToken)
         {

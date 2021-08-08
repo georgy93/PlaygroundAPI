@@ -1,21 +1,22 @@
 ﻿namespace Playground.Infrastructure
 {
+    using Application.Common.Integration;
     using Application.Interfaces;
     using Application.Interfaces.Gateways;
     using Authorization;
     using Identity;
     using Identity.Services;
-    using Messaging.Kafka;
-    using Messaging.RabbitMq;
+    using Messaging.Integration;
+    using Messaging.Rest.DelegatingHandlers;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using Playground.Messaging.Kafka;
     using Polly;
     using Polly.Extensions.Http;
     using Refit;
-    using RestMessaging.DelegatingHandlers;
     using Services;
     using Services.Background;
     using System;
@@ -30,8 +31,9 @@
             .AddServices()
             .AddBackgroundServices()
             .AddGateways()
-            .AddKafkaMessaging();
+            .AddKafkaMessaging()
             //.AddRabbitMqMessaging();
+            .AddIntegrationEventsMessaging();
 
         private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
@@ -40,7 +42,7 @@
 
             jwtSettingsConfig.Bind(jwtSettings);
 
-            var tokenValidationParameters = new TokenValidationParameters()
+            var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
@@ -84,7 +86,8 @@
 
         private static IServiceCollection AddBackgroundServices(this IServiceCollection services) => services
             .AddHostedService<KafkaConsumerBackgroundService>()
-            .AddHostedService<KafkaProducerBackgroundService>();
+            .AddHostedService<KafkaProducerBackgroundService>()
+            .AddHostedService<IntegrationEventsPublisherBackgroundService>();
 
         private static IServiceCollection AddGateways(this IServiceCollection services)
         {
@@ -108,6 +111,12 @@
             return services
                 .AddTransient<RequestExceptionHandlingBehavior>()
                 .AddTransient<RequestStatisticsBehavior>();
+        }
+
+        private static IServiceCollection AddIntegrationEventsMessaging(this IServiceCollection services)
+        {
+            return services
+                .AddScoped<IIntegrationEventsService, IntegrationEventsService>();
         }
     }
 }

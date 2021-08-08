@@ -8,14 +8,13 @@
     {
         public static IServiceCollection AddKafkaMessaging(this IServiceCollection services)
         {
-            var healthCheckProducerConfiguration = new ProducerConfig()
+            var healthCheckProducerConfiguration = new ProducerConfig
             {
                 BootstrapServers = "kafka:9092",
                 MessageSendMaxRetries = 0,
                 MessageTimeoutMs = 1500,
                 RequestTimeoutMs = 1500,
                 SocketTimeoutMs = 1500,
-                MetadataRequestTimeoutMs = 1500,
             };
 
             services

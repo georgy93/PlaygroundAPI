@@ -1,4 +1,4 @@
-﻿namespace Playground.Infrastructure.RestMessaging.DelegatingHandlers
+﻿namespace Playground.Infrastructure.Messaging.Rest.DelegatingHandlers
 {
     using System.Net.Http;
     using System.Threading;

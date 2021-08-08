@@ -1,4 +1,4 @@
-﻿namespace Playground.Infrastructure.RestMessaging.DelegatingHandlers
+﻿namespace Playground.Infrastructure.Messaging.Rest.DelegatingHandlers
 {
     using Microsoft.Extensions.Logging;
     using System;

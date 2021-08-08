@@ -1,7 +1,9 @@
 ﻿namespace Playground.Persistence
 {
+    using Application.Common.Integration;
     using Domain.Entities;
     using EntityFramework;
+    using EntityFramework.Services;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -25,6 +27,19 @@
         {
             // https://github.com/dotnet/aspnetcore/issues/17093
             services
+                 .AddDbContext<IntegrationEventLogDbContext>(
+                   contextBuilder =>
+                   {
+                       contextBuilder.UseSqlServer(
+                         connectionString: config.GetConnectionString("DefaultConnection"),
+                         sqlServerOptionsAction: sqlServerContextBuilder =>
+                         {
+                             sqlServerContextBuilder.MigrationsAssembly(typeof(IntegrationEventLogDbContext).Assembly.GetName().Name);
+                             //sqlServerContextBuilder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(3), errorNumbersToAdd: null);
+                         });
+                   },
+                   contextLifetime: ServiceLifetime.Scoped //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
+               )
                .AddDbContext<AppDbContext>(
                    contextBuilder =>
                    {
@@ -32,7 +47,7 @@
                          connectionString: config.GetConnectionString("DefaultConnection"),
                          sqlServerOptionsAction: sqlServerContextBuilder =>
                          {
-                             sqlServerContextBuilder.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
+                             sqlServerContextBuilder.MigrationsAssembly(typeof(AppDbContext).Assembly.GetName().Name);
                              // sqlServerContextBuilder.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                          });
                    },
@@ -42,7 +57,8 @@
                .AddRoles<IdentityRole>()
                .AddEntityFrameworkStores<AppDbContext>();
 
-            return services;
+            return services
+                .AddScoped<IIntegrationEventLogService, IntegrationEventLogService>();
 
             //return services
             //    .AddScoped(typeof(IEfRepository<>), typeof(EfRepository<>))
@@ -78,7 +94,7 @@
                 {
                     var logger = provider.GetRequiredService<ILogger<MongoClient>>();
 
-                    settings.ClusterConfigurator = clusterBuilder =>  // TODO: clusterBuilder.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode               
+                    settings.ClusterConfigurator = clusterBuilder =>  // TODO: clusterBuilder.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode
                         clusterBuilder
                         .Subscribe<CommandStartedEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Command.ToJson()}"))
                         .Subscribe<CommandSucceededEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Reply.ToJson()}"))

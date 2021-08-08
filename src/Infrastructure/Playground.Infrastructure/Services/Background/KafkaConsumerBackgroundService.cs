@@ -2,9 +2,9 @@
 {
     using Confluent.Kafka;
     using Domain.ValueObjects;
-    using Messaging.Kafka.Serialization.Json;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
+    using Playground.Messaging.Kafka.Serialization.Json;
     using System;
     using System.Threading;
     using System.Threading.Tasks;
