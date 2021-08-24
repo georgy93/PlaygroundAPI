@@ -2,6 +2,9 @@
 {
     using API;
     using API.Behavior.Settings;
+    using API.Controllers;
+    using Extensions;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Options;
     using System.Net;
@@ -12,6 +15,18 @@
     public sealed class SecretControllerTests : IntegrationTest
     {
         private static readonly string ApiKeyHeaderName = "ApiKey";
+
+        [Fact]
+        public void SecretController_Should_Contain_Correct_Endpoints()
+        {
+            // Arrange
+            // Act
+            var controller = new SecretController();
+
+            // Assert
+            controller.ValidateEndpoint<HttpGetAttribute>(nameof(SecretController.GetSecret), ApiRoutes.Secret.Get);
+            controller.ValidateEndpoint<HttpGetAttribute>(nameof(SecretController.MapRequestAbortedToCancellationTokenParameterAsync), ApiRoutes.Secret.CancellationTokenMap);
+        }
 
         [Fact]
         public async Task Caling_SecretController_Get_WithCorrectApiKey_Should_SucceedAsync()

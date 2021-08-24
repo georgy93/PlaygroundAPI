@@ -3,6 +3,7 @@
     using Application.Interfaces;
     using Domain.Entities;
     using Domain.Entities.Abstract;
+    using Domain.Entities.Aggregates.User;
     using Extensions;
     using MediatR;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -17,6 +18,7 @@
     /// <summary>
     /// Add-Migration Initial
     /// Update-Database
+    /// https://docs.microsoft.com/en-us/ef/core/modeling/constructors readonly props
     /// </summary>
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {
@@ -131,7 +133,8 @@
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
+            //  modelBuilder.Entity<Entity<int>>().Ignore(e => e.DomainEvents); // remove not mapped and test
+            //  modelBuilder.Entity<Entity<Guid>>().Ignore(e => e.DomainEvents);
             base.OnModelCreating(modelBuilder);
         }
 

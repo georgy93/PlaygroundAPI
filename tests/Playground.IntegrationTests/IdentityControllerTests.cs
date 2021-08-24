@@ -1,10 +1,12 @@
 ﻿namespace Playground.IntegrationTests
 {
     using API;
+    using API.Controllers;
+    using Extensions;
     using Infrastructure.Identity;
     using Infrastructure.Identity.Models;
+    using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Diagnostics;
     using System.Net;
     using System.Net.Http;
     using System.Net.Http.Json;
@@ -14,6 +16,19 @@
     public class IdentityControllerTests : IntegrationTest
     {
         private readonly string CorrectPasswrod = "somePassword1234!";
+
+        [Fact]
+        public void IdentityController_Should_Contain_Correct_Endpoints()
+        {
+            // Arrange
+            // Act
+            var controller = new IdentityController(null);
+
+            // Assert
+            controller.ValidateEndpoint<HttpPostAttribute>(nameof(IdentityController.RegisterAsync), ApiRoutes.Identity.Register);
+            controller.ValidateEndpoint<HttpPostAttribute>(nameof(IdentityController.LoginAsync), ApiRoutes.Identity.Login);
+            controller.ValidateEndpoint<HttpPostAttribute>(nameof(IdentityController.RefreshTokenAsync), ApiRoutes.Identity.Refresh);
+        }
 
         [Fact]
         public async Task Caling_IdentityController_Register_With_CorrectDataForNewUser_Should_RegisterTheNewUserAsync()

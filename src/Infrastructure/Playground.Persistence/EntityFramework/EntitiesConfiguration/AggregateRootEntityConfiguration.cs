@@ -9,6 +9,10 @@
         public void Configure(EntityTypeBuilder<AggregateRootEntity> builder)
         {
             builder.HasKey(x => x.Id);
+
+            // Address value object persisted as owned entity type supported since EF Core 2.0
+            // Address class properties will be added as columns to the AggregateRootEntity table thanks to the OwnsOne
+            builder.OwnsOne(x => x.Address);
         }
     }
 }

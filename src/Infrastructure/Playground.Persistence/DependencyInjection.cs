@@ -1,7 +1,7 @@
 ﻿namespace Playground.Persistence
 {
     using Application.Common.Integration;
-    using Domain.Entities;
+    using Domain.Entities.Aggregates.User;
     using EntityFramework;
     using EntityFramework.Services;
     using Microsoft.AspNetCore.Identity;

@@ -1,6 +1,8 @@
 ﻿namespace Playground.Infrastructure.Identity.Services
 {
+    using Application.Interfaces;
     using Domain.Entities;
+    using Domain.Entities.Aggregates.User;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
@@ -16,6 +18,7 @@
 
     internal class IdentityService : IIdentityService
     {
+        private readonly IDateTimeService _dateTimeService;
         private readonly ILogger<IdentityService> _logger;
         // private readonly IAuthenticationGateway _authenticationGateWay;
         private readonly IOptionsMonitor<JwtSettings> _jwtSettings;
@@ -26,13 +29,15 @@
                                // IAuthenticationGateway authenticationGateWay,
                                IOptionsMonitor<JwtSettings> jwtSettings,
                                UserManager<ApplicationUser> userManager,
-                               TokenValidationParameters tokenValidationParameters)
+                               TokenValidationParameters tokenValidationParameters,
+                               IDateTimeService dateTimeService)
         {
             _logger = logger;
             //_authenticationGateWay = authenticationGateWay;
             _jwtSettings = jwtSettings;
             _userManager = userManager;
             _tokenValidationParameters = tokenValidationParameters;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest request)
@@ -43,14 +48,12 @@
             if (existingUser is not null)
                 return AuthenticationResult.Fail(IdentityErrors.EmailIsAlreadyTakenByAnotherUser);
 
-            var newUser = new ApplicationUser
-            {
-                Id = Guid.NewGuid().ToString(),
-                Email = email,
-                UserName = email
-            };
+            var newUser = new ApplicationUser(
+               userId: new UserId(Guid.NewGuid()),
+               email: Email.FromString(email)
+            );
 
-            // await userManager.AddClaimAsync(newUser, new Claim("tags.view", "true"));
+            // await _userManager.AddClaimAsync(newUser, new Claim("tags.view", "true"));
 
             var createdUser = await _userManager.CreateAsync(newUser, request.Password);
 
@@ -81,29 +84,29 @@
             var expiryDateTimeUtc = new DateTime(year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, DateTimeKind.Utc)
                 .AddSeconds(expiryDateUnix);
 
-            if (expiryDateTimeUtc > DateTime.UtcNow)
+            if (expiryDateTimeUtc > _dateTimeService.Now)
                 return AuthenticationResult.Fail(IdentityErrors.TokenHasntExpiredYet);
 
             // TODO Uncomment when ready
-            //var storedRefreshToken = await _authenticationGateWay.GetRefreshToken(request.RefreshToken);
-            //if (storedRefreshToken is null)
-            //    return AuthenticationResult.Fail(IdentityErrors.TokenDoesNotExist);
+            RefreshToken storedRefreshToken = null; //await _authenticationGateWay.GetRefreshToken(request.RefreshToken);
+            if (storedRefreshToken is null)
+                return AuthenticationResult.Fail(IdentityErrors.TokenDoesNotExist);
 
-            //if (DateTime.UtcNow > storedRefreshToken.ExpiryDate)
-            //    return AuthenticationResult.Fail(IdentityErrors.TokenHasExpired);
+            if (_dateTimeService.Now > storedRefreshToken.ExpiryDate)
+                return AuthenticationResult.Fail(IdentityErrors.TokenHasExpired);
 
-            //if (storedRefreshToken.Invalidated)
-            //    return AuthenticationResult.Fail(IdentityErrors.RefreshTokenIsInvalidated);
+            if (storedRefreshToken.Invalidated)
+                return AuthenticationResult.Fail(IdentityErrors.RefreshTokenIsInvalidated);
 
-            //if (storedRefreshToken.Used)
-            //    return AuthenticationResult.Fail(IdentityErrors.RefreshedTokenIsAlreadyUsed);
+            if (storedRefreshToken.Used)
+                return AuthenticationResult.Fail(IdentityErrors.RefreshedTokenIsAlreadyUsed);
 
-            //var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
+            var jti = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            //if (storedRefreshToken.JwtId is not jti)
-            //    return AuthenticationResult.Fail(IdentityErrors.RefreshTokenDoesNotMatchJWT);
+            if (storedRefreshToken.JwtId != jti)
+                return AuthenticationResult.Fail(IdentityErrors.RefreshTokenDoesNotMatchJWT);
 
-            //storedRefreshToken.Used = true;
+            storedRefreshToken.SetInUse();
 
             //await _authenticationGateWay.UpdateRefreshToken(storedRefreshToken);
 
@@ -150,19 +153,14 @@
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.UtcNow.AddHours(_jwtSettings.CurrentValue.TokenLifetime.Minutes),
+                Expires = _dateTimeService.Now.AddHours(_jwtSettings.CurrentValue.TokenLifetime.Minutes),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
-            var refreshToken = new RefreshToken
-            {
-                JwtId = token.Id,
-                UserId = user.Id,
-                CreationDate = DateTime.UtcNow,
-                ExpiryDate = DateTime.UtcNow.AddHours(2)
-            };
+            // TODO use token.ValidFrom and ValitTo
+            var refreshToken = RefreshToken.New(token.Id, user.Id, _dateTimeService.Now, _dateTimeService.Now.AddHours(2));
 
             // await _authenticationGateWay.AddRefreshToken(refreshToken);
 

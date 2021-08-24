@@ -9,7 +9,6 @@
         public void Configure(EntityTypeBuilder<RefreshToken> builder)
         {
             builder.HasKey(x => x.Token);
-            builder.HasOne(x => x.User);
         }
     }
 }
