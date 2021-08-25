@@ -6,17 +6,17 @@
     {
         protected Name() { }
 
-        internal Name(string name)
+        internal Name(string name) => Value = name;
+
+        public string Value { get; init; }
+
+        public static Email FromString(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("email is not supplied", nameof(name));
 
-            Value = name;
+            return new(name);
         }
-
-        public string Value { get; init; }
-
-        public static Email FromString(string name) => new(name);
 
         public static implicit operator string(Name self) => self.Value;
     }

@@ -7,7 +7,11 @@
     {
         protected Email() { }
 
-        internal Email(string email)
+        internal Email(string email) => Value = email;
+
+        public string Value { get; init; }
+
+        public static Email FromString(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
                 throw new ArgumentException("email is not supplied", nameof(email));
@@ -16,12 +20,8 @@
             if (!new EmailAddressAttribute().IsValid(email))
                 throw new ArgumentException($"invalid email value {email} supplied", nameof(email));
 
-            Value = email;
+            return new(email);
         }
-
-        public string Value { get; init; }
-
-        public static Email FromString(string email) => new(email);
 
         public static implicit operator string(Email self) => self.Value;
     }
