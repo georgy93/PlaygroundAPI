@@ -1,19 +1,21 @@
-﻿namespace Playground.Domain.Entities.Aggregates.User
+﻿namespace Playground.Application.Common
 {
-    using Abstract;
-    using Exceptions;
+    using Domain.Entities.Aggregates.Buyer;
+    using Domain.Exceptions;
     using Microsoft.AspNetCore.Identity;
     using System;
 
-    public class ApplicationUser : IdentityUser, IAggregateRoot
+    // TODO: No value objects here
+    // Imagine this is handled in another MS and we are reading information from token in this MS
+    public class ApplicationUser : IdentityUser
     {
-        // constructor for ef
+        // ef wants default constructor or one that accpets values for all parameters. The access modifier is not important
         protected ApplicationUser() { }
 
         public ApplicationUser(UserId userId, Email email)
         {
-            Id = userId.ToString();
-            Email = email;
+            Id = userId?.ToString() ?? throw new ArgumentNullException(nameof(userId));
+            Email = email ?? throw new ArgumentNullException(nameof(email));
             UserName = email;
 
             EnsureValidState();

@@ -1,4 +1,4 @@
-﻿namespace Playground.Application.Interfaces
+﻿namespace Playground.Domain.Services
 {
     using System;
 

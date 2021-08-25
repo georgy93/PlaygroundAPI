@@ -4,6 +4,7 @@
     using Application.Interfaces;
     using Application.Interfaces.Gateways;
     using Authorization;
+    using Domain.Services;
     using Identity;
     using Identity.Services;
     using Messaging.Integration;

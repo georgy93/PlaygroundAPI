@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.ValueObjects
+﻿namespace Playground.Domain.Entities.Aggregates.Order
 {
     using System;
 

@@ -1,9 +1,9 @@
 ﻿namespace Playground.Persistence.EntityFramework.Services
 {
     using Application.Common.Integration;
+    using EntityFramework;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Storage;
-    using Persistence.EntityFramework;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -56,7 +56,7 @@
             await ResilientTransaction.New(_appDbContext).ExecuteAsync(async () =>
             {
                 // Achieving atomicity between original catalog database operation and the IntegrationEventLog thanks to a local transaction
-                await _appDbContext.SaveChangesAsync();
+                await _appDbContext.SaveChangesAsync(CancellationToken.None);
                 await SaveEventAsync(integrationEvent, _appDbContext.Database.CurrentTransaction);
             });
         }

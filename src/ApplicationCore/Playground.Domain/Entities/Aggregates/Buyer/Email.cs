@@ -1,11 +1,10 @@
-﻿namespace Playground.Domain.Entities.Aggregates.User
+﻿namespace Playground.Domain.Entities.Aggregates.Buyer
 {
     using System;
     using System.ComponentModel.DataAnnotations;
 
     public record Email
     {
-        // constructor for ef
         protected Email() { }
 
         internal Email(string email)
@@ -20,7 +19,7 @@
             Value = email;
         }
 
-        public string Value { get; internal set; }
+        public string Value { get; init; }
 
         public static Email FromString(string email) => new(email);
 

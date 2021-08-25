@@ -1,10 +1,9 @@
-﻿namespace Playground.Domain.Entities.Aggregates.User
+﻿namespace Playground.Domain.Entities.Aggregates.Buyer
 {
     using System;
 
     public record UserId
     {
-        // constructor for ef
         protected UserId() { }
 
         public UserId(Guid value)
@@ -15,7 +14,7 @@
             Value = value;
         }
 
-        public Guid Value { get; internal set; }
+        public Guid Value { get; init; }
 
         public override string ToString() => Value.ToString();
 

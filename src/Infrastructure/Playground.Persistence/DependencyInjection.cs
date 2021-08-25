@@ -1,8 +1,11 @@
 ﻿namespace Playground.Persistence
 {
+    using Application.Common;
     using Application.Common.Integration;
-    using Domain.Entities.Aggregates.User;
+    using Domain.Entities.Aggregates.Buyer;
+    using Domain.Entities.Aggregates.Order;
     using EntityFramework;
+    using EntityFramework.Repositories;
     using EntityFramework.Services;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -58,11 +61,9 @@
                .AddEntityFrameworkStores<AppDbContext>();
 
             return services
-                .AddScoped<IIntegrationEventLogService, IntegrationEventLogService>();
-
-            //return services
-            //    .AddScoped(typeof(IEfRepository<>), typeof(EfRepository<>))
-            //    .AddScoped(typeof(IEfReadOnlyRepository<>), typeof(EfReadOnlyRepository<>));
+                .AddScoped<IIntegrationEventLogService, IntegrationEventLogService>()
+                .AddScoped<IOrderRepository, OrderRepository>()
+                .AddScoped<IBuyerRepository, BuyerRepository>();
         }
 
         // https://www.youtube.com/watch?v=bdgtYbGYsK0

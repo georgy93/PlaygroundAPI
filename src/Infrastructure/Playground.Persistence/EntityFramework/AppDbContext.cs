@@ -1,9 +1,11 @@
 ﻿namespace Playground.Persistence.EntityFramework
 {
+    using Application.Common;
     using Application.Interfaces;
     using Domain.Entities;
     using Domain.Entities.Abstract;
-    using Domain.Entities.Aggregates.User;
+    using Domain.Entities.Aggregates.Order;
+    using Domain.Services;
     using Extensions;
     using MediatR;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -20,7 +22,7 @@
     /// Update-Database
     /// https://docs.microsoft.com/en-us/ef/core/modeling/constructors readonly props
     /// </summary>
-    public class AppDbContext : IdentityDbContext<ApplicationUser>
+    public class AppDbContext : IdentityDbContext<ApplicationUser>, IUnitOfWork
     {
         public const string DEFAULT_SCHEMA = "playground";
 
@@ -44,13 +46,15 @@
 
         public DbSet<RefreshToken> RefreshTokens { get; init; }
 
+        public DbSet<Order> Orders { get; init; }
+
         public DbSet<VersionedEntity> VersionedEntities { get; init; }
 
         public bool HasActiveTransaction => _currentTransaction is not null;
 
         public IDbContextTransaction GetCurrentTransaction() => _currentTransaction;
 
-        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
+        public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken)
         {
             // Dispatch Domain Events collection.
             // Choices:
@@ -58,7 +62,7 @@
             // side effects from the domain event handlers which are using the same DbContext with "InstancePerLifetimeScope" or "scoped" lifetime
             // B) Right AFTER committing data (EF SaveChanges) into the DB will make multiple transactions.
             // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers.
-            await this.DispatchDomainEventsAsync(_mediator);
+            await _mediator.DispatchDomainEventsAsync(this);
 
             AuditEntities();
 
@@ -70,7 +74,7 @@
         }
 
         // Call this only when we are saving outbox messages or persisting operations that have not produced domain events
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
         {
             // Concurrency:
             // https://www.learnentityframeworkcore.com/concurrency
@@ -104,7 +108,7 @@
 
             try
             {
-                await SaveChangesAsync();
+                await SaveChangesAsync(CancellationToken.None);
                 transaction.Commit();
             }
             catch

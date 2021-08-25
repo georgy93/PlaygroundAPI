@@ -1,8 +1,9 @@
 ﻿namespace Playground.Infrastructure.Identity.Services
 {
-    using Application.Interfaces;
+    using Application.Common;
     using Domain.Entities;
-    using Domain.Entities.Aggregates.User;
+    using Domain.Entities.Aggregates.Buyer;
+    using Domain.Services;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;
     using Microsoft.Extensions.Options;
