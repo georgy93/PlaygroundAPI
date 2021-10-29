@@ -12,10 +12,10 @@
             var domainEntitiesWithPendingEvents = appDbContext
                 .ChangeTracker
                 .Entries<IDomainEntity>()
-                .Where(x => x.Entity.DomainEvents.Any());
+                .Where(entry => entry.Entity.DomainEvents.Any());
 
             var domainEvents = domainEntitiesWithPendingEvents
-                .SelectMany(x => x.Entity.DomainEvents)
+                .SelectMany(entry => entry.Entity.DomainEvents)
                 .ToList();
 
             domainEntitiesWithPendingEvents

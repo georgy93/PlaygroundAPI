@@ -37,6 +37,7 @@
                   </PropertyGroup>
                 */
             })
+            .AddSwaggerGenNewtonsoftSupport() // fix performance issue on swagger UI
             .AddSwaggerExamplesFromAssemblyOf<Startup>();
 
         private static OpenApiSecurityRequirement CreateSecurityRequirement()

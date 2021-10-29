@@ -30,6 +30,8 @@ services:
       - myapi-network
       #- elastic
 
+  # to connecto through SQL Server Management tool type 'localhost' for server name and 'SA' and the SA_PASSWORD value to login
+  # https://github.com/lkurzyniec/netcore-boilerplate init db example
   sqlServer:
     container_name: sqlServer
     image: mcr.microsoft.com/mssql/server:2019-latest

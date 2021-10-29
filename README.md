@@ -36,13 +36,14 @@ Application Core Types
 | Has own Identity  | no   |  no           | yes/no          |
 
 #### Domain
-This will contain all entities, value objects, enums, exceptions, interfaces, types and logic specific to the domain layer.
+This will contain all aggregates, entities, value objects, enums, exceptions, interfaces for repositories and domain services, types and logic specific to the domain layer.
+
 #### Application
 This layer contains all application logic and coordinates business actions. It also defines interfaces that are implemented by outside layers.
 For example, if the application need to access a notification service, a new interface would be added to application and an implementation would be created within infrastructure.
 
  The Application layer is dependent on the domain layer and optionally also on a Utils project in our solution (general helpers and extensions, that we have created to encapsulate boilerplate code).
-It can also include Nugget package references (for example Refit library, Newtonsoft Json, etc.)
+ It can also include Nugget package references (for example Refit library, Polly, Newtonsoft Json, etc.)
 
 The Application layer should be created following the CQRS principles and contain our MediatR handlers.
 
@@ -63,7 +64,7 @@ we should do it through service/repository interfaces. These interfaces should b
 
   The Infrastructure project typically includes data access implementations. In a typical ASP.NET Core web application, these implementations include the Entity Framework (EF) DbContext, 
   any EF Core Migration types that have been defined, and data access implementation classes. The most common way to abstract data access implementation code is through
-the use of the Repository design pattern.
+  the use of the Repository design pattern.
 
   In addition to data access implementations, the Infrastructure project should contain implementations of services that must interact with other infrastructure concerns. 
   These services should implement interfaces defined in the Application Core, and so Infrastructure should have a reference to the Application Core project. 
@@ -79,7 +80,7 @@ Infrastructure Types:
 Infrastructure logic:  
 - InMemory Data Cache  
 - EF Core DbContext, Migrations  
--  Database interaction  
+- Database interaction  
 - Service implementations (from Application core)  
 - Other WEB API Clients  
 - services with network calls and etc.  

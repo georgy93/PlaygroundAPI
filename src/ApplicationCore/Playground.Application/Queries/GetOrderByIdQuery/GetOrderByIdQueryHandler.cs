@@ -26,16 +26,17 @@
 
                 await connection.OpenAsync(cancellationToken);
 
-                // TODO: FIX DB SCHEMA
-                var result = await connection.QueryAsync<dynamic>(@"SELECT
+                // TODO: FIX DB SCHEMA and query properties
+                var result = await connection.QueryAsync<dynamic>(sql:
+                @"SELECT
                     o.[Id] as OrderNumber,
                     o.OrderDate as Date,
                     o.Description as Description,
-                    o.Address_City as City,
-                    o.Address_Country as Country,
-                    o.Address_State as State,
-                    o.Address_Street as Street,
-                    o.Address_ZipCode as ZipCode,
+                    o.ShippingAddress_City as City,
+                    o.ShippingAddress_Country as Country,
+                    o.ShippingAddress_State as State,
+                    o.ShippingAddress_Street as Street,
+                    o.ShippingAddress_ZipCode as ZipCode,
                     os.Name as Status,
                     oi.ProductName as Productname,
                     oi.Units as Units,
@@ -45,7 +46,8 @@
                 LEFT JOIN ordering.Orderitems oi ON o.Id = oi.orderid
                 LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id
                 WHERE o.Id=@id",
-                    new { request.OrderId });
+                param: new { request.OrderId },
+                commandTimeout: 10);
 
                 if (!result.AsList().Any())
                     throw new KeyNotFoundException(); // TODO: Use other exception

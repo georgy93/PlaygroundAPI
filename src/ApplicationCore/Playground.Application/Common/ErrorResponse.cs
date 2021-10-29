@@ -3,6 +3,7 @@
     using Newtonsoft.Json;
     using System;
 
+    // TODO: Move to API
     public record ErrorResponse
     {
         public string ErrorCode { get; init; }

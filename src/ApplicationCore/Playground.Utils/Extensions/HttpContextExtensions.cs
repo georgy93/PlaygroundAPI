@@ -16,9 +16,9 @@
         private static readonly ActionDescriptor EmptyActionDescriptor = new();
 
         public static async Task WriteResultAsync<TResult>(this HttpContext context,
-                                                     IActionResultExecutor<ObjectResult> resultExecutor,
-                                                     TResult result,
-                                                     int statusCode = StatusCodes.Status500InternalServerError)
+                                                           IActionResultExecutor<ObjectResult> resultExecutor,
+                                                           TResult result,
+                                                           int statusCode = StatusCodes.Status500InternalServerError)
         {
             var routeData = context.GetRouteData() ?? EmptyRouteData;
             var actionContext = new ActionContext(context, routeData, EmptyActionDescriptor);
