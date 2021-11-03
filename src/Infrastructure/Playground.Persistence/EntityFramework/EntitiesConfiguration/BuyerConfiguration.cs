@@ -10,7 +10,7 @@
         {
             builder.ToTable("Buyers", AppDbContext.DEFAULT_SCHEMA);
 
-            //builder.HasKey(b => b.Id);
+            builder.HasKey(b => b.Id);
 
             builder.Property(b => b.Id)
                 .UseHiLo("buyerseq", AppDbContext.DEFAULT_SCHEMA);

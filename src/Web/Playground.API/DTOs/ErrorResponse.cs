@@ -1,4 +1,4 @@
-﻿namespace Playground.Application.Common
+﻿namespace Playground.API.DTOs
 {
     using Newtonsoft.Json;
     using System;

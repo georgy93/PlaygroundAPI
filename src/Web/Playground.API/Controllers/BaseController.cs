@@ -1,6 +1,6 @@
 ﻿namespace Playground.API.Controllers
 {
-    using Application.Common;
+    using DTOs;
     using MediatR;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

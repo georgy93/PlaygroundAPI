@@ -74,7 +74,7 @@
         }
 
         // Call this only when we are saving outbox messages or persisting operations that have not produced domain events
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             // Concurrency:
             // https://www.learnentityframeworkcore.com/concurrency

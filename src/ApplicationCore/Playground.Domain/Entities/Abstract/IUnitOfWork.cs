@@ -7,7 +7,7 @@
     {
         Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken);
 
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         //Task<bool> SaveEntitiesAsync();
         //Task StartAsync();

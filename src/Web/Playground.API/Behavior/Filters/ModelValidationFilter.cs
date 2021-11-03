@@ -1,6 +1,6 @@
 ﻿namespace Playground.API.Behavior.Filters
 {
-    using Application.Common;
+    using DTOs;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
     using System.Linq;

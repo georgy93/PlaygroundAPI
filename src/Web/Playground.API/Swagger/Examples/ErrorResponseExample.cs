@@ -1,6 +1,6 @@
 ﻿namespace Playground.API.Swagger.Examples
 {
-    using Application.Common;
+    using DTOs;
     using Swashbuckle.AspNetCore.Filters;
 
     public class ErrorResponseExample : IExamplesProvider<ErrorResponse>
