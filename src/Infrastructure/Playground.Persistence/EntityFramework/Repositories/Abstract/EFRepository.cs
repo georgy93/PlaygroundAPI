@@ -1,6 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.Repositories.Abstract
 {
-    using Domain.Entities.Abstract;
+    using Domain.SeedWork;
     using Microsoft.EntityFrameworkCore;
     using System.Threading;
     using System.Threading.Tasks;

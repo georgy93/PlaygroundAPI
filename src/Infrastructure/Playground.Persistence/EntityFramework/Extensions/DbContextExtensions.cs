@@ -1,6 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.Extensions
 {
-    using Domain.Entities.Abstract;
+    using Domain.SeedWork;
     using MediatR;
     using System.Linq;
     using System.Threading.Tasks;

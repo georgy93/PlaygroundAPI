@@ -1,7 +1,7 @@
 ﻿namespace Playground.Persistence.EntityFramework.Repositories
 {
     using Abstract;
-    using Domain.Entities.Aggregates.Buyer;
+    using Domain.Entities.Aggregates.BuyerAggregate;
 
     internal class BuyerRepository : EFRepository<Buyer>, IBuyerRepository
     {

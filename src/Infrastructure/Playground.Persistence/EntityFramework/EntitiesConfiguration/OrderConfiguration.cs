@@ -1,6 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.EntitiesConfiguration
 {
-    using Domain.Entities.Aggregates.Order;
+    using Domain.Entities.Aggregates.OrderAggregate;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

@@ -2,7 +2,7 @@
 {
     using Application.Common;
     using Domain.Entities;
-    using Domain.Entities.Aggregates.Buyer;
+    using Domain.Entities.Aggregates.BuyerAggregate;
     using Domain.Services;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Logging;

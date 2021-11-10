@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.Entities.Abstract
+﻿namespace Playground.Domain.SeedWork
 {
     using MediatR;
     using System;

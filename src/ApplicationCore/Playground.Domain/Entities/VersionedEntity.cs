@@ -1,6 +1,6 @@
 ﻿namespace Playground.Domain.Entities
 {
-    using Playground.Domain.Entities.Abstract;
+    using Playground.Domain.SeedWork;
 
     public class VersionedEntity : Entity<int>
     {

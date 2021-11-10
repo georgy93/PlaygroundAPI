@@ -1,6 +1,6 @@
 ﻿namespace Playground.Domain.Entities
 {
-    using Abstract;
+    using SeedWork;
     using System;
     using System.ComponentModel.DataAnnotations.Schema;
 

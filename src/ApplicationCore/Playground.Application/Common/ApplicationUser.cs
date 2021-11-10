@@ -1,6 +1,6 @@
 ﻿namespace Playground.Application.Common
 {
-    using Domain.Entities.Aggregates.Buyer;
+    using Domain.Entities.Aggregates.BuyerAggregate;
     using Domain.Exceptions;
     using Microsoft.AspNetCore.Identity;
     using System;

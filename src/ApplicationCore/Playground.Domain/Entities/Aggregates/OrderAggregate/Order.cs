@@ -1,7 +1,7 @@
-﻿namespace Playground.Domain.Entities.Aggregates.Order
+﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
-    using Abstract;
     using Events;
+    using SeedWork;
     using Services;
     using System;
     using System.Collections.Generic;

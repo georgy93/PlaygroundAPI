@@ -1,6 +1,6 @@
 ﻿namespace Playground.Domain.Events
 {
-    using Entities.Aggregates.Order;
+    using Entities.Aggregates.OrderAggregate;
     using MediatR;
     using System.Collections.Generic;
 

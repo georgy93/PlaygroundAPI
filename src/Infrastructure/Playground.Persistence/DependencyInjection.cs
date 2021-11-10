@@ -2,8 +2,8 @@
 {
     using Application.Common;
     using Application.Common.Integration;
-    using Domain.Entities.Aggregates.Buyer;
-    using Domain.Entities.Aggregates.Order;
+    using Domain.Entities.Aggregates.BuyerAggregate;
+    using Domain.Entities.Aggregates.OrderAggregate;
     using EntityFramework;
     using EntityFramework.Repositories;
     using EntityFramework.Services;

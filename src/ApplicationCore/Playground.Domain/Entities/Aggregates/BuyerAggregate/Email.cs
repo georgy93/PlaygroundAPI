@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.Entities.Aggregates.Buyer
+﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
     using System;
     using System.ComponentModel.DataAnnotations;

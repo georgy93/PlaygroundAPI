@@ -1,6 +1,6 @@
-﻿namespace Playground.Domain.Entities.Aggregates.Buyer
+﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
-    using Abstract;
+    using SeedWork;
     using System;
 
     public class Buyer : Entity<int>, IAggregateRoot

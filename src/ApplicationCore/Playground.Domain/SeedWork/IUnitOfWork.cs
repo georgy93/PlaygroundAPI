@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.Entities.Abstract
+﻿namespace Playground.Domain.SeedWork
 {
     using System.Threading;
     using System.Threading.Tasks;

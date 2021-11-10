@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.Entities.Aggregates.Order
+﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
     public enum OrderStatus
     {

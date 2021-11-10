@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.Entities.Aggregates.Buyer
+﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
     using System;
 
@@ -10,7 +10,7 @@
 
         public string Value { get; init; }
 
-        public static Email FromString(string name)
+        public static Name FromString(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 throw new ArgumentException("email is not supplied", nameof(name));

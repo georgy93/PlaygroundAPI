@@ -1,6 +1,6 @@
-﻿namespace Playground.Domain.Entities.Aggregates.Order
+﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
-    using Abstract;
+    using SeedWork;
     using System;
 
     public class OrderItem : Entity<int>

@@ -3,8 +3,8 @@
     using Application.Common;
     using Application.Interfaces;
     using Domain.Entities;
-    using Domain.Entities.Abstract;
-    using Domain.Entities.Aggregates.Order;
+    using Domain.Entities.Aggregates.OrderAggregate;
+    using Domain.SeedWork;
     using Domain.Services;
     using Extensions;
     using MediatR;
