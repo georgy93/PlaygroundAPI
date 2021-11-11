@@ -1,8 +1,10 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using SeedWork;
     using System;
+    using System.Collections.Generic;
 
-    public record UserId
+    public class UserId : ValueObject
     {
         protected UserId() { }
 
@@ -17,6 +19,11 @@
         public Guid Value { get; init; }
 
         public override string ToString() => Value.ToString();
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
+        }
 
         public static implicit operator Guid(UserId self) => self.Value;
     }

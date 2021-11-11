@@ -1,8 +1,10 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using SeedWork;
     using System;
+    using System.Collections.Generic;
 
-    public record Name
+    public class Name : ValueObject
     {
         protected Name() { }
 
@@ -16,6 +18,11 @@
                 throw new ArgumentException("email is not supplied", nameof(name));
 
             return new(name);
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
         }
 
         public static implicit operator string(Name self) => self.Value;

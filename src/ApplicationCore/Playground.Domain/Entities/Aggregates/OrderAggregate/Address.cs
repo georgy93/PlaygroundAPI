@@ -1,8 +1,10 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
+    using SeedWork;
     using System;
+    using System.Collections.Generic;
 
-    public record Address
+    public class Address : ValueObject
     {
         // constructor for ef
         protected Address() { }
@@ -40,5 +42,14 @@
         public string Country { get; init; }
 
         public string ZipCode { get; init; }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Country;
+            yield return City;
+            yield return ZipCode;
+            yield return State;
+            yield return Street;
+        }
     }
 }

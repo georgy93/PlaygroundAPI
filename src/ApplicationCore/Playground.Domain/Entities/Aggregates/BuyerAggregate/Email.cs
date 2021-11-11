@@ -1,9 +1,11 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using SeedWork;
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    public record Email
+    public class Email : ValueObject
     {
         protected Email() { }
 
@@ -21,6 +23,11 @@
                 throw new ArgumentException($"invalid email value {email} supplied", nameof(email));
 
             return new(email);
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Value;
         }
 
         public static implicit operator string(Email self) => self.Value;
