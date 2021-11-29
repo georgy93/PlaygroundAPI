@@ -29,11 +29,11 @@
             //AddOrderStartedDomainEvent();
         }
 
-        public Address ShippingAddress { get; init; }
+        public Address ShippingAddress { get; private set; }
 
-        public Address BillingAddress { get; init; }
+        public Address BillingAddress { get; private set; }
 
-        public DateTime OrderDate { get; init; }
+        public DateTime OrderDate { get; private set; }
 
         public OrderStatus OrderStatus { get; private set; }
 

@@ -25,11 +25,11 @@
 
         public decimal Discount { get; private set; }
 
-        public string PictureUrl { get; init; }
+        public string PictureUrl { get; private set; }
 
-        public int ProductId { get; init; }
+        public int ProductId { get; private set; }
 
-        public string ProductName { get; init; }
+        public string ProductName { get; private set; }
 
         public decimal UnitPrice { get; private set; }
 

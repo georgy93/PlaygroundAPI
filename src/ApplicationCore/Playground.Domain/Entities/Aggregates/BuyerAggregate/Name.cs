@@ -1,7 +1,7 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using Ardalis.GuardClauses;
     using SeedWork;
-    using System;
     using System.Collections.Generic;
 
     public class Name : ValueObject
@@ -10,12 +10,11 @@
 
         internal Name(string name) => Value = name;
 
-        public string Value { get; init; }
+        public string Value { get; private set; }
 
         public static Name FromString(string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("email is not supplied", nameof(name));
+            Guard.Against.NullOrWhiteSpace(name, nameof(name), "name is not supplied");
 
             return new(name);
         }

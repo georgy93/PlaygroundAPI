@@ -1,9 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
     using SeedWork;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class OrderStatus : Enumeration
     {
@@ -14,34 +11,8 @@
         public static readonly OrderStatus Shipped = new(5, "Shipped");
         public static readonly OrderStatus Cancelled = new(6, "Cancelled");
 
-        public OrderStatus(int id, string name) : base(id, name)
-        { }
+        protected OrderStatus() { }
 
-        public static IEnumerable<OrderStatus> List() => new[] { Submitted, AwaitingValidation, StockConfirmed, Paid, Shipped, Cancelled };
-
-        public static OrderStatus FromName(string name)
-        {
-            var state = List()
-                .SingleOrDefault(s => string.Equals(s.Name, name, StringComparison.CurrentCultureIgnoreCase));
-
-            if (state == null)
-            {
-                throw new Exception($"Possible values for OrderStatus: {string.Join(",", List().Select(s => s.Name))}");
-            }
-
-            return state;
-        }
-
-        public static OrderStatus From(int id)
-        {
-            var state = List().SingleOrDefault(s => s.Id == id);
-
-            if (state == null)
-            {
-                throw new Exception($"Possible values for OrderStatus: {string.Join(",", List().Select(s => s.Name))}");
-            }
-
-            return state;
-        }
+        protected OrderStatus(int id, string name) : base(id, name) { }
     }
 }

@@ -7,9 +7,7 @@
 
     public abstract class Enumeration : IComparable
     {
-        public string Name { get; private set; }
-
-        public int Id { get; private set; }
+        protected Enumeration() { }
 
         protected Enumeration(int id, string name)
         {
@@ -17,11 +15,17 @@
             Name = name;
         }
 
+        public int Id { get; private set; }
+
+        public string Name { get; private set; }
+
         public override string ToString() => Name;
 
+        public string ToStringDetailed() => $"{Id} - {Name}";
+
         public static IEnumerable<T> GetAll<T>() where T : Enumeration => typeof(T)
-            .GetFields(BindingFlags.Public | 
-                       BindingFlags.Static | 
+            .GetFields(BindingFlags.Public |
+                       BindingFlags.Static |
                        BindingFlags.DeclaredOnly)
             .Select(f => f.GetValue(null))
             .Cast<T>();

@@ -1,5 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using Ardalis.GuardClauses;
     using SeedWork;
     using System;
     using System.Collections.Generic;
@@ -11,12 +12,11 @@
 
         internal Email(string email) => Value = email;
 
-        public string Value { get; init; }
+        public string Value { get; private set; }
 
         public static Email FromString(string email)
         {
-            if (string.IsNullOrWhiteSpace(email))
-                throw new ArgumentException("email is not supplied", nameof(email));
+            Guard.Against.NullOrWhiteSpace(email, nameof(email), "email is not supplied");
 
             // TODO: more email validation logic
             if (!new EmailAddressAttribute().IsValid(email))

@@ -7,7 +7,7 @@
 
     internal static class DbContextExtensions
     {
-        public static async Task DispatchDomainEventsAsync(this IMediator mediator, AppDbContext appDbContext)
+        public static async Task DispatchDomainEventsAsync(this AppDbContext appDbContext, IMediator mediator)
         {
             var domainEntitiesWithPendingEvents = appDbContext
                 .ChangeTracker

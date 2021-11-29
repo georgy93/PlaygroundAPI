@@ -19,11 +19,11 @@
             //EnsureValidState();
         }
 
-        public Name FirstName { get; init; }
+        public Name FirstName { get; private set; }
 
-        public Name LastName { get; init; }
+        public Name LastName { get; private set; }
 
-        public Email Email { get; init; }
+        public Email Email { get; private set; }
 
         // public void ChangeEmail(Email newEmail) => ApplyChange(c => c.Email = newEmail);
 

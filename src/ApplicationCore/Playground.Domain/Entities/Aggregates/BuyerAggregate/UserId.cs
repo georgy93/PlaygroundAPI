@@ -16,7 +16,7 @@
             Value = value;
         }
 
-        public Guid Value { get; init; }
+        public Guid Value { get; private set; }
 
         public override string ToString() => Value.ToString();
 
