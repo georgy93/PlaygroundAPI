@@ -1,7 +1,7 @@
 ﻿namespace Playground.API.Behavior.Middlewares
 {
+    using Application.Common.Serialization;
     using Domain.Exceptions;
-    using Domain.Exceptions.Serialization;
     using DTOs;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

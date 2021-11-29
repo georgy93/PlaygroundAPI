@@ -4,6 +4,9 @@
 
     public abstract class BusinessException : ApplicationException
     {
+        public BusinessException(string message) : base(message)
+        { }
+
         public abstract int HttpStatusCode { get; }
     }
 }

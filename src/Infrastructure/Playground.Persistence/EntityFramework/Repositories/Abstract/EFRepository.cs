@@ -24,10 +24,8 @@
 
         public async ValueTask AddAsync(TEntity entity) => await DbSet.AddAsync(entity);
 
-        public async Task<bool> ExistsAsync(int id, CancellationToken cancellationToken) => await DbSet.FindAsync(new object[] { id }, cancellationToken) != null;
-        //.AsQueryable()
-        //.AnyAsync(order => order.Id == orderId, cancellationToken);
+        public async ValueTask<bool> ExistsAsync(int id, CancellationToken cancellationToken) => await DbSet.FindAsync(new object[] { id }, cancellationToken) != null;
 
-        public async ValueTask<TEntity> LoadAsync(int id, CancellationToken cancellationToken) => await DbSet.FindAsync(new object[] { id }, cancellationToken);
+        public abstract Task<TEntity> LoadAsync(int id, CancellationToken cancellationToken);
     }
 }

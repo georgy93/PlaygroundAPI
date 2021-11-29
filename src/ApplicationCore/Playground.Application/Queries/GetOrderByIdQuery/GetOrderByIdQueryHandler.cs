@@ -1,5 +1,6 @@
 ﻿namespace Playground.Application.Queries.GetOrderByIdQuery
 {
+    using Common.Exceptions;
     using Dapper;
     using MediatR;
     using Microsoft.Extensions.Configuration;
@@ -50,7 +51,7 @@
                 commandTimeout: 10);
 
                 if (!result.AsList().Any())
-                    throw new KeyNotFoundException(); // TODO: Use other exception
+                    throw new RecordNotFoundException(request.OrderId); // TODO: Use other exception
 
                 return MapOrderItems(result);
             }

@@ -1,4 +1,4 @@
-﻿namespace Playground.Domain.Exceptions.Serialization
+﻿namespace Playground.Application.Common.Serialization
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
