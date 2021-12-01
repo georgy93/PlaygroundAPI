@@ -46,7 +46,7 @@
                 FROM ordering.Orders o
                 LEFT JOIN ordering.Orderitems oi ON o.Id = oi.orderid
                 LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id
-                WHERE o.Id=@id",
+                WHERE o.Id=@OrderId",
                 param: new { request.OrderId },
                 commandTimeout: 10);
 
