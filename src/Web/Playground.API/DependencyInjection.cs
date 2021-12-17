@@ -16,7 +16,7 @@
             .AddPresentationConfigurations(config)
             .AddCustomWebApi()
             .AddHttpContextAccessor()
-            .AddSwagger();
+            .AddSwagger(config);
 
         private static IServiceCollection AddCustomWebApi(this IServiceCollection services)
         {

@@ -7,8 +7,9 @@
     {
         public static IApplicationBuilder UseSwagger(this IApplicationBuilder app, IConfiguration configuration)
         {
-            var swaggerSettings = new SwaggerSettings();
-            configuration.GetSection(nameof(SwaggerSettings)).Bind(swaggerSettings);
+            var swaggerSettings = configuration
+                .GetSection(nameof(SwaggerSettings))
+                .Get<SwaggerSettings>();
 
             return app
                 .UseSwagger(opt =>

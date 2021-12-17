@@ -1,6 +1,7 @@
 ﻿namespace Playground.API.Swagger
 {
     using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Net.Http.Headers;
     using Microsoft.OpenApi.Models;
@@ -11,14 +12,18 @@
 
     public static class SwaggerSetup
     {
-        public static IServiceCollection AddSwagger(this IServiceCollection services) => services
+        public static IServiceCollection AddSwagger(this IServiceCollection services, IConfiguration configuration) => services
             .AddSwaggerGen(opt =>
             {
+                var swaggerSettings = configuration
+                    .GetSection(nameof(SwaggerSettings))
+                    .Get<SwaggerSettings>();
+
                 opt.SwaggerDoc("v1", new OpenApiInfo
                 {
-                    Title = "Playground API",
-                    Description = "This is just a playground application",
-                    Version = "v1"
+                    Title = swaggerSettings.Title,
+                    Description = swaggerSettings.Description,
+                    Version = swaggerSettings.Version
                 });
                 opt.ExampleFilters();
                 opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
