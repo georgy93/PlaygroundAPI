@@ -11,7 +11,7 @@
         {
             builder.ToTable("OrderStatuses", AppDbContext.DEFAULT_SCHEMA);
 
-            builder.ConfigureEnumeration();
+          //  builder.ConfigureEnumeration();
         }
     }
 }

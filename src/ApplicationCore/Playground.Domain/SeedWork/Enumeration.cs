@@ -5,6 +5,7 @@
     using System.Linq;
     using System.Reflection;
 
+    // Use Ardalis Smart Enum because it is more optimized
     public abstract class Enumeration : IComparable
     {
         protected Enumeration() { }
