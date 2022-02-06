@@ -1,5 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using Ardalis.GuardClauses;
     using Exceptions;
     using SeedWork;
     using System;
@@ -12,12 +13,14 @@
         //  TODO: are names and email necessary?
         public Buyer(UserId userId, Email email, Name firstName, Name lastName)
         {
-            //Id = userId?.ToString() ?? throw new ArgumentNullException(nameof(userId));
+            Guard.Against.Null(userId, nameof(userId));
+            Guard.Against.Null(email, nameof(email));
+            Guard.Against.Null(firstName, nameof(firstName));
+            Guard.Against.Null(lastName, nameof(lastName));
+
             Email = email ?? throw new ArgumentNullException(nameof(email));
             FirstName = firstName;
             LastName = lastName;
-
-            //EnsureValidState();
         }
 
         public Name FirstName { get; private set; }
