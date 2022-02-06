@@ -1,5 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using Exceptions;
     using SeedWork;
     using System;
 
@@ -25,7 +26,7 @@
 
         public Email Email { get; private set; }
 
-        // public void ChangeEmail(Email newEmail) => ApplyChange(c => c.Email = newEmail);
+        public void ChangeEmail(Email newEmail) => ApplyChange(c => c.Email = newEmail);
 
         private void ApplyChange(Action<Buyer> changeAction)
         {
@@ -33,13 +34,13 @@
                 throw new ArgumentNullException(nameof(changeAction));
 
             changeAction(this);
-            // EnsureValidState();
+            EnsureValidState();
         }
 
-        //private void EnsureValidState()
-        //{
-        //    if (string.IsNullOrWhiteSpace(Email))
-        //        throw new InvalidEntityStateException(this, "Invalid state because of missing email");
-        //}
+        private void EnsureValidState()
+        {
+            if (string.IsNullOrWhiteSpace(Email))
+                throw new InvalidEntityStateException(this, "Invalid state because of missing email");
+        }
     }
 }

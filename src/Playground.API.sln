@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.API", "Web\Playground.API\Playground.API.csproj", "{8460B30D-32D0-464A-BE38-717A232AB4E0}"
 EndProject
@@ -38,7 +38,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.IntegrationTests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.FunctionalTests", "..\tests\Playground.FunctionalTests\Playground.FunctionalTests.csproj", "{1A9BB3BE-B029-464C-BA49-9AE5450D7EFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground.FluentValidations", "ApplicationCore\Playground.FluentValidations\Playground.FluentValidations.csproj", "{93FF6ED7-3A47-479B-8273-6F686A20721E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.FluentValidations", "ApplicationCore\Playground.FluentValidations\Playground.FluentValidations.csproj", "{93FF6ED7-3A47-479B-8273-6F686A20721E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground.UnitTests", "..\tests\Playground.UnitTests\Playground.UnitTests.csproj", "{3FDAD541-15D2-4694-9161-780F0F82883A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,6 +96,10 @@ Global
 		{93FF6ED7-3A47-479B-8273-6F686A20721E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93FF6ED7-3A47-479B-8273-6F686A20721E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93FF6ED7-3A47-479B-8273-6F686A20721E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FDAD541-15D2-4694-9161-780F0F82883A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FDAD541-15D2-4694-9161-780F0F82883A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FDAD541-15D2-4694-9161-780F0F82883A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FDAD541-15D2-4694-9161-780F0F82883A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -112,6 +118,7 @@ Global
 		{7F1A3F41-AEF6-4CA8-BA3F-F24A968079D2} = {A9CD3F0D-AE5A-483A-A9AC-4ADC895ACF56}
 		{1A9BB3BE-B029-464C-BA49-9AE5450D7EFB} = {A9CD3F0D-AE5A-483A-A9AC-4ADC895ACF56}
 		{93FF6ED7-3A47-479B-8273-6F686A20721E} = {303757B5-5DAC-472D-9B47-CC8C877F306F}
+		{3FDAD541-15D2-4694-9161-780F0F82883A} = {A9CD3F0D-AE5A-483A-A9AC-4ADC895ACF56}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BF6192FB-3BD1-4153-A9F9-8112B8F99299}

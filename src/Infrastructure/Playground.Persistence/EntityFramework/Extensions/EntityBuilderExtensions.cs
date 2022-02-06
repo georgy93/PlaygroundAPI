@@ -1,23 +1,23 @@
 ﻿namespace Playground.Persistence.EntityFramework.Extensions
 {
-    using Domain.SeedWork;
+    using Ardalis.SmartEnum;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     public static class EntityBuilderExtensions
     {
-        public static void ConfigureEnumeration<TEnum>(this EntityTypeBuilder<TEnum> builder) where TEnum : Enumeration
+        public static void ConfigureEnumeration<TEnum>(this EntityTypeBuilder<TEnum> builder) where TEnum : SmartEnum<TEnum>
         {
-            builder.HasKey(o => o.Id);
+            builder.HasKey(o => o.Value);
 
-            builder.Property(o => o.Id)
-                .HasColumnName(nameof(Enumeration.Id))
+            builder.Property(o => o.Value)
+                .HasColumnName("Id")
                 .HasDefaultValue(1)
                 .ValueGeneratedNever()
                 .IsRequired();
 
             builder.Property(o => o.Name)
-                 .HasColumnName(nameof(Enumeration.Name))
+                 .HasColumnName("Name")
                  .HasMaxLength(255)
                  .IsRequired();
         }

@@ -28,34 +28,33 @@
     {
         public static EntityTypeBuilder<Order> ConfigureShippingAddress(this EntityTypeBuilder<Order> builder) => builder.OwnsOne(order => order.ShippingAddress, a =>
         {
-            a.Property(p => p.Country).HasColumnName("Shipping" + nameof(Address.Country)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.City).HasColumnName("Shipping" + nameof(Address.City)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.ZipCode).HasColumnName("Shipping" + nameof(Address.ZipCode)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.State).HasColumnName("Shipping" + nameof(Address.State)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.Street).HasColumnName("Shipping" + nameof(Address.Street)).HasMaxLength(255).IsRequired();
+            string ShippingPrefix = "Shipping";
+
+            a.Property(p => p.Country).HasColumnName(ShippingPrefix + nameof(Address.Country)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.City).HasColumnName(ShippingPrefix + nameof(Address.City)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.ZipCode).HasColumnName(ShippingPrefix + nameof(Address.ZipCode)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.State).HasColumnName(ShippingPrefix + nameof(Address.State)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.Street).HasColumnName(ShippingPrefix + nameof(Address.Street)).HasMaxLength(255).IsRequired();
         });
 
         public static EntityTypeBuilder<Order> ConfigureBillingAddress(this EntityTypeBuilder<Order> builder) => builder.OwnsOne(order => order.BillingAddress, a =>
         {
-            a.Property(p => p.Country).HasColumnName("Billing" + nameof(Address.Country)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.City).HasColumnName("Billing" + nameof(Address.City)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.ZipCode).HasColumnName("Billing" + nameof(Address.ZipCode)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.State).HasColumnName("Billing" + nameof(Address.State)).HasMaxLength(255).IsRequired();
-            a.Property(p => p.Street).HasColumnName("Billing" + nameof(Address.Street)).HasMaxLength(255).IsRequired();
+            string BillingPrefix = "Billing";
+
+            a.Property(p => p.Country).HasColumnName(BillingPrefix + nameof(Address.Country)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.City).HasColumnName(BillingPrefix + nameof(Address.City)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.ZipCode).HasColumnName(BillingPrefix + nameof(Address.ZipCode)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.State).HasColumnName(BillingPrefix + nameof(Address.State)).HasMaxLength(255).IsRequired();
+            a.Property(p => p.Street).HasColumnName(BillingPrefix + nameof(Address.Street)).HasMaxLength(255).IsRequired();
         });
 
 
         public static EntityTypeBuilder<Order> ConfigureOrderStatus(this EntityTypeBuilder<Order> builder)
         {
-            builder.Property<int>("_orderStatusId")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
+            builder.Property(o => o.OrderStatus)
                 .HasColumnName("OrderStatusId")
+                .HasConversion(os => os.Value, os => OrderStatus.FromValue(os))
                 .IsRequired();
-
-            builder.HasOne(p => p.OrderStatus)
-                .WithMany()
-                .HasForeignKey("_orderStatusId")
-                .HasConstraintName("fk_Orders_to_OrderStatuses");
 
             return builder;
         }
