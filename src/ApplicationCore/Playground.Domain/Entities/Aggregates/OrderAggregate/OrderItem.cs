@@ -1,5 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
+    using Ardalis.GuardClauses;
     using SeedWork;
     using System;
 
@@ -7,20 +8,21 @@
     {
         protected OrderItem() { }
 
-        public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, string pictureUrl, int units = 1)
+        public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
         {
-            if (units <= 0)
-                throw new InvalidOperationException("Invalid number of units");
+            Guard.Against.NegativeOrZero(units, nameof(units), "Invalid number of units");
+            Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice), "Invalid price");
+            Guard.Against.Negative(discount, nameof(discount), "Invalid discount");
 
             if ((unitPrice * units) < discount)
-                throw new InvalidOperationException("The total of order item is lower than applied discount");
+                throw new InvalidOperationException("The total value of order item is lower than applied discount");
 
             ProductId = productId;
             ProductName = productName;
             UnitPrice = unitPrice;
             Units = units;
             Discount = discount;
-            PictureUrl = pictureUrl;
+            PictureUrl = pictureUrl.ToString();
         }
 
         public decimal Discount { get; private set; }
@@ -35,18 +37,23 @@
 
         public int Units { get; private set; }
 
+        public decimal GetTotalWithoutDiscount() => Units * UnitPrice;
+
+        public decimal GetTotalWithDiscount() => GetTotalWithoutDiscount() - Discount;
+
         public void AddUnits(int units)
         {
-            if (units < 0)
-                throw new InvalidOperationException("Invalid units");
+            Guard.Against.Negative(units, nameof(units), "Invalid number of units");
 
-            UnitPrice += units;
+            Units += units;
         }
 
         public void SetNewDiscount(decimal discount)
         {
-            if (discount < 0)
-                throw new InvalidOperationException("Discount is not valid");
+            Guard.Against.Negative(discount, nameof(discount), "Discount is not valid");
+
+            if (GetTotalWithoutDiscount() < discount)
+                throw new InvalidOperationException("The total value of order item is lower than applied discount");
 
             Discount = discount;
         }

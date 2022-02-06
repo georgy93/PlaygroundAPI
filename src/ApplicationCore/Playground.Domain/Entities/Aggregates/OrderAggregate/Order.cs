@@ -44,7 +44,7 @@
         public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress)
             => new(shippingAddress, billingAddress, dateTimeService.Now);
 
-        public decimal GetTotal() => _orderItems.Sum(orderItem => orderItem.Units * orderItem.UnitPrice);
+        public decimal GetTotal() => _orderItems.Sum(orderItem => orderItem.GetTotalWithoutDiscount());
 
         public void SetPaidStatus()
         {

@@ -46,7 +46,7 @@
 
         public override bool Equals(object obj)
         {
-            if (obj is null or not Entity<TKey>)
+            if (obj is not Entity<TKey>)
                 return false;
 
             if (ReferenceEquals(this, obj))
@@ -59,6 +59,8 @@
 
             return !other.IsTransient() && !IsTransient() && Equals(other.Id, Id);
         }
+
+        public virtual void ValidateState() { }
 
         public static bool operator ==(Entity<TKey> left, Entity<TKey> right) => Equals(left, null)
             ? Equals(right, null)

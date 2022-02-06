@@ -2,6 +2,7 @@
 {
     using Application.Common;
     using Application.Interfaces;
+    using Ardalis.GuardClauses;
     using Domain.Entities;
     using Domain.Entities.Aggregates.OrderAggregate;
     using Domain.SeedWork;
@@ -64,8 +65,6 @@
             // You will need to handle eventual consistency and compensatory actions in case of failures in any of the Handlers.
             await this.DispatchDomainEventsAsync(_mediator);
 
-            AuditEntities();
-
             // After executing this line all the changes (from the Command Handler and Domain Event Handlers)
             // performed through the DbContext will be committed
             var result = await SaveChangesAsync(cancellationToken);
@@ -84,6 +83,7 @@
             // https://github.com/mikeckennedy/optimistic_concurrency_mongodb_dotnet/blob/master/src/MongoDB.Kennedy/ConcurrentDataContext.cs
 
             AuditEntities();
+            ValidateEntitiesState();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -100,8 +100,7 @@
 
         public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
-            if (transaction is null)
-                throw new ArgumentNullException(nameof(transaction));
+            Guard.Against.Null(transaction, nameof(transaction));
 
             if (transaction != _currentTransaction)
                 throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");
@@ -134,12 +133,11 @@
             }
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder builder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-            //  modelBuilder.Entity<Entity<int>>().Ignore(e => e.DomainEvents); // remove not mapped and test
-            //  modelBuilder.Entity<Entity<Guid>>().Ignore(e => e.DomainEvents);
-            base.OnModelCreating(modelBuilder);
+            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            base.OnModelCreating(builder);
         }
 
         private void AuditEntities()
@@ -160,6 +158,14 @@
                         continue;
                 }
             }
+        }
+
+        private void ValidateEntitiesState()
+        {
+            //foreach (var entry in ChangeTracker.Entries<Entity>())
+            //{
+            //    entry.ValidateState();
+            //}
         }
 
         private void DisposeTransaction()

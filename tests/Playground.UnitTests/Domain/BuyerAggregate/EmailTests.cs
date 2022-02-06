@@ -25,7 +25,7 @@
         [InlineData(" ")]
         [InlineData(null)]
         [InlineData("alabala.gmail.com")]
-        [InlineData("4234gvr@#1254egcydcf!")]
+        [InlineData("4234gvr#1254egcydcf!")]
         public void Creating_Email_From_Invalid_String_Should_Throw_Exception(string emailString)
         { 
             // Arrange
