@@ -11,21 +11,15 @@
         protected Buyer() { }
 
         //  TODO: are names and email necessary?
-        public Buyer(UserId userId, Email email, Name firstName, Name lastName)
+        public Buyer(UserId userId, Email email, FullName fullName)
         {
             Guard.Against.Null(userId, nameof(userId));
-            Guard.Against.Null(email, nameof(email));
-            Guard.Against.Null(firstName, nameof(firstName));
-            Guard.Against.Null(lastName, nameof(lastName));
 
-            Email = email ?? throw new ArgumentNullException(nameof(email));
-            FirstName = firstName;
-            LastName = lastName;
+            Email = Guard.Against.Null(email, nameof(email));
+            FullName = Guard.Against.Null(fullName, nameof(fullName));
         }
 
-        public Name FirstName { get; private set; }
-
-        public Name LastName { get; private set; }
+        public FullName FullName { get; private set; }
 
         public Email Email { get; private set; }
 
@@ -33,8 +27,7 @@
 
         private void ApplyChange(Action<Buyer> changeAction)
         {
-            if (changeAction == null)
-                throw new ArgumentNullException(nameof(changeAction));
+            Guard.Against.Null(changeAction, nameof(changeAction));
 
             changeAction(this);
             EnsureValidState();

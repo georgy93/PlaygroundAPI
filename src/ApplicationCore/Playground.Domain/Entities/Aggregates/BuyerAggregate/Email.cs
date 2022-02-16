@@ -10,7 +10,10 @@
     {
         protected Email() { }
 
-        internal Email(string email) => Value = email;
+        internal Email(string email)
+        {
+            Value = email;
+        }
 
         public string Value { get; private set; }
 
@@ -24,6 +27,8 @@
 
             return new(email);
         }
+
+        public override string ToString() => Value;
 
         protected override IEnumerable<object> GetEqualityComponents()
         {

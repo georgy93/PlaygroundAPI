@@ -11,17 +11,11 @@
 
         public Address(string street, string city, string state, string country, string zipCode)
         {
-            Guard.Against.NullOrWhiteSpace(street, nameof(street), "invalid street");
-            Guard.Against.NullOrWhiteSpace(city, nameof(city), "invalid city");
-            Guard.Against.NullOrWhiteSpace(state, nameof(state), "invalid state");
-            Guard.Against.NullOrWhiteSpace(country, nameof(country), "invalid country");
-            Guard.Against.NullOrWhiteSpace(zipCode, nameof(zipCode), "invalid zipCode");
-
-            Street = street;
-            City = city;
-            State = state;
-            Country = country;
-            ZipCode = zipCode;
+            Street = Guard.Against.NullOrWhiteSpace(street, nameof(street), "invalid street");
+            City = Guard.Against.NullOrWhiteSpace(city, nameof(city), "invalid city");
+            State = Guard.Against.NullOrWhiteSpace(state, nameof(state), "invalid state");
+            Country = Guard.Against.NullOrWhiteSpace(country, nameof(country), "invalid country");
+            ZipCode = Guard.Against.NullOrWhiteSpace(zipCode, nameof(zipCode), "invalid zipCode");
         }
 
         public string Street { get; private set; }

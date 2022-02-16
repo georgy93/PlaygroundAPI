@@ -17,7 +17,7 @@
             var email = Email.FromString(emailString);
 
             // Assert
-            Assert.Equal(emailString, email);
+            Assert.Equal(emailString, email.Value);
         }
 
         [Theory]
@@ -32,6 +32,21 @@
             // Act
             // Assert
             Assert.ThrowsAny<ArgumentException>(() => Email.FromString(emailString));
+        }
+
+        [Theory]
+        [InlineData("alabala1@abv.bg")]
+        [InlineData("alabala2@yahoo.com")]
+        [InlineData("alabala3@gmail.com")]
+        public void Email_Should_Have_Correct_String_Representation(string emailString)
+        {
+            // Arrange
+            // Act
+            var email = Email.FromString(emailString);
+
+            // Assert
+            Assert.Equal(emailString, email);
+            Assert.Equal(emailString, email.ToString());
         }
     }
 }

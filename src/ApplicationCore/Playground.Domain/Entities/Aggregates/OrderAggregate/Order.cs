@@ -1,5 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
+    using Ardalis.GuardClauses;
     using Events;
     using SeedWork;
     using Services;
@@ -22,8 +23,8 @@
 
         internal Order(Address shippingAddress, Address billingAddress, DateTime creationDate) : this()
         {
-            ShippingAddress = shippingAddress ?? throw new ArgumentNullException(nameof(shippingAddress));
-            BillingAddress = billingAddress ?? throw new ArgumentNullException(nameof(billingAddress));
+            ShippingAddress = Guard.Against.Null(shippingAddress, nameof(shippingAddress));
+            BillingAddress = Guard.Against.Null(billingAddress, nameof(billingAddress));
             OrderDate = creationDate;
 
             //AddOrderStartedDomainEvent();

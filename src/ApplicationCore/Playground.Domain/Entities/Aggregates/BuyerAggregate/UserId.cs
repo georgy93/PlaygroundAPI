@@ -1,5 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
+    using Ardalis.GuardClauses;
     using SeedWork;
     using System;
     using System.Collections.Generic;
@@ -10,10 +11,7 @@
 
         public UserId(Guid value)
         {
-            if (value == Guid.Empty)
-                throw new ArgumentException("invalid guid value", nameof(value));
-
-            Value = value;
+            Value = Guard.Against.Default(value, nameof(value));
         }
 
         public Guid Value { get; private set; }
@@ -26,5 +24,7 @@
         }
 
         public static implicit operator Guid(UserId self) => self.Value;
+
+        public static implicit operator string(UserId self) => self.ToString();
     }
 }

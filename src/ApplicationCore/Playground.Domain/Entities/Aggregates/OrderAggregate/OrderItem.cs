@@ -10,19 +10,17 @@
 
         public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
         {
-            Guard.Against.NegativeOrZero(units, nameof(units), "Invalid number of units");
-            Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice), "Invalid price");
-            Guard.Against.Negative(discount, nameof(discount), "Invalid discount");
-
-            if ((unitPrice * units) < discount)
-                throw new InvalidOperationException("The total value of order item is lower than applied discount");
-
             ProductId = productId;
-            ProductName = productName;
-            UnitPrice = unitPrice;
-            Units = units;
-            Discount = discount;
+            Units = Guard.Against.NegativeOrZero(units, nameof(units), "Invalid number of units");
+            UnitPrice = Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice), "Invalid price");
+            Discount = Guard.Against.Negative(discount, nameof(discount), "Invalid discount");
+            ProductName = Guard.Against.NullOrWhiteSpace(productName, nameof(productName));
+
+            Guard.Against.Null(pictureUrl, nameof(pictureUrl));
             PictureUrl = pictureUrl.ToString();
+
+            if (GetTotalWithoutDiscount() < discount)
+                throw new InvalidOperationException("The total value of order item is lower than applied discount");
         }
 
         public decimal Discount { get; private set; }
