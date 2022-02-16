@@ -85,7 +85,7 @@
 
             AuditEntities();
             ValidateEntitiesState();
-            IncreaseModifiedAggregatesVersion();
+            IncreaseModifiedAggregatesVersion(); // ?? here
 
             return await base.SaveChangesAsync(cancellationToken);
         }

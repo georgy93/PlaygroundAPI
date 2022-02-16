@@ -5,7 +5,7 @@
     using SeedWork;
     using System;
 
-    public class Buyer : Entity<int>, IAggregateRoot
+    public class Buyer : AggregateRootBase<int>
     {
         // ef wants default constructor or one that accpets values for all parameters. The access modifier is not important
         protected Buyer() { }

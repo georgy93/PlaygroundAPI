@@ -8,7 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Order : Entity<int>, IAggregateRoot
+    public class Order : AggregateRootBase<int>
     {
         private readonly List<OrderItem> _orderItems;
 

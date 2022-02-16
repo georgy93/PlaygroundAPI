@@ -14,13 +14,16 @@
             builder.Property(order => order.Id)
                 .UseHiLo("orderseq", AppDbContext.DEFAULT_SCHEMA);
 
+            builder.Property("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
+
             // Address value object persisted as owned entity type supported since EF Core 2.0
             // Address class properties will be added as columns to the AggregateRootEntity table thanks to the OwnsOne
             builder
                 .ConfigureShippingAddress()
                 .ConfigureBillingAddress()
                 .ConfigureOrderStatus()
-                .ConfigureOrderItems();
+                .ConfigureOrderItems()
+                .ConfigureOrderDate();
         }
     }
 
@@ -68,6 +71,15 @@
 
             var navigation = builder.Metadata.FindNavigation(nameof(Order.OrderItems));
             navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
+
+            return builder;
+        }
+
+        public static EntityTypeBuilder<Order> ConfigureOrderDate(this EntityTypeBuilder<Order> builder)
+        {
+            builder.Property(o => o.OrderDate)
+               .HasColumnName(nameof(Order.OrderDate))
+               .IsRequired();
 
             return builder;
         }

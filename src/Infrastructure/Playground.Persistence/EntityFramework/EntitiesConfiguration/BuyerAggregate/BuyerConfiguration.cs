@@ -11,27 +11,24 @@
             builder.ToTable("Buyers", AppDbContext.DEFAULT_SCHEMA);
 
             builder.HasKey(b => b.Id);
-
             builder.Property(b => b.Id)
                 .UseHiLo("buyerseq", AppDbContext.DEFAULT_SCHEMA);
 
+            builder.Property("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
+
             builder
-                .ConfigureFirstName()
-                .ConfigureLastName()
+                .ConfigureFullName()
                 .ConfigureEmail();
         }
     }
 
     internal static class BuyerBuilderExtensions
     {
-        public static EntityTypeBuilder<Buyer> ConfigureFirstName(this EntityTypeBuilder<Buyer> builder) => builder.OwnsOne(buyer => buyer.FirstName, a =>
+        public static EntityTypeBuilder<Buyer> ConfigureFullName(this EntityTypeBuilder<Buyer> builder) => builder.OwnsOne(buyer => buyer.FullName, a =>
         {
-            a.Property(p => p.Value).HasColumnName(nameof(Buyer.FirstName)).HasMaxLength(255).IsRequired();
-        });
-
-        public static EntityTypeBuilder<Buyer> ConfigureLastName(this EntityTypeBuilder<Buyer> builder) => builder.OwnsOne(buyer => buyer.LastName, a =>
-        {
-            a.Property(p => p.Value).HasColumnName(nameof(Buyer.LastName)).HasMaxLength(255).IsRequired();
+            a.Property(fn => fn.FirstName).HasColumnName(nameof(Buyer.FullName.FirstName)).HasMaxLength(255).IsRequired();
+            a.Property(fn => fn.Surname).HasColumnName(nameof(Buyer.FullName.Surname)).HasMaxLength(255).IsRequired();
+            a.Property(fn => fn.LastName).HasColumnName(nameof(Buyer.FullName.LastName)).HasMaxLength(255).IsRequired();
         });
 
         public static EntityTypeBuilder<Buyer> ConfigureEmail(this EntityTypeBuilder<Buyer> builder) => builder.OwnsOne(buyer => buyer.Email, a =>
