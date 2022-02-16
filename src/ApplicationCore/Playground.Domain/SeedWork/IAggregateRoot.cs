@@ -1,4 +1,7 @@
 ﻿namespace Playground.Domain.SeedWork
 {
-    public interface IAggregateRoot { }
+    public interface IAggregateRoot : IDomainEntity
+    {
+        public void IncreaseVersion() { }
+    }
 }

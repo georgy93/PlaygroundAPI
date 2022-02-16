@@ -14,6 +14,7 @@
     using Microsoft.EntityFrameworkCore.Storage;
     using System;
     using System.Data;
+    using System.Linq;
     using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
@@ -84,6 +85,7 @@
 
             AuditEntities();
             ValidateEntitiesState();
+            IncreaseModifiedAggregatesVersion();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
@@ -166,6 +168,16 @@
             //{
             //    entry.ValidateState();
             //}
+        }
+
+        private void IncreaseModifiedAggregatesVersion()
+        {
+            var modifiedAggregateRoots = ChangeTracker.Entries<IAggregateRoot>().Where(entry => entry.Entity.DomainEvents.Any());
+
+            foreach (var modifiedAggregateRoot in modifiedAggregateRoots)
+            {
+                modifiedAggregateRoot.Entity.IncreaseVersion();
+            }
         }
 
         private void DisposeTransaction()
