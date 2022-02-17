@@ -23,8 +23,8 @@
 
         internal Order(Address shippingAddress, Address billingAddress, DateTime creationDate) : this()
         {
-            ShippingAddress = Guard.Against.Null(shippingAddress, nameof(shippingAddress));
-            BillingAddress = Guard.Against.Null(billingAddress, nameof(billingAddress));
+            ShippingAddress = Guard.Against.Null(shippingAddress);
+            BillingAddress = Guard.Against.Null(billingAddress);
             OrderDate = creationDate;
 
             //AddOrderStartedDomainEvent();

@@ -102,7 +102,7 @@
 
         public async Task CommitTransactionAsync(IDbContextTransaction transaction)
         {
-            Guard.Against.Null(transaction, nameof(transaction));
+            Guard.Against.Null(transaction);
 
             if (transaction != _currentTransaction)
                 throw new InvalidOperationException($"Transaction {transaction.TransactionId} is not current");

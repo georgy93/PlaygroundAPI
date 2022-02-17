@@ -13,10 +13,10 @@
         //  TODO: are names and email necessary?
         public Buyer(UserId userId, Email email, FullName fullName)
         {
-            Guard.Against.Null(userId, nameof(userId));
+            Guard.Against.Null(userId);
 
-            Email = Guard.Against.Null(email, nameof(email));
-            FullName = Guard.Against.Null(fullName, nameof(fullName));
+            Email = Guard.Against.Null(email);
+            FullName = Guard.Against.Null(fullName);
         }
 
         public FullName FullName { get; private set; }
@@ -27,7 +27,7 @@
 
         private void ApplyChange(Action<Buyer> changeAction)
         {
-            Guard.Against.Null(changeAction, nameof(changeAction));
+            Guard.Against.Null(changeAction);
 
             changeAction(this);
             EnsureValidState();
