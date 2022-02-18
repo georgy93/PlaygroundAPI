@@ -2,7 +2,7 @@
 {
     using System;
 
-    public class AggregateRootBase<TKey> : Entity<TKey>, IAggregateRoot
+    public abstract class AggregateRootBase<TKey> : Entity<TKey>, IAggregateRoot
         where TKey : IEquatable<TKey>
     {
         private int _versionId; // used by entity builder

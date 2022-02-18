@@ -1,7 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework
 {
     using Application.Common;
-    using Application.Interfaces;
     using Ardalis.GuardClauses;
     using Domain.Entities;
     using Domain.Entities.Aggregates.OrderAggregate;
@@ -149,12 +148,10 @@
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _currentUserService.UserId;
-                        entry.Entity.Created = _dateTimeService.Now;
+                        entry.Entity.SetCreationInfo(_dateTimeService, _currentUserService);
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedBy = _currentUserService.UserId;
-                        entry.Entity.LastModified = _dateTimeService.Now;
+                        entry.Entity.SetUpdatationInfo(_dateTimeService, _currentUserService);
                         break;
                     default:
                         continue;
@@ -164,10 +161,8 @@
 
         private void ValidateEntitiesState()
         {
-            //foreach (var entry in ChangeTracker.Entries<Entity>())
-            //{
-            //    entry.ValidateState();
-            //}
+            foreach (var entry in ChangeTracker.Entries<EntityBase>())
+                entry.Entity.ValidateState();
         }
 
         private void IncreaseModifiedAggregatesVersion()
@@ -175,9 +170,7 @@
             var modifiedAggregateRoots = ChangeTracker.Entries<IAggregateRoot>().Where(entry => entry.Entity.DomainEvents.Any());
 
             foreach (var modifiedAggregateRoot in modifiedAggregateRoots)
-            {
                 modifiedAggregateRoot.Entity.IncreaseVersion();
-            }
         }
 
         private void DisposeTransaction()

@@ -14,7 +14,7 @@
             builder.Property(b => b.Id)
                 .UseHiLo("buyerseq", AppDbContext.DEFAULT_SCHEMA);
 
-            builder.Property("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
+            builder.Property<string>("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
 
             builder
                 .ConfigureFullName()
@@ -39,7 +39,7 @@
                 .IsRequired();
 
             a.HasIndex(e => e.Value)
-                .HasDatabaseName("unique_Buyers_Email_idx")
+                .HasDatabaseName("unique_buyers_email_idx")
                 .IsUnique();
         });
     }

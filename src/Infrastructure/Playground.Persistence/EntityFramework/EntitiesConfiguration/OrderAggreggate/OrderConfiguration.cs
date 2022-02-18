@@ -14,7 +14,7 @@
             builder.Property(order => order.Id)
                 .UseHiLo("orderseq", AppDbContext.DEFAULT_SCHEMA);
 
-            builder.Property("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
+            builder.Property<string>("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
 
             // Address value object persisted as owned entity type supported since EF Core 2.0
             // Address class properties will be added as columns to the AggregateRootEntity table thanks to the OwnsOne
@@ -50,7 +50,6 @@
             a.Property(p => p.State).HasColumnName(BillingPrefix + nameof(Address.State)).HasMaxLength(255).IsRequired();
             a.Property(p => p.Street).HasColumnName(BillingPrefix + nameof(Address.Street)).HasMaxLength(255).IsRequired();
         });
-
 
         public static EntityTypeBuilder<Order> ConfigureOrderStatus(this EntityTypeBuilder<Order> builder)
         {

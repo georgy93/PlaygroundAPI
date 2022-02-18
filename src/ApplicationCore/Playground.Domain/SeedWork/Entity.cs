@@ -1,36 +1,19 @@
 ﻿namespace Playground.Domain.SeedWork
 {
-    using MediatR;
     using System;
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations.Schema;
-
-    /// <summary>
-    /// Use only for aggregates, because of the domain events ???
-    /// </summary>
-    public abstract class Entity<TKey> : IEntity<TKey>, IDomainEntity
+    
+    public abstract class Entity<TKey> : EntityBase, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {
-        private readonly List<INotification> _domainEvents = new();
-
         private int? _requestedHashCode;
 
         public virtual TKey Id { get; protected set; }
-
-        [NotMapped] // TODO: exclude from else where??
-        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 
         /// <summary>
         /// Checks whether the entity was just now created. Returns true if the entity was created now and has not yet received an Id.
         /// </summary>
         /// <returns></returns>
         public bool IsTransient() => Equals(Id, default(TKey));
-
-        public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
-
-        public void RemoveDomainEvent(INotification eventItem) => _domainEvents.Remove(eventItem);
-
-        public void ClearDomainEvents() => _domainEvents.Clear();
 
         public override int GetHashCode()
         {
@@ -59,8 +42,6 @@
 
             return !other.IsTransient() && !IsTransient() && Equals(other.Id, Id);
         }
-
-        public virtual void ValidateState() { }
 
         public static bool operator ==(Entity<TKey> left, Entity<TKey> right) => Equals(left, null)
             ? Equals(right, null)

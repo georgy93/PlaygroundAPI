@@ -1,15 +1,20 @@
 ﻿namespace Playground.Domain.SeedWork
 {
     using System;
+    using Services;
 
     public interface IAuditableEntity
     {
-        string CreatedBy { get; set; }
+        string CreatedBy { get; }
 
-        DateTime Created { get; set; }
+        DateTime Created { get; }
 
-        string LastModifiedBy { get; set; }
+        string LastModifiedBy { get; }
 
-        DateTime? LastModified { get; set; }
+        DateTime LastModified { get; }
+
+        void SetCreationInfo(IDateTimeService dateTimeService, ICurrentUserService currentUserService);
+
+        void SetUpdatationInfo(IDateTimeService dateTimeService, ICurrentUserService currentUserService);
     }
 }
