@@ -8,7 +8,7 @@
     using System.Collections.Generic;
     using System.Linq;
 
-    public class Buyer : AggregateRootBase<int>
+    public class Buyer : AggregateRootBase<long>
     {
         private readonly List<PaymentMethod> _paymentMethods = new();
 

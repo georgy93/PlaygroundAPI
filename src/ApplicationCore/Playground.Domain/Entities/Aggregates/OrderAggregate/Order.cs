@@ -1,8 +1,8 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
     using Ardalis.GuardClauses;
+    using BuyerAggregate;
     using Events;
-    using Playground.Domain.Entities.Aggregates.BuyerAggregate;
     using SeedWork;
     using Services;
     using System;
@@ -11,7 +11,7 @@
 
     public class Order : AggregateRootBase<int>
     {
-        private readonly List<OrderItem> _orderItems;
+        private readonly List<OrderItem> _orderItems = new();
 
         private string _description;
         private bool _isDraft;
@@ -22,23 +22,26 @@
             _isDraft = false;
         }
 
-        internal Order(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, Buyer buyer, PaymentMethod paymentMethod) : this()
+        internal Order(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, PaymentMethod paymentMethod) : this()
         {
             ShippingAddress = Guard.Against.Null(shippingAddress);
             BillingAddress = Guard.Against.Null(billingAddress);
             OrderDate = Guard.Against.Null(dateTimeService).Now;
             OrderStatus = OrderStatus.Submitted;
+            BuyerId = buyerId;
+            PaymentMethodId = Guard.Against.Null(paymentMethod).Id;
 
-            //  _buyerId = buyerId;
-            //  _paymentMethodId = paymentMethodId;
-
-            AddOrderStartedDomainEvent(buyer, paymentMethod);
+            AddOrderStartedDomainEvent(buyerId, buyerName, paymentMethod);
         }
 
         public static Order NewDraft() => new() { _isDraft = true };
 
-        public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, Buyer buyer, PaymentMethod paymentMethod)
-            => new(dateTimeService, shippingAddress, billingAddress, buyer, paymentMethod);
+        public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, PaymentMethod paymentMethod)
+            => new(dateTimeService, shippingAddress, billingAddress, buyerId, buyerName, paymentMethod);
+
+        public long BuyerId { get; private set; }
+
+        public long PaymentMethodId { get; private set; }
 
         public Address ShippingAddress { get; private set; }
 
@@ -48,20 +51,9 @@
 
         public OrderStatus OrderStatus { get; private set; }
 
-        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
+        public IReadOnlyCollection<OrderItem> OrderItems => _orderItems.AsReadOnly();
 
         public decimal GetTotal() => _orderItems.Sum(orderItem => orderItem.GetTotalWithoutDiscount());
-
-        public void SetPaidStatus()
-        {
-            if (OrderStatus == OrderStatus.StockConfirmed)
-            {
-                OrderStatus = OrderStatus.Paid;
-                _description = "The payment was performed at a simulated \"American Bank checking bank account ending on XX35071\"";
-
-                AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
-            }
-        }
 
         public void SetAwaitingValidationStatus()
         {
@@ -81,6 +73,17 @@
                 _description = "All the items were confirmed with available stock.";
 
                 AddDomainEvent(new OrderStatusChangedToStockConfirmedDomainEvent(Id));
+            }
+        }
+
+        public void SetPaidStatus()
+        {
+            if (OrderStatus == OrderStatus.StockConfirmed)
+            {
+                OrderStatus = OrderStatus.Paid;
+                _description = "The payment was performed at a simulated \"American Bank checking bank account ending on XX35071\"";
+
+                AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
             }
         }
 
@@ -106,15 +109,6 @@
             AddDomainEvent(new OrderCancelledDomainEvent(this));
         }
 
-        private void AddOrderStartedDomainEvent(Buyer buyer, PaymentMethod paymentMethod)
-        {
-            var orderStartedDomainEvent = new OrderStartedDomainEvent(this, buyer.UserId, buyer.FullName, paymentMethod.CardType.Value,
-                                                                      paymentMethod.CardNumber, paymentMethod.SecurityNumber,
-                                                                      paymentMethod.CardHolderName, paymentMethod.Expiration);
-
-            AddDomainEvent(orderStartedDomainEvent);
-        }
-
         public void SetCancelledStatusWhenStockIsRejected(IEnumerable<int> orderStockRejectedItems)
         {
             if (OrderStatus == OrderStatus.AwaitingValidation)
@@ -129,6 +123,15 @@
 
                 _description = $"The product items don't have stock: ({itemsStockRejectedDescription}).";
             }
+        }
+
+        private void AddOrderStartedDomainEvent(long buyerId, string buyerName, PaymentMethod paymentMethod)
+        {
+            var orderStartedDomainEvent = new OrderStartedDomainEvent(this, buyerId.ToString(), buyerName, paymentMethod.CardType.Value,
+                                                                      paymentMethod.CardNumber, paymentMethod.SecurityNumber,
+                                                                      paymentMethod.CardHolderName, paymentMethod.Expiration);
+
+            AddDomainEvent(orderStartedDomainEvent);
         }
 
         private void StatusChangeException(OrderStatus orderStatusToChange)
