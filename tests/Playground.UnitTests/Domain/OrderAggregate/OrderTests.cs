@@ -13,6 +13,7 @@
     {
         private static readonly Address DefaultShippingAddress = new("lala st.", "NY", "NY", "USA", "232");
         private static readonly Address DefaultBillingAddress = new("lal2a st.", "LA", "LA", "USA", "112");
+        private static readonly FullName DefaultBuyerFullName = new("Dwayne", "Rock", "Johnson");
 
         private readonly IDateTimeService _dateTimeService;
 
@@ -26,11 +27,10 @@
         {
             // Arrange
             var buyerId = 1;
-            var buyerName = new FullName("Dwayne", "Rock", "Johnson");
             var paymentMethod = new PaymentMethod(CardType.Visa, "dada", "23232", "212", "Hahao", DateTime.Now.AddYears(2), _dateTimeService);
 
             // Act
-            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, buyerName, paymentMethod);
+            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, DefaultBuyerFullName, paymentMethod);
 
             // Assert
             Assert.Equal(buyerId, order.BuyerId);
@@ -48,9 +48,8 @@
         {
             // Arrange
             var buyerId = 1;
-            var buyerName = new FullName("Dwayne", "Rock", "Johnson");
             var paymentMethod = new PaymentMethod(CardType.Visa, "dada", "23232", "212", "Hahao", DateTime.Now.AddYears(2), _dateTimeService);
-            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, buyerName, paymentMethod);
+            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, DefaultBuyerFullName, paymentMethod);
 
             // Act - Assert
             order.SetAwaitingValidationStatus();
@@ -75,9 +74,8 @@
         {
             // Arrange
             var buyerId = 1;
-            var buyerName = new FullName("Dwayne", "Rock", "Johnson");
             var paymentMethod = new PaymentMethod(CardType.Visa, "dada", "23232", "212", "Hahao", DateTime.Now.AddYears(2), _dateTimeService);
-            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, buyerName, paymentMethod);
+            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, DefaultBuyerFullName, paymentMethod);
 
             // Act
             order.SetAwaitingValidationStatus();
@@ -93,9 +91,8 @@
         {
             // Arrange
             var buyerId = 1;
-            var buyerName = new FullName("Dwayne", "Rock", "Johnson");
             var paymentMethod = new PaymentMethod(CardType.Visa, "dada", "23232", "212", "Hahao", DateTime.Now.AddYears(2), _dateTimeService);
-            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, buyerName, paymentMethod);
+            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, DefaultBuyerFullName, paymentMethod);
 
             // Act
             order.SetAwaitingValidationStatus();
@@ -111,9 +108,8 @@
         {
             // Arrange
             var buyerId = 1;
-            var buyerName = new FullName("Dwayne", "Rock", "Johnson");
             var paymentMethod = new PaymentMethod(CardType.Visa, "dada", "23232", "212", "Hahao", DateTime.Now.AddYears(2), _dateTimeService);
-            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, buyerName, paymentMethod);
+            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, DefaultBuyerFullName, paymentMethod);
 
             // Act
             order.SetAwaitingValidationStatus();
@@ -130,9 +126,8 @@
         {
             // Arrange
             var buyerId = 1;
-            var buyerName = new FullName("Dwayne", "Rock", "Johnson");
             var paymentMethod = new PaymentMethod(CardType.Visa, "dada", "23232", "212", "Hahao", DateTime.Now.AddYears(2), _dateTimeService);
-            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, buyerName, paymentMethod);
+            var order = Order.New(_dateTimeService, DefaultShippingAddress, DefaultBillingAddress, buyerId, DefaultBuyerFullName, paymentMethod);
 
             // Act
             order.SetAwaitingValidationStatus();
