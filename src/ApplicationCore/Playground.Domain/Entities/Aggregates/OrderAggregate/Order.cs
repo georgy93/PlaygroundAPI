@@ -2,6 +2,7 @@
 {
     using Ardalis.GuardClauses;
     using Events;
+    using Playground.Domain.Entities.Aggregates.BuyerAggregate;
     using SeedWork;
     using Services;
     using System;
@@ -21,14 +22,23 @@
             _isDraft = false;
         }
 
-        internal Order(Address shippingAddress, Address billingAddress, DateTime creationDate) : this()
+        internal Order(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, Buyer buyer, PaymentMethod paymentMethod) : this()
         {
             ShippingAddress = Guard.Against.Null(shippingAddress);
             BillingAddress = Guard.Against.Null(billingAddress);
-            OrderDate = creationDate;
+            OrderDate = Guard.Against.Null(dateTimeService).Now;
+            OrderStatus = OrderStatus.Submitted;
 
-            //AddOrderStartedDomainEvent();
+            //  _buyerId = buyerId;
+            //  _paymentMethodId = paymentMethodId;
+
+            AddOrderStartedDomainEvent(buyer, paymentMethod);
         }
+
+        public static Order NewDraft() => new() { _isDraft = true };
+
+        public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, Buyer buyer, PaymentMethod paymentMethod)
+            => new(dateTimeService, shippingAddress, billingAddress, buyer, paymentMethod);
 
         public Address ShippingAddress { get; private set; }
 
@@ -40,21 +50,16 @@
 
         public IReadOnlyCollection<OrderItem> OrderItems => _orderItems;
 
-        public static Order NewDraft() => new() { _isDraft = true };
-
-        public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress)
-            => new(shippingAddress, billingAddress, dateTimeService.Now);
-
         public decimal GetTotal() => _orderItems.Sum(orderItem => orderItem.GetTotalWithoutDiscount());
 
         public void SetPaidStatus()
         {
             if (OrderStatus == OrderStatus.StockConfirmed)
             {
-                AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
-
                 OrderStatus = OrderStatus.Paid;
                 _description = "The payment was performed at a simulated \"American Bank checking bank account ending on XX35071\"";
+
+                AddDomainEvent(new OrderStatusChangedToPaidDomainEvent(Id, OrderItems));
             }
         }
 
@@ -62,8 +67,9 @@
         {
             if (OrderStatus == OrderStatus.Submitted)
             {
-                AddDomainEvent(new OrderStatusChangedToAwaitingValidationDomainEvent(Id, _orderItems));
                 OrderStatus = OrderStatus.AwaitingValidation;
+
+                AddDomainEvent(new OrderStatusChangedToAwaitingValidationDomainEvent(Id, _orderItems));
             }
         }
 
@@ -71,10 +77,10 @@
         {
             if (OrderStatus == OrderStatus.AwaitingValidation)
             {
-                AddDomainEvent(new OrderStatusChangedToStockConfirmedDomainEvent(Id));
-
                 OrderStatus = OrderStatus.StockConfirmed;
                 _description = "All the items were confirmed with available stock.";
+
+                AddDomainEvent(new OrderStatusChangedToStockConfirmedDomainEvent(Id));
             }
         }
 
@@ -96,21 +102,15 @@
 
             OrderStatus = OrderStatus.Cancelled;
             _description = $"The order was cancelled.";
+
             AddDomainEvent(new OrderCancelledDomainEvent(this));
         }
 
-        // TODO Use value object for payment
-        private void AddOrderStartedDomainEvent(string userId,
-            string userName,
-            int cardTypeId,
-            string cardNumber,
-            string cardSecurityNumber,
-            string cardHolderName,
-            DateTime cardExpiration)
+        private void AddOrderStartedDomainEvent(Buyer buyer, PaymentMethod paymentMethod)
         {
-            var orderStartedDomainEvent = new OrderStartedDomainEvent(this, userId, userName, cardTypeId,
-                                                                      cardNumber, cardSecurityNumber,
-                                                                      cardHolderName, cardExpiration);
+            var orderStartedDomainEvent = new OrderStartedDomainEvent(this, buyer.UserId, buyer.FullName, paymentMethod.CardType.Value,
+                                                                      paymentMethod.CardNumber, paymentMethod.SecurityNumber,
+                                                                      paymentMethod.CardHolderName, paymentMethod.Expiration);
 
             AddDomainEvent(orderStartedDomainEvent);
         }
@@ -126,6 +126,7 @@
                     .Select(orderItem => orderItem.ProductName);
 
                 var itemsStockRejectedDescription = string.Join(", ", itemsStockRejectedProductNames);
+
                 _description = $"The product items don't have stock: ({itemsStockRejectedDescription}).";
             }
         }

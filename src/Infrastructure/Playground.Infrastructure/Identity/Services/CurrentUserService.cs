@@ -1,6 +1,6 @@
 ﻿namespace Playground.Infrastructure.Identity.Services
 {
-    using Application.Interfaces;
+    using Domain.Services;
     using Microsoft.AspNetCore.Http;
     using System.Linq;
 
