@@ -2,6 +2,8 @@
 {
     using Common.Exceptions;
     using Dapper;
+    using DapperQueryBuilder;
+    using Domain.Entities.Aggregates.OrderAggregate;
     using MediatR;
     using Microsoft.Extensions.Configuration;
     using System.Collections.Generic;
@@ -28,27 +30,27 @@
                 await connection.OpenAsync(cancellationToken);
 
                 // TODO: FIX DB SCHEMA and query properties
-                var result = await connection.QueryAsync<dynamic>(sql:
-                @"SELECT
-                    o.[Id] as OrderNumber,
-                    o.OrderDate as Date,
-                    o.Description as Description,
-                    o.ShippingAddress_City as City,
-                    o.ShippingAddress_Country as Country,
-                    o.ShippingAddress_State as State,
-                    o.ShippingAddress_Street as Street,
-                    o.ShippingAddress_ZipCode as ZipCode,
-                    os.Name as Status,
-                    oi.ProductName as Productname,
-                    oi.Units as Units,
-                    oi.UnitPrice as UnitPrice,
-                    oi.PictureUrl as Pictureurl
+                // https://github.com/Drizin/DapperQueryBuilder
+                var query = connection.QueryBuilder(
+                @$"SELECT
+                    o.{nameof(Order.Id):raw} as {nameof(GetOrderByIdQueryResult.OrderNumber):raw},
+                    o.{nameof(Order.OrderDate):raw} as {nameof(GetOrderByIdQueryResult.Date):raw},
+                    o.Description as {nameof(GetOrderByIdQueryResult.Description):raw},
+                    o.ShippingCity as {nameof(GetOrderByIdQueryResult.City):raw},
+                    o.ShippingCountry as {nameof(GetOrderByIdQueryResult.Country):raw},
+                    o.ShippingStreet as {nameof(GetOrderByIdQueryResult.Street):raw},
+                    o.ShippingZipCode as {nameof(GetOrderByIdQueryResult.ZipCode):raw},
+                    os.Name as {nameof(GetOrderByIdQueryResult.Status):raw},
+                    oi.{nameof(OrderItem.ProductName):raw} as {nameof(OrderitemDto.ProductName):raw},
+                    oi.{nameof(OrderItem.Units):raw} as {nameof(OrderitemDto.Units):raw},
+                    oi.{nameof(OrderItem.UnitPrice):raw} as {nameof(OrderitemDto.UnitPrice):raw},
+                    oi.{nameof(OrderItem.PictureUrl):raw} as {nameof(OrderitemDto.PictureUrl):raw}
                 FROM ordering.Orders o
                 LEFT JOIN ordering.Orderitems oi ON o.Id = oi.orderid
                 LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id
-                WHERE o.Id=@OrderId",
-                param: new { request.OrderId },
-                commandTimeout: 10);
+                WHERE o.Id = {request.OrderId}");
+
+                var result = await query.QueryAsync<dynamic>(commandTimeout: 10);
 
                 if (!result.AsList().Any())
                     throw new RecordNotFoundException(request.OrderId); // TODO: Use other exception
@@ -59,11 +61,11 @@
             private static GetOrderByIdQueryResult MapOrderItems(dynamic result)
             {
                 var total = 0m;
-                var orderItems = new List<OrderitemDTO>();
+                var orderItems = new List<OrderitemDto>();
 
                 foreach (dynamic item in result)
                 {
-                    var orderitem = new OrderitemDTO
+                    var orderitem = new OrderitemDto
                     {
                         ProductName = item.productname,
                         Units = item.units,
@@ -92,7 +94,7 @@
         }
     }
 
-    public class OrderitemDTO
+    public record OrderitemDto
     {
         public string ProductName { get; init; }
 

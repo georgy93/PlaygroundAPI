@@ -2,8 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
-    public class GetOrderByIdQueryResult
+    public record GetOrderByIdQueryResult
     {
         public int OrderNumber { get; init; }
 
@@ -21,7 +22,7 @@
 
         public string Country { get; init; }
 
-        public IEnumerable<OrderitemDTO> OrderItems { get; init; }
+        public IEnumerable<OrderitemDto> OrderItems { get; init; } = Enumerable.Empty<OrderitemDto>();
 
         public decimal Total { get; init; }
     }
