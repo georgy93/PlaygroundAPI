@@ -14,7 +14,7 @@
             builder.Property(b => b.Id)
                 .UseHiLo("buyerseq", AppDbContext.DEFAULT_SCHEMA);
 
-            builder.Property<string>("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
+            builder.Property<int>("_versionId").HasColumnName("VersionId").IsConcurrencyToken();
 
             builder
                 .ConfigureFullName()

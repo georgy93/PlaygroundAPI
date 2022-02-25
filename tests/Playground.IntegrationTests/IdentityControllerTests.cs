@@ -150,9 +150,9 @@
         private static string GenerateEmail()
         {
             var rnd = new Random();
-            var number = rnd.Next(1, 100000);
+            var number = rnd.Next(1, 1000);
 
-            return $"someEmail{number}@yahoo.com";
+            return $"someemail{number}@yahoo.com";
         }
     }
 }

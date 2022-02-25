@@ -25,13 +25,24 @@
 
         public virtual void Dispose()
         {
-            WebApplicationFactory.Dispose();
+            Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                WebApplicationFactory.Dispose();
+                TestClient.Dispose();
+            }
         }
 
         protected async Task AuthenticateAsync()
         {
-            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, await GetJwtAsync());
+            var jwt = await GetJwtAsync();
+
+            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, jwt);
         }
 
         private async Task<string> GetJwtAsync()
@@ -45,6 +56,11 @@
             var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>();
 
             return authenticationResult.Token;
+        }
+
+        ~IntegrationTest()
+        {
+            Dispose(false);
         }
     }
 }
