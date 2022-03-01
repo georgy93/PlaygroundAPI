@@ -2,7 +2,6 @@
 {
     using Domain.Services;
     using Microsoft.AspNetCore.Http;
-    using System.Linq;
 
     internal class CurrentUserService : ICurrentUserService
     {

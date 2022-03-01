@@ -2,7 +2,6 @@
 {
     using Ardalis.GuardClauses;
     using SeedWork;
-    using System.Collections.Generic;
 
     public class FullName : ValueObject
     {

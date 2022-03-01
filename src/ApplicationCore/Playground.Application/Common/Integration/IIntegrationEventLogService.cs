@@ -1,10 +1,6 @@
 ﻿namespace Playground.Application.Common.Integration
 {
     using Microsoft.EntityFrameworkCore.Storage;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     public interface IIntegrationEventLogService
     {

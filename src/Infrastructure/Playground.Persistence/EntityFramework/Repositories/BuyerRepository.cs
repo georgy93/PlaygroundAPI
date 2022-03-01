@@ -2,9 +2,6 @@
 {
     using Abstract;
     using Domain.Entities.Aggregates.BuyerAggregate;
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     internal class BuyerRepository : EFRepository<Buyer>, IBuyerRepository
     {

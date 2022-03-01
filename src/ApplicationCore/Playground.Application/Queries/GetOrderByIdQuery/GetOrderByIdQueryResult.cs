@@ -1,9 +1,5 @@
 ﻿namespace Playground.Application.Queries.GetOrderByIdQuery
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     public record GetOrderByIdQueryResult
     {
         public int OrderNumber { get; init; }

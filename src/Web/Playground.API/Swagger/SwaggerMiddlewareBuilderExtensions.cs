@@ -1,7 +1,6 @@
 ﻿namespace Playground.API.Swagger
 {
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.Extensions.Configuration;
 
     public static class SwaggerMiddlewareBuilderExtensions
     {

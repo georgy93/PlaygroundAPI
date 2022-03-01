@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.SeedWork
 {
-    using MediatR;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public abstract class EntityBase : IDomainEntity

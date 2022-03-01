@@ -2,8 +2,6 @@
 {
     using Ardalis.GuardClauses;
     using SeedWork;
-    using System;
-    using System.Collections.Generic;
 
     public class UserId : ValueObject
     {

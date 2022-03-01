@@ -4,13 +4,8 @@
     using Dapper;
     using DapperQueryBuilder;
     using Domain.Entities.Aggregates.OrderAggregate;
-    using MediatR;
     using Microsoft.Extensions.Configuration;
-    using System.Collections.Generic;
     using System.Data.SqlClient;
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     public record GetOrderByIdQuery(int OrderId) : IRequest<GetOrderByIdQueryResult>
     {

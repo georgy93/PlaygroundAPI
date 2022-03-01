@@ -4,7 +4,6 @@
     using GuardClauses;
     using SeedWork;
     using Services;
-    using System;
 
     public class PaymentMethod : Entity<int>
     {

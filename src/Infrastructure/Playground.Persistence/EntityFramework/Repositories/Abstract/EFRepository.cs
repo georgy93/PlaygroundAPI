@@ -1,9 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.Repositories.Abstract
 {
     using Domain.SeedWork;
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Use Repository only for State changing operations. For reading data follow CQRS

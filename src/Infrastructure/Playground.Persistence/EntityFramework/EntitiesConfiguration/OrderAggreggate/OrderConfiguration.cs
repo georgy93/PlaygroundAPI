@@ -1,8 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.EntitiesConfiguration.OrderAggreggate
 {
     using Domain.Entities.Aggregates.OrderAggregate;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     internal class OrderConfiguration : IEntityTypeConfiguration<Order>
     {

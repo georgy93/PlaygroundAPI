@@ -2,9 +2,6 @@
 {
     using Abstract;
     using Domain.Entities.Aggregates.OrderAggregate;
-    using Microsoft.EntityFrameworkCore;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     internal class OrderRepository : EFRepository<Order>, IOrderRepository
     {

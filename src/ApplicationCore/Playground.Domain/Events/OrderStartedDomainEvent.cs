@@ -1,8 +1,6 @@
 ﻿namespace Playground.Domain.Events
 {
     using Entities.Aggregates.OrderAggregate;
-    using MediatR;
-    using System;
 
     public record OrderStartedDomainEvent(
         Order Order,

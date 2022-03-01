@@ -1,8 +1,6 @@
 ﻿namespace Playground.Infrastructure.Messaging.Rest.DelegatingHandlers
 {
     using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     internal class RequestStatisticsBehavior : DelegatingHandler
     {

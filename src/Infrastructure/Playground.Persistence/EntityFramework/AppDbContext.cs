@@ -8,15 +8,9 @@
     using Domain.Services;
     using Extensions;
     using MediatR;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Storage;
-    using System;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;   
     using System.Data;
-    using System.Linq;
     using System.Reflection;
-    using System.Threading;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// Add-Migration Initial

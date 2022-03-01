@@ -1,12 +1,7 @@
 ﻿namespace Playground.API.Behavior.Filters
 {
     using Application.Interfaces;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using System;
     using System.Net.Mime;
-    using System.Threading.Tasks;
     using Utils.Extensions;
 
     [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]

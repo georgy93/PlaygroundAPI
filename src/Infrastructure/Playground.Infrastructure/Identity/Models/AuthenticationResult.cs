@@ -1,7 +1,5 @@
 ﻿namespace Playground.Infrastructure.Identity.Models
 {
-    using System.Collections.Generic;
-
     public record AuthenticationResult
     {
         private AuthenticationResult(string token, string refreshtoken)

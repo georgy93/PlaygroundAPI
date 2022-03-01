@@ -1,7 +1,6 @@
 ﻿namespace Playground.Domain.SeedWork
 {
     using Services;
-    using System;
 
     public abstract class AuditableEntity<TKey> : Entity<TKey>, IAuditableEntity
         where TKey : IEquatable<TKey>

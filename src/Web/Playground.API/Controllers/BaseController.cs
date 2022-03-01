@@ -2,8 +2,6 @@
 {
     using DTOs;
     using MediatR;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using System.Net.Mime;
 
     [ApiController] // this will return automatically error response when model state is invalid

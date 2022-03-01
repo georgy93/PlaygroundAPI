@@ -1,7 +1,6 @@
 ﻿namespace Playground.Infrastructure.Identity.Services
 {
     using Models;
-    using System.Threading.Tasks;
 
     public interface IIdentityService
     {

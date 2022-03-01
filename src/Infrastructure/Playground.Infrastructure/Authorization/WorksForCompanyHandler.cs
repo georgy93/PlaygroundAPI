@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using System.Security.Claims;
-    using System.Threading.Tasks;
 
     public class WorksForCompanyHandler : AuthorizationHandler<WorksForCompanyRequirement>
     {

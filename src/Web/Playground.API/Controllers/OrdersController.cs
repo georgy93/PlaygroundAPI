@@ -1,10 +1,7 @@
 ﻿namespace Playground.API.Controllers
 {
     using Application.Queries.GetOrderByIdQuery;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
     using System.Net;
-    using System.Threading.Tasks;
 
     public class OrdersController : BaseController
     {

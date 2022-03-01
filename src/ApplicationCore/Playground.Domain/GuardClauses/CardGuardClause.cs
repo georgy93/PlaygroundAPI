@@ -3,7 +3,6 @@
     using Ardalis.GuardClauses;
     using Exceptions;
     using Services;
-    using System;
 
     internal static class CardGuardClause
     {

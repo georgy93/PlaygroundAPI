@@ -2,7 +2,6 @@
 {
     using Application.Interfaces;
     using Microsoft.Extensions.Caching.Memory;
-    using System;
     using System.Text.Json;
 
     internal class ResponseCacheInMemoryService : IResponseCacheService

@@ -4,9 +4,6 @@
     using Events;
     using SeedWork;
     using Services;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     public class Buyer : AggregateRootBase<long>
     {

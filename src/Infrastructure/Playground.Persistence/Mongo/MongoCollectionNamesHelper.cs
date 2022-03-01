@@ -1,8 +1,5 @@
 ﻿namespace Playground.Persistence.Mongo
 {
-    using System;
-    using System.Collections.Generic;
-
     internal static class MongoCollectionNamesHelper
     {
         private static readonly IReadOnlyDictionary<Type, string> _collectionNames = new Dictionary<Type, string>()

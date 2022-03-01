@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.SeedWork
-{
-    using System;
-    
+{    
     public abstract class Entity<TKey> : EntityBase, IEntity<TKey>
         where TKey : IEquatable<TKey>
     {

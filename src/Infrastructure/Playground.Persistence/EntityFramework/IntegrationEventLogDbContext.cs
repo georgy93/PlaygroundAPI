@@ -1,9 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework
 {
     using Application.Common.Integration;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
-    using System;
 
     /// <summary>
     /// PM Console: Add-Migration InitialCreate -Context IntegrationEventLogDbContext -OutputDir EntityFramework\Migrations\IntegrationEventLogDbContextMigrations

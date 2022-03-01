@@ -1,7 +1,6 @@
 ﻿namespace Playground.API.DTOs
 {
     using Newtonsoft.Json;
-    using System;
 
     // TODO: Move to API
     public record ErrorResponse

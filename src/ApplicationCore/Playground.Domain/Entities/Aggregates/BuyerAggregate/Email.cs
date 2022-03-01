@@ -3,7 +3,6 @@
     using Ardalis.GuardClauses;
     using GuardClauses;
     using SeedWork;
-    using System.Collections.Generic;
 
     public class Email : ValueObject
     {

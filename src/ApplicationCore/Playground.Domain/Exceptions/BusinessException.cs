@@ -1,7 +1,6 @@
 ﻿namespace Playground.Domain.Exceptions
 {
     using Microsoft.AspNetCore.Http;
-    using System;
 
     public abstract class BusinessException : ApplicationException
     {

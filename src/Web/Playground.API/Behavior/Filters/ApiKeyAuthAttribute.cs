@@ -1,11 +1,6 @@
 ﻿namespace Playground.API.Behavior.Filters
 {
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using Microsoft.Extensions.Options;
     using Settings;
-    using System;
-    using System.Threading.Tasks;
 
     [AttributeUsage(validOn: AttributeTargets.Class | AttributeTargets.Method)]
     public sealed class ApiKeyAuthAttribute : TypeFilterAttribute

@@ -1,7 +1,6 @@
 ﻿namespace Playground.Domain.Events
 {
     using Entities.Aggregates.BuyerAggregate;
-    using MediatR;
 
     public class BuyerAndPaymentMethodVerifiedDomainEvent : INotification
     {

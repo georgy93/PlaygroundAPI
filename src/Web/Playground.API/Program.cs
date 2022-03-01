@@ -1,15 +1,10 @@
 namespace Playground.API
 {
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.Extensions.Configuration;
-    using Microsoft.Extensions.Hosting;
     using Persistence.EntityFramework;
     using Persistence.EntityFramework.Extensions;
     using Serilog;
     using Serilog.Sinks.Elasticsearch;
-    using System;
     using System.Reflection;
-    using System.Threading.Tasks;
     using Utils.Helpers;
 
     public class Program

@@ -1,8 +1,6 @@
 ﻿namespace Playground.API.Behavior.Filters
 {
     using Application.Interfaces;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
     using Utils.Extensions;
 
     public sealed class RemoveCachedResponseAttribute : TypeFilterAttribute

@@ -1,9 +1,5 @@
 ﻿namespace Playground.Infrastructure.HealthCheck
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     public record HealthCheckResponse
     {
         public string Status { get; init; }

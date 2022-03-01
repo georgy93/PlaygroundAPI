@@ -1,8 +1,5 @@
 ﻿namespace Playground.Domain.SeedWork
 {
-    using System.Collections.Generic;
-    using System.Linq;
-
     public abstract class ValueObject
     {
         protected static bool EqualOperator(ValueObject left, ValueObject right)

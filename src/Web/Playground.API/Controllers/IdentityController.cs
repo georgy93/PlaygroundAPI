@@ -2,9 +2,6 @@
 {
     using Infrastructure.Identity.Models;
     using Infrastructure.Identity.Services;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
 
     [ProducesResponseType(typeof(AuthSuccessResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(AuthFailedResponse), StatusCodes.Status400BadRequest)]

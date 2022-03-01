@@ -1,7 +1,6 @@
 ﻿namespace Playground.Domain.SeedWork
 {
     using MediatR;
-    using System.Collections.Generic;
 
     public interface IDomainEntity
     {

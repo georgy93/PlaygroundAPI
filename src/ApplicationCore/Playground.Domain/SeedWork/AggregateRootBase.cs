@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.SeedWork
 {
-    using System;
-
     public abstract class AggregateRootBase<TKey> : Entity<TKey>, IAggregateRoot
         where TKey : IEquatable<TKey>
     {

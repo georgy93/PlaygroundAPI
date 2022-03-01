@@ -1,10 +1,7 @@
 ﻿namespace Playground.Infrastructure.Messaging.Rest.DelegatingHandlers
 {
     using Microsoft.Extensions.Logging;
-    using System;
     using System.Net.Http;
-    using System.Threading;
-    using System.Threading.Tasks;
     using Utils.Extensions;
 
     internal class RequestExceptionHandlingBehavior : DelegatingHandler

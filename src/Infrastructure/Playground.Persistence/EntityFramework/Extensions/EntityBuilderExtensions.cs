@@ -1,8 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.Extensions
 {
     using Ardalis.SmartEnum;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     public static class EntityBuilderExtensions
     {

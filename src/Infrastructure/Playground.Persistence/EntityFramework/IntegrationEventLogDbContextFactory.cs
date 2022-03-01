@@ -1,8 +1,5 @@
 ﻿namespace Playground.Persistence.EntityFramework
 {
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Design;
-
     public class IntegrationEventLogDbContextFactory : IDesignTimeDbContextFactory<IntegrationEventLogDbContext>
     {
         public IntegrationEventLogDbContext CreateDbContext(string[] args)

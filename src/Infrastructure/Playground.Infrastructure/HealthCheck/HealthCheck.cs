@@ -1,7 +1,5 @@
 ﻿namespace Playground.Infrastructure.HealthCheck
 {
-    using System;
-
     public record HealthCheck
     {
         public string Status { get; init; }

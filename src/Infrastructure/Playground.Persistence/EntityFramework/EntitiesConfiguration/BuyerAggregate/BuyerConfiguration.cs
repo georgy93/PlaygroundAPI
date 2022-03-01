@@ -1,8 +1,6 @@
 ﻿namespace Playground.Persistence.EntityFramework.EntitiesConfiguration.BuyerAggregate
 {
     using Domain.Entities.Aggregates.BuyerAggregate;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
     internal class BuyerConfiguration : IEntityTypeConfiguration<Buyer>
     {

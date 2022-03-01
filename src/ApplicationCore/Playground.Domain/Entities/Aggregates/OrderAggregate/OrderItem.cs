@@ -2,7 +2,6 @@
 {
     using Ardalis.GuardClauses;
     using SeedWork;
-    using System;
 
     public class OrderItem : Entity<int>
     {

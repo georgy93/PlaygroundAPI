@@ -1,9 +1,5 @@
 ﻿namespace Playground.Persistence.EntityFramework
 {
-    using Microsoft.EntityFrameworkCore;
-    using System;
-    using System.Threading.Tasks;
-
     public class ResilientTransaction
     {
         private readonly DbContext _context;

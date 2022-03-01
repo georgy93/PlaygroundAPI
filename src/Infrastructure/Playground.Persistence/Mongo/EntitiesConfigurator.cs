@@ -1,7 +1,5 @@
 ﻿namespace Playground.Persistence.Mongo
 {
-    using System;
-    using System.Linq;
     using System.Reflection;
 
     internal static class EntitiesConfigurator

@@ -3,8 +3,6 @@
     using Application.Common.Integration;
     using Microsoft.Extensions.Logging;
     using Polly;
-    using System;
-    using System.Threading.Tasks;
 
     internal class IntegrationEventsService : IIntegrationEventsService
     {

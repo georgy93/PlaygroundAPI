@@ -1,7 +1,6 @@
 ﻿namespace Playground.Infrastructure.Services
 {
     using Domain.Services;
-    using System;
 
     internal class DateTimeService : IDateTimeService
     {

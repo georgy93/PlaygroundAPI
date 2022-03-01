@@ -1,6 +1,5 @@
 ﻿namespace Playground.Domain.SeedWork
 {
-    using System;
     using Services;
 
     public interface IAuditableEntity

@@ -1,7 +1,6 @@
 ﻿namespace Playground.Infrastructure.HealthCheck
 {
     using Microsoft.Extensions.Diagnostics.HealthChecks;
-    using System.Linq;
 
     public static class HealthCheckHelper
     {

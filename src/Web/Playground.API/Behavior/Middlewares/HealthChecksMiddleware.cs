@@ -1,9 +1,7 @@
 ﻿namespace Playground.API.Behavior.Middlewares
 {
     using Infrastructure.HealthCheck;
-    using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-    using Microsoft.AspNetCore.Http;
     using System.Net.Mime;
     using Utils.Extensions;
 

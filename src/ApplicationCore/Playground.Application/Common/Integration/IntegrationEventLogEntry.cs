@@ -1,7 +1,6 @@
 ﻿namespace Playground.Application.Common.Integration
 {
     using Newtonsoft.Json;
-    using System;
 
     public class IntegrationEventLogEntry
     {

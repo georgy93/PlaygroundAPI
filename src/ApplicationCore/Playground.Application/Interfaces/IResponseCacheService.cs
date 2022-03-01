@@ -1,7 +1,5 @@
 ﻿namespace Playground.Application.Interfaces
 {
-    using System;
-
     public interface IResponseCacheService
     {
         string GetCachedResponse(string cacheKey);

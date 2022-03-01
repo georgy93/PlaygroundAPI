@@ -2,8 +2,6 @@
 {
     using Domain.SeedWork;
     using MediatR;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     internal static class DbContextExtensions
     {

@@ -17,7 +17,6 @@
     using MongoDB.Bson;
     using MongoDB.Driver;
     using MongoDB.Driver.Core.Events;
-    using System;
 
     public static class DependencyInjection
     {
