@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.Entities
 {
-    using Playground.Domain.SeedWork;
-
     public class VersionedEntity : Entity<int>
     {
         //[System.ComponentModel.DataAnnotations.Timestamp] - Configure with fluent API

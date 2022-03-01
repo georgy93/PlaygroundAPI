@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.Events
 {
-    using Entities.Aggregates.OrderAggregate;
-
     public record OrderStartedDomainEvent(
         Order Order,
         string UserId,

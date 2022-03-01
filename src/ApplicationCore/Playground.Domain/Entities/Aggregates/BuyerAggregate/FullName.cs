@@ -1,8 +1,5 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
-    using Ardalis.GuardClauses;
-    using SeedWork;
-
     public class FullName : ValueObject
     {
         private string _fullNameString;

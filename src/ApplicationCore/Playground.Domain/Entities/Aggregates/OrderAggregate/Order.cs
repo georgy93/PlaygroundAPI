@@ -1,9 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
-    using Ardalis.GuardClauses;
-    using BuyerAggregate;
     using Events;
-    using SeedWork;
     using Services;
 
     public class Order : AggregateRootBase<int>

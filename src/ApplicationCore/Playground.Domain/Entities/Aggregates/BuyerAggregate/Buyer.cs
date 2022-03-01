@@ -1,8 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
-    using Ardalis.GuardClauses;
     using Events;
-    using SeedWork;
     using Services;
 
     public class Buyer : AggregateRootBase<long>

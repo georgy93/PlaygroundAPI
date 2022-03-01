@@ -1,8 +1,5 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
-    using Ardalis.GuardClauses;
-    using SeedWork;
-
     public class OrderItem : Entity<int>
     {
         protected OrderItem() { }

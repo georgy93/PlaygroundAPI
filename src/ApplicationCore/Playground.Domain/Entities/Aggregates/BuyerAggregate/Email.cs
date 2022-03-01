@@ -1,8 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
-    using Ardalis.GuardClauses;
     using GuardClauses;
-    using SeedWork;
 
     public class Email : ValueObject
     {

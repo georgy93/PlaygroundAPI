@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
-    using Ardalis.SmartEnum;
-
     public class OrderStatus : SmartEnum<OrderStatus>
     {
         public static readonly OrderStatus Submitted = new("Submitted", 1);

@@ -1,6 +1,5 @@
 ﻿namespace Playground.Domain.Entities
 {
-    using SeedWork;
     using System.ComponentModel.DataAnnotations.Schema;
 
     public class RefreshToken : Entity<int>

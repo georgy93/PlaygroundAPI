@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
-    using Ardalis.SmartEnum;
-
     public class CardType : SmartEnum<CardType>
     {
         public static readonly CardType Amex = new("Amex", 1);

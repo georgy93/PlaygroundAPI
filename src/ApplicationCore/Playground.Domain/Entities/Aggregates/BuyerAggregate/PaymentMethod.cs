@@ -1,8 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
 {
-    using Ardalis.GuardClauses;
     using GuardClauses;
-    using SeedWork;
     using Services;
 
     public class PaymentMethod : Entity<int>

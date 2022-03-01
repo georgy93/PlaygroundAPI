@@ -1,6 +1,5 @@
 ﻿namespace Playground.Domain.GuardClauses
 {
-    using Ardalis.GuardClauses;
     using System.Text.RegularExpressions;
 
     internal static class EmailGuardClause
