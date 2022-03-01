@@ -1,13 +1,6 @@
 ﻿namespace Playground.UnitTests.Domain.OrderAggregate
 {
     using Mocks;
-    using Playground.Domain.Entities.Aggregates.BuyerAggregate;
-    using Playground.Domain.Entities.Aggregates.OrderAggregate;
-    using Playground.Domain.Events;
-    using Playground.Domain.Services;
-    using System;
-    using System.Linq;
-    using Xunit;
 
     public class OrderTests
     {

@@ -1,9 +1,5 @@
 ﻿namespace Playground.UnitTests.Domain.OrderAggregate
 {
-    using Playground.Domain.Entities.Aggregates.OrderAggregate;
-    using System;
-    using Xunit;
-
     public class OrderItemTests
     {
         private const int DefaultProductId = 1;

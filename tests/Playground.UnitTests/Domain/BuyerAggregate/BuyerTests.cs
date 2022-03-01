@@ -1,11 +1,6 @@
 ﻿namespace Playground.UnitTests.Domain.BuyerAggregate
 {
-    using Mocks;
-    using Playground.Domain.Entities.Aggregates.BuyerAggregate;
-    using Playground.Domain.Events;
-    using Playground.Domain.Services;
-    using System;
-    using Xunit;
+    using Mocks;   
 
     public class BuyerTests
     {

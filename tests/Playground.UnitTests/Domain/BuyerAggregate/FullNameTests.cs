@@ -1,9 +1,5 @@
 ﻿namespace Playground.UnitTests.Domain.BuyerAggregate
 {
-    using Playground.Domain.Entities.Aggregates.BuyerAggregate;
-    using System;
-    using Xunit;
-
     public class FullNameTests
     {
         [Theory]
