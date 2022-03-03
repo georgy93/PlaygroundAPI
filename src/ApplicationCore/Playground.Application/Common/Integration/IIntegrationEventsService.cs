@@ -1,9 +1,8 @@
-﻿namespace Playground.Application.Common.Integration
-{
-    public interface IIntegrationEventsService : IDisposable
-    {
-        Task PublishThroughEventBusAsync(IntegrationEvent integrationEvent);
+﻿namespace Playground.Application.Common.Integration;
 
-        Task SaveEventAndPlaygroundChangesAsync(IntegrationEvent integrationEvent);
-    }
+public interface IIntegrationEventsService : IDisposable
+{
+    Task PublishThroughEventBusAsync(IntegrationEvent integrationEvent);
+
+    Task SaveEventAndPlaygroundChangesAsync(IntegrationEvent integrationEvent);
 }

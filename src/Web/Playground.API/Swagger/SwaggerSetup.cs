@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.Net.Http.Headers;
     using Microsoft.OpenApi.Models;
-    using Swashbuckle.AspNetCore.Filters;
     using System.IO;
     using System.Reflection;
 

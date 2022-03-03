@@ -1,21 +1,20 @@
-﻿namespace Playground.Application.Common.Integration
+﻿namespace Playground.Application.Common.Integration;
+
+using Microsoft.EntityFrameworkCore.Storage;
+
+public interface IIntegrationEventLogService
 {
-    using Microsoft.EntityFrameworkCore.Storage;
+    Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId, CancellationToken cancellationToken);
 
-    public interface IIntegrationEventLogService
-    {
-        Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsPendingToPublishAsync(Guid transactionId, CancellationToken cancellationToken);
+    Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsFailedToPublishPublishAsync(CancellationToken cancellationToken);
 
-        Task<IEnumerable<IntegrationEventLogEntry>> RetrieveEventLogsFailedToPublishPublishAsync(CancellationToken cancellationToken);
+    Task SaveEventAsync(IntegrationEvent integrationEvent, IDbContextTransaction transaction);
 
-        Task SaveEventAsync(IntegrationEvent integrationEvent, IDbContextTransaction transaction);
+    Task SaveEventAndPlaygroundChangesAsync(IntegrationEvent integrationEvent);
 
-        Task SaveEventAndPlaygroundChangesAsync(IntegrationEvent integrationEvent);
+    Task MarkEventAsPublishedAsync(Guid eventId);
 
-        Task MarkEventAsPublishedAsync(Guid eventId);
+    Task MarkEventAsInProgressAsync(Guid eventId);
 
-        Task MarkEventAsInProgressAsync(Guid eventId);
-
-        Task MarkEventAsFailedAsync(Guid eventId);
-    }
+    Task MarkEventAsFailedAsync(Guid eventId);
 }

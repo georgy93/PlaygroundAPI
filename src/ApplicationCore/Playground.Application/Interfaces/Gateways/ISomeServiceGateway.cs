@@ -1,11 +1,10 @@
-﻿namespace Playground.Application.Interfaces.Gateways
-{
-    using Refit;
+﻿namespace Playground.Application.Interfaces.Gateways;
 
-    public interface ISomeServiceGateway
-    {
-        //[Get("/someController/someEndpoint")]
-        [Get("/")]
-        Task<string> GetInfoAsync(CancellationToken cancellationToken);
-    }
+using Refit;
+
+public interface ISomeServiceGateway
+{
+    //[Get("/someController/someEndpoint")]
+    [Get("/")]
+    Task<string> GetInfoAsync(CancellationToken cancellationToken);
 }

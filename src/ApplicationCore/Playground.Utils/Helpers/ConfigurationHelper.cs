@@ -1,7 +1,6 @@
 ﻿namespace Playground.Utils.Helpers
 {
     using Microsoft.Extensions.Configuration;
-    using System;
     using System.IO;
 
     public static class ConfigurationHelper

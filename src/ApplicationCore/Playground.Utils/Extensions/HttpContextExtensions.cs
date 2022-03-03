@@ -5,9 +5,7 @@
     using Microsoft.AspNetCore.Mvc.Abstractions;
     using Microsoft.AspNetCore.Mvc.Infrastructure;
     using Microsoft.AspNetCore.Routing;
-    using System.Linq;
     using System.Text;
-    using System.Threading.Tasks;
 
     // TODO use the better method
     public static class HttpContextExtensions

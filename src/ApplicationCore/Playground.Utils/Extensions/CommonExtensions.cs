@@ -2,7 +2,6 @@
 {
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
-    using System;
 
     public static class CommonExtensions
     {

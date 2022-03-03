@@ -1,8 +1,6 @@
 ﻿namespace Playground.Application.Queries.GetOrderByIdQuery
 {
-    using Common.Exceptions;
-    using Dapper;
-    using DapperQueryBuilder;
+    using Common.Exceptions;  
     using Domain.Entities.Aggregates.OrderAggregate;
     using Microsoft.Extensions.Configuration;
     using System.Data.SqlClient;

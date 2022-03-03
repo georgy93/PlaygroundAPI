@@ -2,7 +2,6 @@
 {
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
-    using System.Linq;
 
     public static class ServiceCollectionExtensions
     {

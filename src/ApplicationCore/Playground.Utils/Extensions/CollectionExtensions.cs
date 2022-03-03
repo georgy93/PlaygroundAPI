@@ -1,9 +1,5 @@
 ﻿namespace Playground.Utils.Extensions
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     public static class CollectionExtensions
     {
         public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
