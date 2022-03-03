@@ -2,5 +2,5 @@
 {
     using Common.Integration;
 
-    public record OrderStartedIntegrationEvent(string UserId) : IntegrationEvent;
+    public record OrderStartedIntegrationEvent(long UserId) : IntegrationEvent;
 }

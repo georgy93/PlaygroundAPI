@@ -4,7 +4,7 @@
     {
         protected OrderItem() { }
 
-        public OrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
+        internal OrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
         {
             ProductId = productId;
             Units = Guard.Against.NegativeOrZero(units, nameof(units), "Invalid number of units");
@@ -33,14 +33,14 @@
 
         public decimal GetTotalWithDiscount() => GetTotalWithoutDiscount() - Discount;
 
-        public void AddUnits(int units)
+        internal void AddUnits(int units)
         {
             Guard.Against.Negative(units, nameof(units), "Invalid number of units");
 
             Units += units;
         }
 
-        public void SetNewDiscount(decimal discount)
+        internal void SetNewDiscount(decimal discount)
         {
             Guard.Against.Negative(discount, nameof(discount), "Discount is not valid");
 

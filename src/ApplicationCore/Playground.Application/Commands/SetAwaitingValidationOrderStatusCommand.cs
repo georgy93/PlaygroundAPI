@@ -8,14 +8,14 @@ public record SetAwaitingValidationOrderStatusCommand(int OrderNumber) : IReques
 
         public SetAwaitingValidationOrderStatusCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = orderRepository;
+            _orderRepository = Guard.Against.Null(orderRepository);
         }
 
-        public async Task<Unit> Handle(SetAwaitingValidationOrderStatusCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SetAwaitingValidationOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.LoadAsync(command.OrderNumber, cancellationToken);
+            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken);
             if (orderToUpdate is null)
-                throw new RecordNotFoundException(command.OrderNumber);
+                throw new RecordNotFoundException(request.OrderNumber);
 
             orderToUpdate.SetAwaitingValidationStatus();
 

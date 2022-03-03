@@ -12,16 +12,16 @@ public record SetStockRejectedOrderStatusCommand : IRequest<Unit>
 
         public SetStockRejectedOrderStatusCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = orderRepository;
+            _orderRepository = Guard.Against.Null(orderRepository);
         }
 
-        public async Task<Unit> Handle(SetStockRejectedOrderStatusCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SetStockRejectedOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.LoadAsync(command.OrderNumber, cancellationToken);
+            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken);
             if (orderToUpdate is null)
-                throw new RecordNotFoundException(command.OrderNumber);
+                throw new RecordNotFoundException(request.OrderNumber);
 
-            orderToUpdate.SetCancelledStatusWhenStockIsRejected(command.OrderStockItems);
+            orderToUpdate.SetCancelledStatusWhenStockIsRejected(request.OrderStockItems);
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 

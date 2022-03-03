@@ -16,7 +16,8 @@
             _isDraft = false;
         }
 
-        internal Order(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, PaymentMethod paymentMethod) : this()
+        internal Order(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, string username, PaymentMethod paymentMethod)
+            : this()
         {
             ShippingAddress = Guard.Against.Null(shippingAddress);
             BillingAddress = Guard.Against.Null(billingAddress);
@@ -30,8 +31,9 @@
 
         public static Order NewDraft() => new() { _isDraft = true };
 
-        public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, PaymentMethod paymentMethod)
-            => new(dateTimeService, shippingAddress, billingAddress, buyerId, buyerName, paymentMethod);
+        public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, string username,
+            PaymentMethod paymentMethod)
+            => new(dateTimeService, shippingAddress, billingAddress, buyerId, buyerName, username, paymentMethod);
 
         public long BuyerId { get; private set; }
 

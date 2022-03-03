@@ -8,14 +8,14 @@ public record SetStockConfirmedOrderStatusCommand(int OrderNumber) : IRequest<Un
 
         public SetStockConfirmedOrderStatusCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = orderRepository;
+            _orderRepository = Guard.Against.Null(orderRepository);
         }
 
-        public async Task<Unit> Handle(SetStockConfirmedOrderStatusCommand command, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(SetStockConfirmedOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.LoadAsync(command.OrderNumber, cancellationToken);
+            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken);
             if (orderToUpdate is null)
-                throw new RecordNotFoundException(command.OrderNumber);
+                throw new RecordNotFoundException(request.OrderNumber);
 
             orderToUpdate.SetStockConfirmedStatus();
 

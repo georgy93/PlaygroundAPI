@@ -1,20 +1,20 @@
 ﻿namespace Playground.Application.Commands;
 
-public record CreateOrderCommand : IRequest<bool>
+public record CreateOrderCommand : IRequest<Unit>
 {
-    public string UserId { get; init; }
+    public long UserId { get; init; }
 
     public string UserName { get; init; }
 
-    public string City { get; init; }
+    public string FirstName { get; init; }
 
-    public string Street { get; init; }
+    public string Surname { get; init; }
 
-    public string State { get; init; }
+    public string LastName { get; init; }
 
-    public string Country { get; init; }
+    public AddressDto ShippingAddress { get; init; }
 
-    public string ZipCode { get; init; }
+    public AddressDto BillingAddress { get; init; }
 
     public string CardNumber { get; init; }
 
@@ -28,37 +28,38 @@ public record CreateOrderCommand : IRequest<bool>
 
     public IEnumerable<OrderItemDTO> OrderItems { get; init; } = Enumerable.Empty<OrderItemDTO>();
 
-    internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, bool>
+    internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Unit>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
         private readonly ILogger<CreateOrderCommandHandler> _logger;
+        private readonly IDateTimeService _dateTimeService;
 
         // Using DI to inject infrastructure persistence Repositories
-        public CreateOrderCommandHandler(
-            IOrderingIntegrationEventService orderingIntegrationEventService,
-            IOrderRepository orderRepository,
-            ILogger<CreateOrderCommandHandler> logger)
+        public CreateOrderCommandHandler(IOrderingIntegrationEventService orderingIntegrationEventService,
+                                         IOrderRepository orderRepository,
+                                         ILogger<CreateOrderCommandHandler> logger,
+                                         IDateTimeService dateTimeService)
         {
             _orderRepository = Guard.Against.Null(orderRepository);
             _orderingIntegrationEventService = Guard.Against.Null(orderingIntegrationEventService);
             _logger = Guard.Against.Null(logger);
+            _dateTimeService = Guard.Against.Null(dateTimeService);
         }
 
-        public async Task<bool> Handle(CreateOrderCommand message, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            // Add Integration event to clean the basket
-            var orderStartedIntegrationEvent = new OrderStartedIntegrationEvent(message.UserId);
-            await _orderingIntegrationEventService.AddAndSaveEventAsync(orderStartedIntegrationEvent);
+            var shippingAddress = new Address(request.ShippingAddress.Street, request.ShippingAddress.City, request.ShippingAddress.State, request.ShippingAddress.Country, request.ShippingAddress.ZipCode);
+            var billingAddress = new Address(request.BillingAddress.Street, request.BillingAddress.City, request.BillingAddress.State, request.BillingAddress.Country, request.BillingAddress.ZipCode);
+            var cardType = CardType.FromValue(request.CardTypeId);
+            var paymentMethod = new PaymentMethod(cardType, "", request.CardNumber, request.CardSecurityNumber, request.CardHolderName, request.CardExpiration, _dateTimeService);
+            var fullName = new FullName(request.FirstName, request.Surname, request.LastName);
 
-            // Add/Update the Buyer AggregateRoot
-            // DDD patterns comment: Add child entities and value-objects through the Order Aggregate-Root
-            // methods and constructor so validations, invariants and business logic 
-            // make sure that consistency is preserved across the whole aggregate
-            var address = new Address(message.Street, message.City, message.State, message.Country, message.ZipCode);
-            //  var order = new Order(message.UserId, message.UserName, address, message.CardTypeId, message.CardNumber, message.CardSecurityNumber, message.CardHolderName, message.CardExpiration);
-            Order order = null;
-            foreach (var item in message.OrderItems)
+            await _orderingIntegrationEventService.AddAndSaveEventAsync(new OrderStartedIntegrationEvent(request.UserId));
+
+            var order = Order.New(_dateTimeService, shippingAddress, billingAddress, request.UserId, fullName, request.UserName, paymentMethod);
+
+            foreach (var item in request.OrderItems)
             {
                 order.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.Discount, new Uri(item.PictureUrl), item.Units);
             }
@@ -66,23 +67,9 @@ public record CreateOrderCommand : IRequest<bool>
             _logger.LogInformation("----- Creating Order - Order: {@Order}", order);
 
             await _orderRepository.AddAsync(order);
+            await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
 
-            return await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            return Unit.Value;
         }
     }
-}
-
-public record OrderItemDTO
-{
-    public int ProductId { get; init; }
-
-    public string ProductName { get; init; }
-
-    public decimal UnitPrice { get; init; }
-
-    public decimal Discount { get; init; }
-
-    public int Units { get; init; }
-
-    public string PictureUrl { get; init; }
 }

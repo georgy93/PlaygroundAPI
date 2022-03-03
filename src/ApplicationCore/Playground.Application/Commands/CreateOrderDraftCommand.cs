@@ -16,10 +16,10 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
         {
         }
 
-        public Task<OrderDraftDTO> Handle(CreateOrderDraftCommand message, CancellationToken cancellationToken)
+        public Task<OrderDraftDTO> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
         {
             var order = Order.NewDraft();
-            var orderItems = message.Items.Select(i => i.ToOrderItemDTO());
+            var orderItems = request.Items.Select(i => i.ToOrderItemDTO());
 
             foreach (var item in orderItems)
             {
@@ -30,26 +30,6 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
         }
     }
 
-}
-public record OrderDraftDTO
-{
-    public IEnumerable<OrderItemDTO> OrderItems { get; init; } = Enumerable.Empty<OrderItemDTO>();
-
-    public decimal Total { get; init; }
-
-    public static OrderDraftDTO FromOrder(Order order) => new()
-    {
-        OrderItems = order.OrderItems.Select(oi => new OrderItemDTO
-        {
-            Discount = oi.Discount,
-            ProductId = oi.ProductId,
-            UnitPrice = oi.UnitPrice,
-            PictureUrl = oi.PictureUri,
-            Units = oi.Units,
-            ProductName = oi.ProductName
-        }),
-        Total = order.GetTotal()
-    };
 }
 
 public record BasketItem
