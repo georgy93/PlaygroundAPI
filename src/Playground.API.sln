@@ -40,7 +40,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.FunctionalTests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.FluentValidations", "ApplicationCore\Playground.FluentValidations\Playground.FluentValidations.csproj", "{93FF6ED7-3A47-479B-8273-6F686A20721E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playground.UnitTests", "..\tests\Playground.UnitTests\Playground.UnitTests.csproj", "{3FDAD541-15D2-4694-9161-780F0F82883A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Playground.UnitTests", "..\tests\Playground.UnitTests\Playground.UnitTests.csproj", "{3FDAD541-15D2-4694-9161-780F0F82883A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

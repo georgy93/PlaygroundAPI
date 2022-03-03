@@ -11,7 +11,7 @@
             UnitPrice = Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice), "Invalid price");
             Discount = Guard.Against.Negative(discount, nameof(discount), "Invalid discount");
             ProductName = Guard.Against.NullOrWhiteSpace(productName, nameof(productName));
-            PictureUrl = Guard.Against.Null(pictureUrl).ToString();
+            PictureUri = Guard.Against.Null(pictureUrl).ToString();
 
             if (GetTotalWithoutDiscount() < discount)
                 throw new InvalidOperationException("The total value of order item is lower than applied discount");
@@ -19,7 +19,7 @@
 
         public decimal Discount { get; private set; }
 
-        public string PictureUrl { get; private set; }
+        public string PictureUri { get; private set; }
 
         public int ProductId { get; private set; }
 

@@ -49,6 +49,23 @@
 
         public decimal GetTotal() => _orderItems.Sum(orderItem => orderItem.GetTotalWithoutDiscount());
 
+        public void AddOrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
+        {
+            var orderItem = _orderItems.Where(o => o.ProductId == productId).SingleOrDefault();
+            if (orderItem is null)
+            {
+                orderItem = new OrderItem(productId, productName, unitPrice, discount, pictureUrl, units);
+                _orderItems.Add(orderItem);
+
+                return;
+            }
+
+            if (discount > orderItem.Discount)
+                orderItem.SetNewDiscount(discount);
+
+            orderItem.AddUnits(units);
+        }
+
         public void SetAwaitingValidationStatus()
         {
             if (OrderStatus == OrderStatus.Submitted)

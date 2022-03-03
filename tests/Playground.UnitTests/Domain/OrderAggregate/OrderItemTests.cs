@@ -22,7 +22,7 @@
             Assert.Equal(DefaultProductName, orderitem.ProductName);
             Assert.Equal(unitPrice, orderitem.UnitPrice);
             Assert.Equal(discount, orderitem.Discount);
-            Assert.Equal(DefaultPictureUri.ToString(), orderitem.PictureUrl);
+            Assert.Equal(DefaultPictureUri.ToString(), orderitem.PictureUri);
             Assert.Equal(1, orderitem.Units);
         }
 

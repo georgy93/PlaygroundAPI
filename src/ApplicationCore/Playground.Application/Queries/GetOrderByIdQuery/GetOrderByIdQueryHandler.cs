@@ -37,7 +37,7 @@
                     oi.{nameof(OrderItem.ProductName):raw} as {nameof(OrderitemDto.ProductName):raw},
                     oi.{nameof(OrderItem.Units):raw} as {nameof(OrderitemDto.Units):raw},
                     oi.{nameof(OrderItem.UnitPrice):raw} as {nameof(OrderitemDto.UnitPrice):raw},
-                    oi.{nameof(OrderItem.PictureUrl):raw} as {nameof(OrderitemDto.PictureUrl):raw}
+                    oi.{nameof(OrderItem.PictureUri):raw} as {nameof(OrderitemDto.PictureUrl):raw}
                 FROM ordering.Orders o
                 LEFT JOIN ordering.Orderitems oi ON o.Id = oi.orderid
                 LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id
