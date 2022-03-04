@@ -21,8 +21,8 @@
 
         public async ValueTask AddAsync(TEntity entity) => await DbSet.AddAsync(entity);
 
-        public async ValueTask<bool> ExistsAsync(int id, CancellationToken cancellationToken) => await DbSet.FindAsync(new object[] { id }, cancellationToken) != null;
+        public async ValueTask<bool> ExistsAsync(long id, CancellationToken cancellationToken) => await DbSet.FindAsync(new object[] { id }, cancellationToken) != null;
 
-        public abstract Task<TEntity> LoadAsync(int id, CancellationToken cancellationToken);
+        public abstract Task<TEntity> LoadAsync(long id, CancellationToken cancellationToken);
     }
 }

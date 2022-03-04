@@ -8,7 +8,7 @@
         public OrderRepository(AppDbContext appDbContext) : base(appDbContext)
         { }
 
-        public override async Task<Order> LoadAsync(int id, CancellationToken cancellationToken) => await DbSet
+        public override async Task<Order> LoadAsync(long id, CancellationToken cancellationToken) => await DbSet
             .Include(o => o.OrderItems)
             .Include(o => o.OrderStatus)
             .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);

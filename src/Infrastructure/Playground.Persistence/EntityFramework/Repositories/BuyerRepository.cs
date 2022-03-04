@@ -8,7 +8,7 @@
         public BuyerRepository(AppDbContext appDbContext) : base(appDbContext)
         { }
 
-        public override async Task<Buyer> LoadAsync(int id, CancellationToken cancellationToken) => await DbSet
+        public override async Task<Buyer> LoadAsync(long id, CancellationToken cancellationToken) => await DbSet
             .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
     }
 }

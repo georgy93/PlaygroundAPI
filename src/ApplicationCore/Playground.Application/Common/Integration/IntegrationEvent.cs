@@ -18,9 +18,9 @@
         }
 
         [JsonProperty]
-        public Guid Id { get; init; }
+        public Guid Id { get; private init; }
 
         [JsonProperty]
-        public DateTime CreationDate { get; init; }
+        public DateTime CreationDate { get; private init; }
     }
 }

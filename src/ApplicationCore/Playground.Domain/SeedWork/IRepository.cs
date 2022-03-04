@@ -7,10 +7,10 @@
     {
         IUnitOfWork UnitOfWork { get; }
 
-        Task<TEntity> LoadAsync(int id, CancellationToken cancellationToken);
+        Task<TEntity> LoadAsync(long id, CancellationToken cancellationToken);
 
         ValueTask AddAsync(TEntity entity);
 
-        ValueTask<bool> ExistsAsync(int id, CancellationToken cancellationToken);
+        ValueTask<bool> ExistsAsync(long id, CancellationToken cancellationToken);
     }
 }

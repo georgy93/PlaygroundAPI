@@ -51,6 +51,12 @@
 
         public decimal GetTotal() => _orderItems.Sum(orderItem => orderItem.GetTotalWithoutDiscount());
 
+        public void SetBuyerAndPaymentMethod(long buyerId, long paymentMethodId)
+        {
+            PaymentMethodId = paymentMethodId;
+            BuyerId = buyerId;
+        }
+
         public void AddOrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
         {
             var orderItem = _orderItems.Where(o => o.ProductId == productId).SingleOrDefault();
