@@ -3,7 +3,7 @@
     using Abstract;
     using Domain.Entities.Aggregates.OrderAggregate;
 
-    internal class OrderRepository : EFRepository<Order>, IOrderRepository
+    internal class OrderRepository : EFRepository<long, Order>, IOrderRepository
     {
         public OrderRepository(AppDbContext appDbContext) : base(appDbContext)
         { }

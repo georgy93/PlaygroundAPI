@@ -3,7 +3,7 @@
     using Abstract;
     using Domain.Entities.Aggregates.BuyerAggregate;
 
-    internal class BuyerRepository : EFRepository<Buyer>, IBuyerRepository
+    internal class BuyerRepository : EFRepository<long, Buyer>, IBuyerRepository
     {
         public BuyerRepository(AppDbContext appDbContext) : base(appDbContext)
         { }

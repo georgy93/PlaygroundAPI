@@ -1,6 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate
 {
-    public interface IOrderRepository : IRepository<Order>
+    public interface IOrderRepository : IRepository<long, Order>
     {
     }
 }

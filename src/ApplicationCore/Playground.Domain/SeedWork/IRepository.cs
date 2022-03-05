@@ -3,14 +3,16 @@
     using System.Threading;
     using System.Threading.Tasks;
 
-    public interface IRepository<TEntity> where TEntity : IAggregateRoot
+    public interface IRepository<TKey, TEntity>
+        where TKey : IEquatable<TKey>
+        where TEntity : class, IAggregateRoot
     {
         IUnitOfWork UnitOfWork { get; }
 
-        Task<TEntity> LoadAsync(long id, CancellationToken cancellationToken);
+        Task<TEntity> LoadAsync(TKey id, CancellationToken cancellationToken);
 
         ValueTask AddAsync(TEntity entity);
 
-        ValueTask<bool> ExistsAsync(long id, CancellationToken cancellationToken);
+        ValueTask<bool> ExistsAsync(TKey id, CancellationToken cancellationToken);
     }
 }
