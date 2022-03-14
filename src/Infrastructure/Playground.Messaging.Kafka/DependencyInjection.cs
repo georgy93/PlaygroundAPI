@@ -1,8 +1,6 @@
 ﻿namespace Playground.Messaging.Kafka
 {
-    using Confluent.Kafka;
     using Microsoft.Extensions.DependencyInjection;
-    using System;
 
     public static class DependencyInjection
     {

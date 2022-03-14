@@ -47,7 +47,7 @@
         {
             var logData = new { context.Request.Path, Error = businessException };
 
-            _logger.LogError(businessException, logData.Beautify(_businessExceptionContractResolver));
+            _logger.LogError(businessException, "{exception}", logData.Beautify(_businessExceptionContractResolver));
 
             ReThrowIfResponseHasStarted(context, businessException);
 
@@ -58,7 +58,7 @@
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            _logger.LogError(exception, context.Request.Path);
+            _logger.LogError(exception, "{path}", context.Request.Path);
 
             ReThrowIfResponseHasStarted(context, exception);
 

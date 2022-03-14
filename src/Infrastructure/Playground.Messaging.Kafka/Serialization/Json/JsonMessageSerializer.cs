@@ -1,11 +1,9 @@
-﻿namespace Playground.Messaging.Kafka.Serialization.Json
-{
-    using Confluent.Kafka;
-    using System.Text;
-    using System.Text.Json;
+﻿namespace Playground.Messaging.Kafka.Serialization.Json;
 
-    public class JsonMessageSerializer<T> : ISerializer<T>
-    {
-        public byte[] Serialize(T data, SerializationContext context) => Encoding.UTF8.GetBytes(JsonSerializer.Serialize(data));
-    }
+using System.Text;
+using System.Text.Json;
+
+public class JsonMessageSerializer<T> : ISerializer<T>
+{
+    public byte[] Serialize(T data, SerializationContext context) => Encoding.UTF8.GetBytes(JsonSerializer.Serialize(data));
 }

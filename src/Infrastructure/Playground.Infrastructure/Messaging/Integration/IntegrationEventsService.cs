@@ -32,7 +32,7 @@
                     //var properties = channel.CreateBasicProperties();
                     //properties.DeliveryMode = 2; // persistent
 
-                    _logger.LogTrace($"Publishing event to RabbitMQ: {integrationEvent.Id}");
+                    _logger.LogTrace("Publishing event to RabbitMQ: {Id}", integrationEvent.Id);
 
                     //channel.BasicPublish(
                     //    exchange: BROKER_NAME,
@@ -46,7 +46,7 @@
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"ERROR Publishing integration event: {integrationEvent.Id} - ({integrationEvent})");
+                _logger.LogError(ex, "ERROR Publishing integration event: {Id} - ({IntegrationEvent})", integrationEvent.Id, integrationEvent);
 
                 await _integrationEventLogService.MarkEventAsFailedAsync(integrationEvent.Id);
             }

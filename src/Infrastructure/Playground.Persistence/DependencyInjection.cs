@@ -97,9 +97,9 @@
 
                     settings.ClusterConfigurator = clusterBuilder =>  // TODO: clusterBuilder.ConfigureCluster for transactions or settings.ConnectionMode ConnectionMode
                         clusterBuilder
-                        .Subscribe<CommandStartedEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Command.ToJson()}"))
-                        .Subscribe<CommandSucceededEvent>(e => logger.LogInformation($"{e.CommandName} - {e.Reply.ToJson()}"))
-                        .Subscribe<CommandFailedEvent>(e => logger.LogError($"{e.CommandName} - {e.Failure.ToJson()}"));
+                        .Subscribe<CommandStartedEvent>(e => logger.LogInformation("{CommandName} - {Command}", e.CommandName, e.Command.ToJson()))
+                        .Subscribe<CommandSucceededEvent>(e => logger.LogInformation("{CommandName} - {Reply}", e.CommandName, e.Reply.ToJson()))
+                        .Subscribe<CommandFailedEvent>(e => logger.LogError("{CommandName} - {Failure}", e.CommandName, e.Failure.ToJson()));
                 }
 
                 return new MongoClient(settings).GetDatabase(mongoConfig.Value.DatabaseName);

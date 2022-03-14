@@ -72,7 +72,7 @@
                 }
                 catch (ConsumeException consumeEx)
                 {
-                    _logger.LogError(consumeEx, $"Consumer for topic '{consumeEx.ConsumerRecord.Topic}'. Error: {consumeEx.Error.Reason}");
+                    _logger.LogError(consumeEx, "Consumer for topic '{Topic}'. Error: {ErrorReason}", consumeEx.ConsumerRecord.Topic, consumeEx.Error.Reason);
                 }
             }
         }
@@ -83,7 +83,7 @@
             {
                 var delayMs = DateTime.Now.Subtract(ping.CreatedAt).TotalSeconds;
 
-                _logger.LogInformation($"Pong for {ping.Number} after {delayMs} ms delay");
+                _logger.LogInformation("Pong for {Number} after {DelayMs} ms delay", ping.Number, delayMs);
             }
             catch (Exception ex)
             {

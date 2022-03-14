@@ -18,18 +18,18 @@
 
             try
             {
-                logger.LogInformation($"Migrating database associated with context {dbContextName}");
+                logger.LogInformation("Migrating database associated with context {dbContextName}", dbContextName);
 
                 await dbContext.Database.MigrateAsync();
 
                 if (seedAsync != null)
                     await seedAsync(dbContext, services);
 
-                logger.LogInformation($"Migrated database associated with context {dbContextName}");
+                logger.LogInformation("Migrated database associated with context {dbContextName}", dbContextName);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, $"An error occurred while migrating the database used on context {dbContextName}");
+                logger.LogError(ex, "An error occurred while migrating the database used on context {dbContextName}", dbContextName);
                 throw;
             }
         }

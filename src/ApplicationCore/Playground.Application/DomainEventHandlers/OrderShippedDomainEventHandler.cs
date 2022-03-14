@@ -20,7 +20,8 @@ internal class OrderShippedDomainEventHandler : INotificationHandler<OrderShippe
 
     public async Task Handle(OrderShippedDomainEvent orderShippedDomainEvent, CancellationToken cancellationToken)
     {
-        _logger.LogTrace($"Order with Id: {orderShippedDomainEvent.Order.Id} has been successfully updated to status {OrderStatus.Shipped.Name}.");
+        _logger.LogTrace("Order with Id: {OrderId} has been successfully updated to status {Status}.",
+            orderShippedDomainEvent.Order.Id, OrderStatus.Shipped.Name);
 
         var order = await _orderRepository.LoadAsync(orderShippedDomainEvent.Order.Id, CancellationToken.None);
         var buyer = await _buyerRepository.LoadAsync(order.BuyerId, CancellationToken.None);

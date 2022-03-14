@@ -28,7 +28,7 @@
                     RequestPayload = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
                 };
 
-                _logger.LogError(ex, logData.Beautify());
+                _logger.LogError(ex, "{Exception}", logData.Beautify());
 
                 // TODO: throw new ServiceNotAvailableException(request.RequestUri);
                 throw new Exception("error", ex);

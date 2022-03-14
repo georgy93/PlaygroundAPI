@@ -44,7 +44,7 @@
             }
             catch (IOException ex)
             {
-                _logger.LogCritical(ex, ex.Message);
+                _logger.LogCritical(ex, "{Message}", ex.Message);
             }
 
             _disposed = true;
@@ -64,7 +64,7 @@
                     _connection.CallbackException += OnCallbackException;
                     _connection.ConnectionBlocked += OnConnectionBlocked;
 
-                    _logger.LogInformation($"RabbitMQ Client acquired a persistent connection to '{_connection.Endpoint.HostName}' and is subscribed to failure events");
+                    _logger.LogInformation("RabbitMQ Client acquired a persistent connection to '{HostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
 
                     return true;
                 }
@@ -82,7 +82,7 @@
             .Or<BrokerUnreachableException>()
             .WaitAndRetry(_retryCount, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), (ex, time) =>
             {
-                _logger.LogWarning(ex, $"RabbitMQ Client could not connect after {time.TotalSeconds:n1}s ({ex.Message})");
+                _logger.LogWarning(ex, "RabbitMQ Client could not connect after {TotalSeconds:n1}s ({Message})", time.TotalSeconds, ex.Message);
             });
 
         private void OnConnectionBlocked(object sender, ConnectionBlockedEventArgs e)
