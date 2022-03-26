@@ -8,7 +8,7 @@
     using Domain.Services;
     using Extensions;
     using MediatR;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;   
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using System.Data;
     using System.Reflection;
 
@@ -78,7 +78,7 @@
 
             AuditEntities();
             ValidateEntitiesState();
-            IncreaseModifiedAggregatesVersion(); // ?? here
+            IncreaseModifiedAggregatesVersion();
 
             return await base.SaveChangesAsync(cancellationToken);
         }
