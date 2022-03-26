@@ -1,6 +1,6 @@
 ﻿namespace Playground.UnitTests.Domain.OrderAggregate
 {
-    using Mocks;
+    using UnitTests.Mocks;
 
     public class OrderTests
     {

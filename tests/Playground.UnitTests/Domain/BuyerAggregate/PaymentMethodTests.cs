@@ -1,6 +1,6 @@
 ﻿namespace Playground.UnitTests.Domain.BuyerAggregate
 {
-    using Mocks;   
+    using UnitTests.Mocks;
 
     public class PaymentMethodTests
     {
