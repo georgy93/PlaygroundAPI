@@ -9,16 +9,18 @@
     {
         private readonly ILogger<IntegrationEventsPublisherBackgroundService> _logger;
         private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly PeriodicTimer _periodicTimer;
 
         public IntegrationEventsPublisherBackgroundService(ILogger<IntegrationEventsPublisherBackgroundService> logger, IServiceScopeFactory serviceScopeFactory)
         {
             _logger = logger;
             _serviceScopeFactory = serviceScopeFactory;
+            _periodicTimer = new(TimeSpan.FromSeconds(3));
         }
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(async () =>
         {
-            while (!stoppingToken.IsCancellationRequested)
+            while (await _periodicTimer.WaitForNextTickAsync(stoppingToken) && !stoppingToken.IsCancellationRequested)
             {
                 try
                 {
@@ -30,8 +32,6 @@
                 {
                     _logger.LogError(ex, "Error while publishing failed integration events");
                 }
-
-                await Task.Delay(TimeSpan.FromSeconds(3), stoppingToken);
             }
 
         }, stoppingToken);

@@ -1,4 +1,4 @@
-﻿using Playground.Application.Commands;
+﻿namespace Playground.Application.Commands;
 
 public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
 {

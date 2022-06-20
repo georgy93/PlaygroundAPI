@@ -12,6 +12,7 @@
         private readonly string _topic;
         private readonly IProducer<Null, Ping> _producer;
         private readonly ILogger<KafkaProducerBackgroundService> _logger;
+        private readonly PeriodicTimer _periodicTimer = new(TimeSpan.FromSeconds(5));
 
         public KafkaProducerBackgroundService(ILogger<KafkaProducerBackgroundService> logger)
         {
@@ -55,13 +56,11 @@
 
         private async Task StartProducerLoopAsync(CancellationToken cancellationToken)
         {
-            while (!cancellationToken.IsCancellationRequested)
+            while (await _periodicTimer.WaitForNextTickAsync(cancellationToken) && !cancellationToken.IsCancellationRequested)
             {
                 var ping = new Ping(rnd.Next(1, 101), DateTime.UtcNow);
 
                 await _producer.ProduceAsync(_topic, new Message<Null, Ping> { Value = ping }, cancellationToken);
-
-                await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }
         }
     }
