@@ -15,7 +15,7 @@
                 : throw new ArgumentException("Invalid email!", parameterName);
         }
 
-        [GeneratedRegex(EmailRegexPattern, RegexOptions.IgnoreCase | RegexOptions.Compiled)]
+        [GeneratedRegex(EmailRegexPattern, RegexOptions.IgnoreCase)]
         private static partial Regex EmailRegex();
     }
 }

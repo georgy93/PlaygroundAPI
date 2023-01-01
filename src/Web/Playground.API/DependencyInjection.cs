@@ -2,6 +2,7 @@
 {
     using Behavior.Filters;
     using Behavior.Settings;
+    using FluentValidation;
     using FluentValidation.AspNetCore;
     using FluentValidations;
     using Newtonsoft.Json.Serialization;
@@ -24,11 +25,11 @@
             .AddNewtonsoftJson(jsonOptions =>
             {
                 jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            })
-            .AddFluentValidation(mvcConfig =>
-            {
-                mvcConfig.RegisterValidatorsFromAssemblyContaining(typeof(BaseValidator<>));
             });
+
+            // https://docs.fluentvalidation.net/en/latest/upgrading-to-11.html
+            services.AddValidatorsFromAssemblyContaining(typeof(BaseValidator<>))
+                    .AddFluentValidationAutoValidation();
 
             return services
                  .Configure<ApiBehaviorOptions>(options =>
