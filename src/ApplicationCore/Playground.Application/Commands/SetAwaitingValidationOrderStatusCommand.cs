@@ -1,8 +1,8 @@
 ﻿namespace Playground.Application.Commands;
 
-public record SetAwaitingValidationOrderStatusCommand(int OrderNumber) : IRequest<Unit>
+public record SetAwaitingValidationOrderStatusCommand(int OrderNumber) : IRequest
 {
-    internal class SetAwaitingValidationOrderStatusCommandHandler : IRequestHandler<SetAwaitingValidationOrderStatusCommand, Unit>
+    internal class SetAwaitingValidationOrderStatusCommandHandler : IRequestHandler<SetAwaitingValidationOrderStatusCommand>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -11,17 +11,14 @@ public record SetAwaitingValidationOrderStatusCommand(int OrderNumber) : IReques
             _orderRepository = Guard.Against.Null(orderRepository);
         }
 
-        public async Task<Unit> Handle(SetAwaitingValidationOrderStatusCommand request, CancellationToken cancellationToken)
+        public async Task Handle(SetAwaitingValidationOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken);
-            if (orderToUpdate is null)
-                throw new RecordNotFoundException(request.OrderNumber);
+            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken) 
+                ?? throw new RecordNotFoundException(request.OrderNumber);
 
             orderToUpdate.SetAwaitingValidationStatus();
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

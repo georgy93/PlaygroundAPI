@@ -1,12 +1,12 @@
 ﻿namespace Playground.Application.Commands;
 
-public record SetStockRejectedOrderStatusCommand : IRequest<Unit>
+public record SetStockRejectedOrderStatusCommand : IRequest
 {
     public int OrderNumber { get; init; }
 
     public IEnumerable<int> OrderStockItems { get; init; } = Enumerable.Empty<int>();
 
-    internal class SetStockRejectedOrderStatusCommandHandler : IRequestHandler<SetStockRejectedOrderStatusCommand, Unit>
+    internal class SetStockRejectedOrderStatusCommandHandler : IRequestHandler<SetStockRejectedOrderStatusCommand>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -15,17 +15,14 @@ public record SetStockRejectedOrderStatusCommand : IRequest<Unit>
             _orderRepository = Guard.Against.Null(orderRepository);
         }
 
-        public async Task<Unit> Handle(SetStockRejectedOrderStatusCommand request, CancellationToken cancellationToken)
+        public async Task Handle(SetStockRejectedOrderStatusCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken);
-            if (orderToUpdate is null)
-                throw new RecordNotFoundException(request.OrderNumber);
+            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken) 
+                ?? throw new RecordNotFoundException(request.OrderNumber);
 
             orderToUpdate.SetCancelledStatusWhenStockIsRejected(request.OrderStockItems);
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

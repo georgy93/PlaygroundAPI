@@ -1,8 +1,8 @@
 ﻿namespace Playground.Application.Commands;
 
-public record CancelOrderCommand(int OrderNumber) : IRequest<Unit>
+public record CancelOrderCommand(int OrderNumber) : IRequest
 {
-    internal class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand, Unit>
+    internal class CancelOrderCommandHandler : IRequestHandler<CancelOrderCommand>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -11,17 +11,14 @@ public record CancelOrderCommand(int OrderNumber) : IRequest<Unit>
             _orderRepository = Guard.Against.Null(orderRepository);
         }
 
-        public async Task<Unit> Handle(CancelOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CancelOrderCommand request, CancellationToken cancellationToken)
         {
-            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken);
-            if (orderToUpdate is null)
-                throw new RecordNotFoundException(request.OrderNumber);
+            var orderToUpdate = await _orderRepository.LoadAsync(request.OrderNumber, cancellationToken) 
+                ?? throw new RecordNotFoundException(request.OrderNumber);
 
             orderToUpdate.SetCancelledStatus();
 
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }

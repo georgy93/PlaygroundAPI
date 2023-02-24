@@ -1,6 +1,6 @@
 ﻿namespace Playground.Application.Commands;
 
-public record CreateOrderCommand : IRequest<Unit>
+public record CreateOrderCommand : IRequest
 {
     public long UserId { get; init; }
 
@@ -28,7 +28,7 @@ public record CreateOrderCommand : IRequest<Unit>
 
     public IEnumerable<OrderItemDTO> OrderItems { get; init; } = Enumerable.Empty<OrderItemDTO>();
 
-    internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Unit>
+    internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IOrderingIntegrationEventService _orderingIntegrationEventService;
@@ -47,7 +47,7 @@ public record CreateOrderCommand : IRequest<Unit>
             _dateTimeService = Guard.Against.Null(dateTimeService);
         }
 
-        public async Task<Unit> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
+        public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
             var shippingAddress = new Address(request.ShippingAddress.Street, request.ShippingAddress.City, request.ShippingAddress.State, request.ShippingAddress.Country, request.ShippingAddress.ZipCode);
             var billingAddress = new Address(request.BillingAddress.Street, request.BillingAddress.City, request.BillingAddress.State, request.BillingAddress.Country, request.BillingAddress.ZipCode);
@@ -68,8 +68,6 @@ public record CreateOrderCommand : IRequest<Unit>
 
             await _orderRepository.AddAsync(order);
             await _orderRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
-
-            return Unit.Value;
         }
     }
 }
