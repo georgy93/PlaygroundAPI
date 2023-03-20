@@ -28,8 +28,13 @@
             });
 
             // https://docs.fluentvalidation.net/en/latest/upgrading-to-11.html
-            services.AddValidatorsFromAssemblyContaining(typeof(BaseValidator<>))
-                    .AddFluentValidationAutoValidation();
+            services
+                .AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssembly(typeof(BaseValidator<>).Assembly);
+
+            ValidatorOptions.Global.DefaultRuleLevelCascadeMode = CascadeMode.Stop;
+            ValidatorOptions.Global.DefaultClassLevelCascadeMode = CascadeMode.Stop;
 
             return services
                  .Configure<ApiBehaviorOptions>(options =>

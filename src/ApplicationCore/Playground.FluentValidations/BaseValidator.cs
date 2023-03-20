@@ -9,7 +9,6 @@
     {
         protected BaseValidator()
         {
-            CascadeMode = CascadeMode.Stop;
         }
 
         public IValidationContext BeforeAspNetValidation(ActionContext actionContext, IValidationContext commonContext)
