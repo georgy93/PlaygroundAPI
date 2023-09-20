@@ -13,15 +13,15 @@ public static class DependencyInjection
     {
         services
             .AddHealthChecks()
-            .AddRabbitMQ(sp =>
+            .AddRabbitMQ((sp, options) =>
             {
                 var rabbitMqSettings = sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
                 var connectionFactory = rabbitMqSettings.ToConnectionFactory();
 
                 connectionFactory.ClientProvidedName = $"{rabbitMqSettings.ClientProvidedConnectionName}_HealthCheck";
+                options.ConnectionFactory = connectionFactory;
 
-                return connectionFactory;
-            });
+            }, name: "RabbitMQ");
 
         return services
             .Configure<RabbitMqSettings>(configuration.GetSection(nameof(RabbitMqSettings)))
