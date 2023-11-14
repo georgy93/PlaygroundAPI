@@ -5,7 +5,7 @@
 
     public class Buyer : AggregateRootBase<long>
     {
-        private readonly List<PaymentMethod> _paymentMethods = new();
+        private readonly List<PaymentMethod> _paymentMethods = [];
 
         // ef wants default constructor or one that accpets values for all parameters. The access modifier is not important
         protected Buyer() { }

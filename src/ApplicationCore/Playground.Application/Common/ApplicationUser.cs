@@ -25,8 +25,7 @@
 
         private void ApplyChange(Action<ApplicationUser> changeAction)
         {
-            if (changeAction == null)
-                throw new ArgumentNullException(nameof(changeAction));
+            ArgumentNullException.ThrowIfNull(changeAction);
 
             changeAction(this);
             EnsureValidState();

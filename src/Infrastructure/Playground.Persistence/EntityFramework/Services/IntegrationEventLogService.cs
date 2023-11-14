@@ -31,8 +31,7 @@
 
         public Task SaveEventAsync(IntegrationEvent integrationEvent, IDbContextTransaction transaction)
         {
-            if (transaction == null)
-                throw new ArgumentNullException(nameof(transaction));
+            ArgumentNullException.ThrowIfNull(transaction);
 
             var eventLogEntry = new IntegrationEventLogEntry(integrationEvent, transaction.TransactionId);
 

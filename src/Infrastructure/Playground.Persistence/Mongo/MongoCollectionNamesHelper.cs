@@ -2,7 +2,7 @@
 {
     internal static class MongoCollectionNamesHelper
     {
-        private static readonly IReadOnlyDictionary<Type, string> _collectionNames = new Dictionary<Type, string>()
+        private static readonly Dictionary<Type, string> _collectionNames = new()
         {
             // { typeof(MongoEntity), "MongoEntities" }
         };
