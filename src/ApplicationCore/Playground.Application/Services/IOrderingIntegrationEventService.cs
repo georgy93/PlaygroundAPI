@@ -1,9 +1,8 @@
-﻿namespace Playground.Application.Services
-{
-    public interface IOrderingIntegrationEventService
-    {
-        Task PublishEventsThroughEventBusAsync(Guid transactionId);
+﻿namespace Playground.Application.Services;
 
-        Task AddAndSaveEventAsync(IntegrationEvent evt);
-    }
+public interface IOrderingIntegrationEventService
+{
+    Task PublishEventsThroughEventBusAsync(Guid transactionId);
+
+    Task AddAndSaveEventAsync(IntegrationEvent evt);
 }

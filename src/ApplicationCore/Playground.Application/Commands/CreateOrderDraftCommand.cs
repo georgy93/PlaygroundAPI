@@ -51,24 +51,14 @@ public record BasketItem
 
 public static class BasketItemExtensions
 {
-    public static IEnumerable<OrderItemDTO> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems)
-    {
-        foreach (var item in basketItems)
-        {
-            yield return item.ToOrderItemDTO();
-        }
-    }
+    public static IEnumerable<OrderItemDTO> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems) => basketItems.Select(item => item.ToOrderItemDTO());
 
-    public static OrderItemDTO ToOrderItemDTO(this BasketItem item)
+    public static OrderItemDTO ToOrderItemDTO(this BasketItem item) => new()
     {
-        return new OrderItemDTO()
-        {
-            ProductId = item.ProductId,
-            ProductName = item.ProductName,
-            PictureUrl = item.PictureUrl,
-            UnitPrice = item.UnitPrice,
-            Units = item.Quantity
-        };
-    }
+        ProductId = item.ProductId,
+        ProductName = item.ProductName,
+        PictureUrl = item.PictureUrl,
+        UnitPrice = item.UnitPrice,
+        Units = item.Quantity
+    };
 }
-

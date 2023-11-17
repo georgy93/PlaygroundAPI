@@ -7,8 +7,8 @@ public class UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler : IN
 
     public UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler(IOrderRepository orderRepository, ILogger<UpdateOrderWhenBuyerAndPaymentMethodVerifiedDomainEventHandler> logger)
     {
-        _orderRepository = Guard.Against.Null(orderRepository);
-        _logger = Guard.Against.Null(logger);
+        _orderRepository = orderRepository;
+        _logger = logger;
     }
 
     public async Task Handle(BuyerAndPaymentMethodVerifiedDomainEvent buyerPaymentMethodVerifiedEvent, CancellationToken cancellationToken)

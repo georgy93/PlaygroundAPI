@@ -8,7 +8,7 @@ public record SetStockConfirmedOrderStatusCommand(int OrderNumber) : IRequest
 
         public SetStockConfirmedOrderStatusCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = Guard.Against.Null(orderRepository);
+            _orderRepository = orderRepository;
         }
 
         public async Task Handle(SetStockConfirmedOrderStatusCommand request, CancellationToken cancellationToken)

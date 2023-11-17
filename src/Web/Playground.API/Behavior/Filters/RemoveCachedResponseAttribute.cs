@@ -1,27 +1,26 @@
-﻿namespace Playground.API.Behavior.Filters
+﻿namespace Playground.API.Behavior.Filters;
+
+using Application.Interfaces;
+using Utils.Extensions;
+
+public sealed class RemoveCachedResponseAttribute : TypeFilterAttribute
 {
-    using Application.Interfaces;
-    using Utils.Extensions;
+    public RemoveCachedResponseAttribute() : base(typeof(RemoveCachedResponseImplementationAttribute)) { }
 
-    public sealed class RemoveCachedResponseAttribute : TypeFilterAttribute
+    public sealed class RemoveCachedResponseImplementationAttribute : ActionFilterAttribute
     {
-        public RemoveCachedResponseAttribute() : base(typeof(RemoveCachedResponseImplementationAttribute)) { }
+        private readonly IResponseCacheService _cacheService;
 
-        public sealed class RemoveCachedResponseImplementationAttribute : ActionFilterAttribute
+        public RemoveCachedResponseImplementationAttribute(IResponseCacheService cacheService)
         {
-            private readonly IResponseCacheService _cacheService;
+            _cacheService = cacheService;
+        }
 
-            public RemoveCachedResponseImplementationAttribute(IResponseCacheService cacheService)
-            {
-                _cacheService = cacheService;
-            }
+        public override void OnActionExecuting(ActionExecutingContext context)
+        {
+            var key = context.HttpContext.GenerateCacheKeyFromRequest();
 
-            public override void OnActionExecuting(ActionExecutingContext context)
-            {
-                var key = context.HttpContext.GenerateCacheKeyFromRequest();
-
-                _cacheService.RemoveCacheResponse(key);
-            }
+            _cacheService.RemoveCacheResponse(key);
         }
     }
 }

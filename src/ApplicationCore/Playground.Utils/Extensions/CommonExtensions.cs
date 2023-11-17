@@ -1,20 +1,19 @@
-﻿namespace Playground.Utils.Extensions
+﻿namespace Playground.Utils.Extensions;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+
+public static class CommonExtensions
 {
-    using Newtonsoft.Json;
-    using Newtonsoft.Json.Serialization;
+    private static readonly IContractResolver DefaultContractResolver = new DefaultContractResolver();
 
-    public static class CommonExtensions
-    {
-        private static readonly IContractResolver DefaultContractResolver = new DefaultContractResolver();
+    public static bool HasPassed(this DateTime date) => date < DateTime.Now;
 
-        public static bool HasPassed(this DateTime date) => date < DateTime.Now;
-
-        public static string Beautify(this object obj, IContractResolver contractResolver = null) => JsonConvert
-            .SerializeObject(obj, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                Formatting = Formatting.Indented,
-                ContractResolver = contractResolver ?? DefaultContractResolver
-            });
-    }
+    public static string Beautify(this object obj, IContractResolver contractResolver = null) => JsonConvert
+        .SerializeObject(obj, new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            Formatting = Formatting.Indented,
+            ContractResolver = contractResolver ?? DefaultContractResolver
+        });
 }

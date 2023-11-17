@@ -1,10 +1,4 @@
-﻿namespace Playground.Domain.Exceptions
-{
-    public class InvalidEntityStateException : Exception
-    {
-        public InvalidEntityStateException(object entity, string message)
-            : base($"Entity {entity.GetType().Name} state change rejected, {message}")
-        {
-        }
-    }
-}
+﻿namespace Playground.Domain.Exceptions;
+
+public class InvalidEntityStateException(object entity, string message) : Exception($"Entity {entity.GetType().Name} state change rejected, {message}")
+{ }

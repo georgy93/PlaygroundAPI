@@ -12,9 +12,9 @@ public class OrderStatusChangedToStockConfirmedDomainEventHandler : INotificatio
                                                                 ILogger<OrderStatusChangedToStockConfirmedDomainEventHandler> logger,
                                                                 IOrderingIntegrationEventService orderingIntegrationEventService)
     {
-        _orderRepository = Guard.Against.Null(orderRepository);
-        _logger = Guard.Against.Null(logger);
-        _buyerRepository = Guard.Against.Null(buyerRepository);
+        _orderRepository = orderRepository;
+        _logger = logger;
+        _buyerRepository = buyerRepository;
         _orderingIntegrationEventService = orderingIntegrationEventService;
     }
 

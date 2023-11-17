@@ -8,7 +8,7 @@ public record SetPaidOrderStatusCommand(int OrderNumber) : IRequest
 
         public SetPaidOrderStatusCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = Guard.Against.Null(orderRepository);
+            _orderRepository = orderRepository;
         }
 
         public async Task Handle(SetPaidOrderStatusCommand request, CancellationToken cancellationToken)

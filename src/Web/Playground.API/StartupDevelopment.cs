@@ -1,29 +1,28 @@
-﻿namespace Playground.API
+﻿namespace Playground.API;
+
+using System.Diagnostics;
+
+/// <summary>
+/// This Startup class will be executed in developmend environment settings
+/// </summary>
+public class StartupDevelopment : Startup
 {
-    using System.Diagnostics;
-
-    /// <summary>
-    /// This Startup class will be executed in developmend environment settings
-    /// </summary>
-    public class StartupDevelopment : Startup
+    public StartupDevelopment(IConfiguration configuration, IWebHostEnvironment environment)
+        : base(configuration, environment)
     {
-        public StartupDevelopment(IConfiguration configuration, IWebHostEnvironment environment)
-            : base(configuration, environment)
-        {
-        }
+    }
 
-        public override void ConfigureServices(IServiceCollection services)
-        {
-            Debug.WriteLine($"Hello from {nameof(ConfigureServices)} in {nameof(StartupDevelopment)}");
+    public override void ConfigureServices(IServiceCollection services)
+    {
+        Debug.WriteLine($"Hello from {nameof(ConfigureServices)} in {nameof(StartupDevelopment)}");
 
-            base.ConfigureServices(services);
-        }
+        base.ConfigureServices(services);
+    }
 
-        public override void Configure(IApplicationBuilder app)
-        {
-            Debug.WriteLine($"Hello from {nameof(Configure)} in {nameof(StartupDevelopment)}");
+    public override void Configure(IApplicationBuilder app)
+    {
+        Debug.WriteLine($"Hello from {nameof(Configure)} in {nameof(StartupDevelopment)}");
 
-            base.Configure(app);
-        }
+        base.Configure(app);
     }
 }

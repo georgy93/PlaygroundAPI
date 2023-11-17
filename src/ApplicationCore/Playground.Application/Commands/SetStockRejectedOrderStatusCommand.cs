@@ -12,7 +12,7 @@ public record SetStockRejectedOrderStatusCommand : IRequest
 
         public SetStockRejectedOrderStatusCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = Guard.Against.Null(orderRepository);
+            _orderRepository = orderRepository;
         }
 
         public async Task Handle(SetStockRejectedOrderStatusCommand request, CancellationToken cancellationToken)

@@ -8,7 +8,7 @@ public record ShipOrderCommand(int OrderNumber) : IRequest
 
         public ShipOrderCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = Guard.Against.Null(orderRepository);
+            _orderRepository = orderRepository;
         }
 
         public async Task Handle(ShipOrderCommand request, CancellationToken cancellationToken)

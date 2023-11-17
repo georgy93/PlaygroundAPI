@@ -1,6 +1,5 @@
-﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate
+﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate;
+
+public interface IBuyerRepository : IRepository<long, Buyer>
 {
-    public interface IBuyerRepository : IRepository<long, Buyer>
-    {
-    }
 }

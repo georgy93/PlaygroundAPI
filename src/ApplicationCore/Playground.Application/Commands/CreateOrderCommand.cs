@@ -41,10 +41,10 @@ public record CreateOrderCommand : IRequest
                                          ILogger<CreateOrderCommandHandler> logger,
                                          IDateTimeService dateTimeService)
         {
-            _orderRepository = Guard.Against.Null(orderRepository);
-            _orderingIntegrationEventService = Guard.Against.Null(orderingIntegrationEventService);
-            _logger = Guard.Against.Null(logger);
-            _dateTimeService = Guard.Against.Null(dateTimeService);
+            _orderRepository = orderRepository;
+            _orderingIntegrationEventService = orderingIntegrationEventService;
+            _logger = logger;
+            _dateTimeService = dateTimeService;
         }
 
         public async Task Handle(CreateOrderCommand request, CancellationToken cancellationToken)

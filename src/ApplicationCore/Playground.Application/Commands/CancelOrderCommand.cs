@@ -8,7 +8,7 @@ public record CancelOrderCommand(int OrderNumber) : IRequest
 
         public CancelOrderCommandHandler(IOrderRepository orderRepository)
         {
-            _orderRepository = Guard.Against.Null(orderRepository);
+            _orderRepository = orderRepository;
         }
 
         public async Task Handle(CancelOrderCommand request, CancellationToken cancellationToken)
