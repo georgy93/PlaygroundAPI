@@ -1,7 +1,5 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate;
 
-using GuardClauses;
-
 public class Email : ValueObject
 {
     protected Email() { }

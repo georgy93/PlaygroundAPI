@@ -1,15 +1,14 @@
-﻿namespace Playground.Domain.SeedWork
+﻿namespace Playground.Domain.SeedWork;
+
+using MediatR;
+
+public interface IDomainEntity
 {
-    using MediatR;
+    IReadOnlyCollection<INotification> DomainEvents { get; }
 
-    public interface IDomainEntity
-    {
-        IReadOnlyCollection<INotification> DomainEvents { get; }
+    void AddDomainEvent(INotification eventItem);
 
-        void AddDomainEvent(INotification eventItem);
+    void RemoveDomainEvent(INotification eventItem);
 
-        void RemoveDomainEvent(INotification eventItem);
-
-        void ClearDomainEvents();
-    }
+    void ClearDomainEvents();
 }

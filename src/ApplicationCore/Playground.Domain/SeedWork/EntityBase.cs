@@ -1,20 +1,19 @@
-﻿namespace Playground.Domain.SeedWork
+﻿namespace Playground.Domain.SeedWork;
+
+using System.ComponentModel.DataAnnotations.Schema;
+
+public abstract class EntityBase : IDomainEntity
 {
-    using System.ComponentModel.DataAnnotations.Schema;
+    private readonly List<INotification> _domainEvents = new();
 
-    public abstract class EntityBase : IDomainEntity
-    {
-        private readonly List<INotification> _domainEvents = new();
+    [NotMapped] // TODO: exclude from else where??
+    public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
 
-        [NotMapped] // TODO: exclude from else where??
-        public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();
+    public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
 
-        public void AddDomainEvent(INotification eventItem) => _domainEvents.Add(eventItem);
+    public void RemoveDomainEvent(INotification eventItem) => _domainEvents.Remove(eventItem);
 
-        public void RemoveDomainEvent(INotification eventItem) => _domainEvents.Remove(eventItem);
+    public void ClearDomainEvents() => _domainEvents.Clear();
 
-        public void ClearDomainEvents() => _domainEvents.Clear();
-
-        public virtual void ValidateState() { }
-    }
+    public virtual void ValidateState() { }
 }

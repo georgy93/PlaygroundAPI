@@ -1,21 +1,20 @@
-﻿namespace Playground.Domain.GuardClauses
+﻿namespace Playground.Domain.GuardClauses;
+
+using System.Text.RegularExpressions;
+
+internal static partial class EmailGuardClause
 {
-    using System.Text.RegularExpressions;
+    private const string EmailRegexPattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
 
-    internal static partial class EmailGuardClause
+    public static string InvalidEmail(this IGuardClause guardClause, string input, string parameterName)
     {
-        private const string EmailRegexPattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+        Guard.Against.NullOrWhiteSpace(input, parameterName, "email is not supplied");
 
-        public static string InvalidEmail(this IGuardClause guardClause, string input, string parameterName)
-        {
-            Guard.Against.NullOrWhiteSpace(input, parameterName, "email is not supplied");
-
-            return EmailRegex().IsMatch(input)
-                ? input
-                : throw new ArgumentException("Invalid email!", parameterName);
-        }
-
-        [GeneratedRegex(EmailRegexPattern, RegexOptions.IgnoreCase)]
-        private static partial Regex EmailRegex();
+        return EmailRegex().IsMatch(input)
+            ? input
+            : throw new ArgumentException("Invalid email!", parameterName);
     }
+
+    [GeneratedRegex(EmailRegexPattern, RegexOptions.IgnoreCase)]
+    private static partial Regex EmailRegex();
 }

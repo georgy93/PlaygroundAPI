@@ -5,14 +5,14 @@ using Services;
 
 public class Order : AggregateRootBase<int>
 {
-    private readonly List<OrderItem> _orderItems = new();
+    private readonly List<OrderItem> _orderItems = [];
 
     private string _description;
     private bool _isDraft;
 
     protected Order()
     {
-        _orderItems = new();
+        _orderItems = [];
         _isDraft = false;
     }
 

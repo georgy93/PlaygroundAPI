@@ -1,18 +1,17 @@
-﻿namespace Playground.Domain.SeedWork
+﻿namespace Playground.Domain.SeedWork;
+
+using System.Threading;
+using System.Threading.Tasks;
+
+public interface IRepository<TKey, TEntity>
+    where TKey : IEquatable<TKey>
+    where TEntity : class, IAggregateRoot
 {
-    using System.Threading;
-    using System.Threading.Tasks;
+    IUnitOfWork UnitOfWork { get; }
 
-    public interface IRepository<TKey, TEntity>
-        where TKey : IEquatable<TKey>
-        where TEntity : class, IAggregateRoot
-    {
-        IUnitOfWork UnitOfWork { get; }
+    Task<TEntity> LoadAsync(TKey id, CancellationToken cancellationToken);
 
-        Task<TEntity> LoadAsync(TKey id, CancellationToken cancellationToken);
+    ValueTask AddAsync(TEntity entity);
 
-        ValueTask AddAsync(TEntity entity);
-
-        ValueTask<bool> ExistsAsync(TKey id, CancellationToken cancellationToken);
-    }
+    ValueTask<bool> ExistsAsync(TKey id, CancellationToken cancellationToken);
 }
