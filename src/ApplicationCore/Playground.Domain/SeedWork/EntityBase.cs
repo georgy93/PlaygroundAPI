@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 public abstract class EntityBase : IDomainEntity
 {
-    private readonly List<INotification> _domainEvents = new();
+    private readonly List<INotification> _domainEvents = [];
 
     [NotMapped] // TODO: exclude from else where??
     public IReadOnlyCollection<INotification> DomainEvents => _domainEvents.AsReadOnly();

@@ -6,7 +6,7 @@ public static class CollectionExtensions
 
     public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source) => source ?? Enumerable.Empty<T>();
 
-    public static List<T> EmptyIfNull<T>(this List<T> list) => list ?? new List<T>();
+    public static List<T> EmptyIfNull<T>(this List<T> list) => list ?? [];
 
-    public static T[] EmptyIfNull<T>(this T[] arr) => arr ?? Array.Empty<T>();
+    public static T[] EmptyIfNull<T>(this T[] arr) => arr ?? [];
 }
