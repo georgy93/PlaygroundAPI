@@ -1,7 +1,6 @@
-﻿namespace Playground.API.Behavior.Settings
+﻿namespace Playground.API.Behavior.Settings;
+
+public class ErrorHandlingSettings
 {
-    public class ErrorHandlingSettings
-    {
-        public bool ShowDetails { get; set; }
-    }
+    public bool ShowDetails { get; set; }
 }

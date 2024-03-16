@@ -1,6 +1,7 @@
 ﻿namespace Playground.API;
 
 using Behavior.Filters;
+using Behavior.Middlewares;
 using Behavior.Settings;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -18,6 +19,8 @@ public static class DependencyInjection
 
     private static IServiceCollection AddCustomWebApi(this IServiceCollection services)
     {
+        services.AddExceptionHandler<GlobalExceptionHandler>();
+
         services.AddControllers(opts =>
         {
             opts.Filters.Add<ModelValidationFilter>();

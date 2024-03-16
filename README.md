@@ -3,7 +3,7 @@
 A playground API
 
 ## Framework
- .NET 6
+ .NET 8
 <br/>
 
 ## Project Structure

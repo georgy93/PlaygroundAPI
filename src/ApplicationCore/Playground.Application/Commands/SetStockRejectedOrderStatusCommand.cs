@@ -4,7 +4,7 @@ public record SetStockRejectedOrderStatusCommand : IRequest
 {
     public int OrderNumber { get; init; }
 
-    public IEnumerable<int> OrderStockItems { get; init; } = Enumerable.Empty<int>();
+    public IEnumerable<int> OrderStockItems { get; init; } = [];
 
     internal class SetStockRejectedOrderStatusCommandHandler : IRequestHandler<SetStockRejectedOrderStatusCommand>
     {

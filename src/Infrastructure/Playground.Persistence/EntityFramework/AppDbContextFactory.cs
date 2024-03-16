@@ -1,17 +1,16 @@
-﻿namespace Playground.Persistence.EntityFramework
+﻿namespace Playground.Persistence.EntityFramework;
+
+using Microsoft.Extensions.Configuration;
+using Utils.Helpers;
+
+public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {
-    using Microsoft.Extensions.Configuration;
-    using Utils.Helpers;
-
-    public class AppDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
+    public AppDbContext CreateDbContext(string[] args)
     {
-        public AppDbContext CreateDbContext(string[] args)
-        {
-            var configuration = ConfigurationHelper.BuildConfigurationRoot(args);
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(connectionString);
+        var configuration = ConfigurationHelper.BuildConfigurationRoot(args);
+        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>().UseSqlServer(connectionString);
 
-            return new AppDbContext(optionsBuilder.Options);
-        }
+        return new AppDbContext(optionsBuilder.Options);
     }
 }

@@ -26,7 +26,7 @@ public record CreateOrderCommand : IRequest
 
     public int CardTypeId { get; init; }
 
-    public IEnumerable<OrderItemDTO> OrderItems { get; init; } = Enumerable.Empty<OrderItemDTO>();
+    public IEnumerable<OrderItemDTO> OrderItems { get; init; } = [];
 
     internal class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand>
     {

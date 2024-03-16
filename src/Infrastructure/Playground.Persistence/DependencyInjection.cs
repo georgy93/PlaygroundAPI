@@ -2,6 +2,7 @@
 
 using Application.Common;
 using Application.Common.Integration;
+using Azure.Core;
 using Domain.Entities.Aggregates.BuyerAggregate;
 using Domain.Entities.Aggregates.OrderAggregate;
 using EntityFramework;
@@ -16,7 +17,9 @@ using Microsoft.Extensions.Options;
 using Mongo;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 using MongoDB.Driver.Core.Events;
+using Playground.Persistence.EntityFramework.DbContextInterceptors;
 
 public static class DependencyInjection
 {
@@ -29,38 +32,37 @@ public static class DependencyInjection
     {
         // https://github.com/dotnet/aspnetcore/issues/17093
         services
-             .AddDbContext<IntegrationEventLogDbContext>(
-               contextBuilder =>
-               {
-                   contextBuilder.UseSqlServer(
+             .AddDbContext<IntegrationEventLogDbContext>(contextBuilder =>
+             {
+                 contextBuilder.UseSqlServer(
                      connectionString: config.GetConnectionString("DefaultConnection"),
                      sqlServerOptionsAction: sqlServerContextBuilder =>
                      {
                          sqlServerContextBuilder.MigrationsAssembly(typeof(IntegrationEventLogDbContext).Assembly.GetName().Name);
                          //sqlServerContextBuilder.EnableRetryOnFailure(maxRetryCount: 3, maxRetryDelay: TimeSpan.FromSeconds(3), errorNumbersToAdd: null);
                      });
-               },
-               contextLifetime: ServiceLifetime.Scoped //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
-           )
-           .AddDbContext<AppDbContext>(
-               contextBuilder =>
-               {
-                   contextBuilder.UseSqlServer(
+             }, contextLifetime: ServiceLifetime.Scoped) //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
+             .AddDbContext<AppDbContext>((sp, contextBuilder) =>
+             {
+                 contextBuilder.UseSqlServer(
                      connectionString: config.GetConnectionString("DefaultConnection"),
                      sqlServerOptionsAction: sqlServerContextBuilder =>
                      {
                          sqlServerContextBuilder.MigrationsAssembly(typeof(AppDbContext).Assembly.GetName().Name);
                          // sqlServerContextBuilder.EnableRetryOnFailure(maxRetryCount: 15, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
-                     });
-               },
-               contextLifetime: ServiceLifetime.Scoped //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
-           )
-           .AddIdentity<ApplicationUser, IdentityRole>()
-           .AddRoles<IdentityRole>()
-           .AddEntityFrameworkStores<AppDbContext>();
+                     })
+                 .AddInterceptors(
+                     sp.GetRequiredService<AuditableEntitiesInterceptor>(),
+                     sp.GetRequiredService<ValidateEntitiesStateInterceptor>());
+             }, contextLifetime: ServiceLifetime.Scoped) // Showing explicitly that the DbContext is shared across the HTTP request scope(graph of objects started in the HTTP request))
+             .AddIdentity<ApplicationUser, IdentityRole>()
+             .AddRoles<IdentityRole>()
+             .AddEntityFrameworkStores<AppDbContext>();
 
         return services
             .AddScoped<IIntegrationEventLogService, IntegrationEventLogService>()
+            .AddScoped<AuditableEntitiesInterceptor>()
+            .AddScoped<ValidateEntitiesStateInterceptor>()
             .AddScoped<IOrderRepository, OrderRepository>()
             .AddScoped<IBuyerRepository, BuyerRepository>();
     }

@@ -4,7 +4,7 @@ public static class CollectionExtensions
 {
     public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
 
-    public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source) => source ?? Enumerable.Empty<T>();
+    public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source) => source ?? [];
 
     public static List<T> EmptyIfNull<T>(this List<T> list) => list ?? [];
 

@@ -1,7 +1,6 @@
-﻿namespace Playground.API.Behavior.Settings
+﻿namespace Playground.API.Behavior.Settings;
+
+public class ApiKeySettings
 {
-    public class ApiKeySettings
-    {
-        public string Key { get; set; }
-    }
+    public string Key { get; set; }
 }

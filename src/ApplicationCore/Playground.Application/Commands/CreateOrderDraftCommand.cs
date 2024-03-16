@@ -4,8 +4,7 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
 {
     public string BuyerId { get; init; }
 
-    public IEnumerable<BasketItem> Items { get; init; } = Enumerable.Empty<BasketItem>();
-
+    public IEnumerable<BasketItem> Items { get; init; } = [];
 
     internal class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDraftDTO>
     {
@@ -29,7 +28,6 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
             return Task.FromResult(OrderDraftDTO.FromOrder(order));
         }
     }
-
 }
 
 public record BasketItem

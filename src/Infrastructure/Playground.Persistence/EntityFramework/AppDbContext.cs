@@ -5,7 +5,6 @@
     using Domain.Entities;
     using Domain.Entities.Aggregates.OrderAggregate;
     using Domain.SeedWork;
-    using Domain.Services;
     using Extensions;
     using MediatR;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -22,8 +21,6 @@
         public const string DEFAULT_SCHEMA = "playground";
 
         private readonly IMediator _mediator;
-        private readonly IDateTimeService _dateTimeService;
-        private readonly ICurrentUserService _currentUserService;
 
         private IDbContextTransaction _currentTransaction;
 
@@ -31,12 +28,10 @@
 
         public AppDbContext(DbContextOptions options) : base(options) { }
 
-        public AppDbContext(DbContextOptions options, IMediator mediator, IDateTimeService dateTimeService, ICurrentUserService currentUserService)
+        public AppDbContext(DbContextOptions options, IMediator mediator)
             : base(options)
         {
             _mediator = mediator;
-            _dateTimeService = dateTimeService;
-            _currentUserService = currentUserService;
         }
 
         public DbSet<RefreshToken> RefreshTokens { get; init; }
@@ -76,8 +71,6 @@
             // https://dotnetcoretutorials.com/2020/07/17/rowversion-vs-concurrencytoken-in-entityframework-efcore/
             // https://github.com/mikeckennedy/optimistic_concurrency_mongodb_dotnet/blob/master/src/MongoDB.Kennedy/ConcurrentDataContext.cs
 
-            AuditEntities();
-            ValidateEntitiesState();
             IncreaseModifiedAggregatesVersion();
 
             return await base.SaveChangesAsync(cancellationToken);
@@ -133,30 +126,6 @@
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             base.OnModelCreating(builder);
-        }
-
-        private void AuditEntities()
-        {
-            foreach (var entry in ChangeTracker.Entries<IAuditableEntity>())
-            {
-                switch (entry.State)
-                {
-                    case EntityState.Added:
-                        entry.Entity.SetCreationInfo(_dateTimeService, _currentUserService);
-                        break;
-                    case EntityState.Modified:
-                        entry.Entity.SetUpdatationInfo(_dateTimeService, _currentUserService);
-                        break;
-                    default:
-                        continue;
-                }
-            }
-        }
-
-        private void ValidateEntitiesState()
-        {
-            foreach (var entry in ChangeTracker.Entries<EntityBase>())
-                entry.Entity.ValidateState();
         }
 
         private void IncreaseModifiedAggregatesVersion()
