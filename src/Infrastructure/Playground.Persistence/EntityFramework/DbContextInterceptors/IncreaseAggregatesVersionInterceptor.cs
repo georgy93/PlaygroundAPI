@@ -3,23 +3,23 @@
 using Domain.SeedWork;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-internal class ValidateEntitiesStateInterceptor : ISaveChangesInterceptor
+internal class IncreaseAggregatesVersionInterceptor : ISaveChangesInterceptor
 {
     public ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         if (eventData.Context is not null)
         {
-            ValidateEntitiesStates(eventData.Context);
+            IncreaseAggregatesVersions(eventData.Context);
         }
 
         return new ValueTask<InterceptionResult<int>>(result);
     }
 
-    private static void ValidateEntitiesStates(DbContext context)
+    private static void IncreaseAggregatesVersions(DbContext context)
     {
-        foreach (var entry in context.ChangeTracker.Entries<EntityBase>())
+        foreach (var modifiedAggregateRoot in context.ChangeTracker.Entries<IAggregateRoot>())
         {
-            entry.Entity.ValidateState();
+            modifiedAggregateRoot.Entity.IncreaseVersion();
         }
     }
 }

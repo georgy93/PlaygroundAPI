@@ -4,7 +4,7 @@ using Domain.SeedWork;
 using Domain.Services;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
-internal class AuditableEntitiesInterceptor : SaveChangesInterceptor
+internal class AuditableEntitiesInterceptor : ISaveChangesInterceptor
 {
     private readonly IDateTimeService _dateTimeService;
     private readonly ICurrentUserService _currentUserService;
@@ -15,14 +15,14 @@ internal class AuditableEntitiesInterceptor : SaveChangesInterceptor
         _currentUserService = currentUserService;
     }
 
-    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
+    public ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         if (eventData.Context is not null)
         {
             UpdateAuditableEntities(eventData.Context);
         }
 
-        return base.SavingChangesAsync(eventData, result, cancellationToken);
+        return new ValueTask<InterceptionResult<int>>(result);
     }
 
     private void UpdateAuditableEntities(DbContext context)

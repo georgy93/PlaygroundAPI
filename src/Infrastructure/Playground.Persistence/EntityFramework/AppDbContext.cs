@@ -71,8 +71,6 @@
             // https://dotnetcoretutorials.com/2020/07/17/rowversion-vs-concurrencytoken-in-entityframework-efcore/
             // https://github.com/mikeckennedy/optimistic_concurrency_mongodb_dotnet/blob/master/src/MongoDB.Kennedy/ConcurrentDataContext.cs
 
-            IncreaseModifiedAggregatesVersion();
-
             return await base.SaveChangesAsync(cancellationToken);
         }
 
@@ -126,14 +124,6 @@
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
             base.OnModelCreating(builder);
-        }
-
-        private void IncreaseModifiedAggregatesVersion()
-        {
-            var modifiedAggregateRoots = ChangeTracker.Entries<IAggregateRoot>().Where(entry => entry.Entity.DomainEvents.Any());
-
-            foreach (var modifiedAggregateRoot in modifiedAggregateRoots)
-                modifiedAggregateRoot.Entity.IncreaseVersion();
         }
 
         private void DisposeTransaction()

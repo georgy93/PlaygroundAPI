@@ -44,7 +44,8 @@ public static class DependencyInjection
              }, contextLifetime: ServiceLifetime.Scoped) //Showing explicitly that the DbContext is shared across the HTTP request scope (graph of objects started in the HTTP request)
              .AddDbContext<AppDbContext>((sp, contextBuilder) =>
              {
-                 contextBuilder.UseSqlServer(
+                 contextBuilder
+                 .UseSqlServer(
                      connectionString: config.GetConnectionString("DefaultConnection"),
                      sqlServerOptionsAction: sqlServerContextBuilder =>
                      {
@@ -53,7 +54,8 @@ public static class DependencyInjection
                      })
                  .AddInterceptors(
                      sp.GetRequiredService<AuditableEntitiesInterceptor>(),
-                     sp.GetRequiredService<ValidateEntitiesStateInterceptor>());
+                     sp.GetRequiredService<ValidateEntitiesStateInterceptor>(),
+                     sp.GetRequiredService<IncreaseAggregatesVersionInterceptor>());
              }, contextLifetime: ServiceLifetime.Scoped) // Showing explicitly that the DbContext is shared across the HTTP request scope(graph of objects started in the HTTP request))
              .AddIdentity<ApplicationUser, IdentityRole>()
              .AddRoles<IdentityRole>()
@@ -63,6 +65,7 @@ public static class DependencyInjection
             .AddScoped<IIntegrationEventLogService, IntegrationEventLogService>()
             .AddScoped<AuditableEntitiesInterceptor>()
             .AddScoped<ValidateEntitiesStateInterceptor>()
+            .AddScoped<IncreaseAggregatesVersionInterceptor>()
             .AddScoped<IOrderRepository, OrderRepository>()
             .AddScoped<IBuyerRepository, BuyerRepository>();
     }
