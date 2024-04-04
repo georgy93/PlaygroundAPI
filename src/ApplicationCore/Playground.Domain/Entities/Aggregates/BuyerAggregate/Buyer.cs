@@ -26,24 +26,23 @@ public class Buyer : AggregateRootBase<long>
 
     public IEnumerable<PaymentMethod> PaymentMethods => _paymentMethods.AsReadOnly();
 
-    public PaymentMethod VerifyOrAddPaymentMethod(
-       CardType cardType,
-       string alias,
-       string cardNumber,
-       string securityNumber,
-       string cardHolderName,
-       DateTime expiration,
-       int orderId,
-       IDateTimeService dateTimeService)
+    public PaymentMethod VerifyOrAddPaymentMethod(CardType cardType,
+                                                  string alias,
+                                                  string cardNumber,
+                                                  string securityNumber,
+                                                  string cardHolderName,
+                                                  DateTime expiration,
+                                                  int orderId,
+                                                  TimeProvider timeProvider)
     {
         Guard.Against.Null(cardType);
-        Guard.Against.Null(dateTimeService);
+        Guard.Against.Null(timeProvider);
 
         var paymentMethod = _paymentMethods.SingleOrDefault(p => p.IsEqualTo(cardType, cardNumber, expiration));
 
         if (paymentMethod is null)
         {
-            paymentMethod = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration, dateTimeService);
+            paymentMethod = new PaymentMethod(cardType, alias, cardNumber, securityNumber, cardHolderName, expiration, timeProvider);
 
             _paymentMethods.Add(paymentMethod);
         }

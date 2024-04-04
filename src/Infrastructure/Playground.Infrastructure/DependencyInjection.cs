@@ -21,6 +21,7 @@ using Polly.Extensions.Http;
 using Refit;
 using Services;
 using Services.Background;
+using System;
 using System.Text;
 
 public static class DependencyInjection
@@ -83,7 +84,7 @@ public static class DependencyInjection
 
     private static IServiceCollection AddServices(this IServiceCollection services) => services
         .AddSingleton<IResponseCacheService, ResponseCacheInMemoryService>()
-        .AddTransient<IDateTimeService, DateTimeService>();
+        .AddSingleton<TimeProvider>(TimeProvider.System);
 
     private static IServiceCollection AddBackgroundServices(this IServiceCollection services) => services
         .AddHostedService<KafkaConsumerBackgroundService>()

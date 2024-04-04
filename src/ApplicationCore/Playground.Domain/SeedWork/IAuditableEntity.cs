@@ -12,7 +12,7 @@ public interface IAuditableEntity
 
     DateTime LastModified { get; }
 
-    void SetCreationInfo(IDateTimeService dateTimeService, ICurrentUserService currentUserService);
+    void SetCreationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService);
 
-    void SetUpdatationInfo(IDateTimeService dateTimeService, ICurrentUserService currentUserService);
+    void SetUpdatationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService);
 }

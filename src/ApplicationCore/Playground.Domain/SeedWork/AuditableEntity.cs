@@ -13,17 +13,19 @@ public abstract class AuditableEntity<TKey> : Entity<TKey>, IAuditableEntity
 
     public DateTime LastModified { get; private set; }
 
-    public void SetCreationInfo(IDateTimeService dateTimeService, ICurrentUserService currentUserService)
+    public void SetCreationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService)
     {
+        var now = timeProvider.GetUtcNow().UtcDateTime;
+
         CreatedBy = currentUserService.UserId;
-        Created = dateTimeService.Now;
+        Created = now;
         LastModifiedBy = currentUserService.UserId;
-        LastModified = dateTimeService.Now;
+        LastModified = now;
     }
 
-    public void SetUpdatationInfo(IDateTimeService dateTimeService, ICurrentUserService currentUserService)
+    public void SetUpdatationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService)
     {
         LastModifiedBy = currentUserService.UserId;
-        LastModified = dateTimeService.Now;
+        LastModified = timeProvider.GetUtcNow().UtcDateTime;
     }
 }

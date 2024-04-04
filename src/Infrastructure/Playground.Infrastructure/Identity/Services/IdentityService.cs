@@ -3,20 +3,20 @@
 using Application.Common;
 using Domain.Entities;
 using Domain.Entities.Aggregates.BuyerAggregate;
-using Domain.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Models;
 using Newtonsoft.Json.Linq;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 internal class IdentityService : IIdentityService
 {
-    private readonly IDateTimeService _dateTimeService;
+    private readonly TimeProvider _timeProvider;
     private readonly ILogger<IdentityService> _logger;
     // private readonly IAuthenticationGateway _authenticationGateWay;
     private readonly IOptionsMonitor<JwtSettings> _jwtSettings;
@@ -28,14 +28,14 @@ internal class IdentityService : IIdentityService
                            IOptionsMonitor<JwtSettings> jwtSettings,
                            UserManager<ApplicationUser> userManager,
                            TokenValidationParameters tokenValidationParameters,
-                           IDateTimeService dateTimeService)
+                           TimeProvider timeProvider)
     {
         _logger = logger;
         //_authenticationGateWay = authenticationGateWay;
         _jwtSettings = jwtSettings;
         _userManager = userManager;
         _tokenValidationParameters = tokenValidationParameters;
-        _dateTimeService = dateTimeService;
+        _timeProvider = timeProvider;
     }
 
     public async Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest request)
@@ -80,7 +80,9 @@ internal class IdentityService : IIdentityService
         var expiryDateTimeUtc = new DateTime(year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, DateTimeKind.Utc)
             .AddSeconds(expiryDateUnix);
 
-        if (expiryDateTimeUtc > _dateTimeService.Now)
+        var now = _timeProvider.GetUtcNow().UtcDateTime;
+
+        if (expiryDateTimeUtc > now)
             return AuthenticationResult.Fail(IdentityErrors.TokenHasntExpiredYet);
 
         // TODO Uncomment when ready
@@ -88,7 +90,7 @@ internal class IdentityService : IIdentityService
         if (storedRefreshToken is null)
             return AuthenticationResult.Fail(IdentityErrors.TokenDoesNotExist);
 
-        if (_dateTimeService.Now > storedRefreshToken.ExpiryDate)
+        if (now > storedRefreshToken.ExpiryDate)
             return AuthenticationResult.Fail(IdentityErrors.TokenHasExpired);
 
         if (storedRefreshToken.Invalidated)
@@ -152,18 +154,19 @@ internal class IdentityService : IIdentityService
 
         claims.AddRange(userClaims);
 
+        var now = _timeProvider.GetUtcNow().UtcDateTime;
         var key = Encoding.ASCII.GetBytes(_jwtSettings.CurrentValue.Secret);
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
-            Expires = _dateTimeService.Now.AddHours(_jwtSettings.CurrentValue.TokenLifetime.Minutes),
+            Expires = now.AddHours(_jwtSettings.CurrentValue.TokenLifetime.Minutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
 
         // TODO use token.ValidFrom and ValitTo
-        var refreshToken = RefreshToken.New(token.Id, user.Id, _dateTimeService.Now, _dateTimeService.Now.AddHours(2));
+        var refreshToken = RefreshToken.New(token.Id, user.Id, now, now.AddHours(2));
 
         // await _authenticationGateWay.AddRefreshToken(refreshToken);
 

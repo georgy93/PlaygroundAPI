@@ -1,7 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.OrderAggregate;
 
 using Events;
-using Services;
 
 public class Order : AggregateRootBase<int>
 {
@@ -16,12 +15,12 @@ public class Order : AggregateRootBase<int>
         _isDraft = false;
     }
 
-    internal Order(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, string username, PaymentMethod paymentMethod)
+    internal Order(TimeProvider timeProvider, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, string username, PaymentMethod paymentMethod)
         : this()
     {
         ShippingAddress = Guard.Against.Null(shippingAddress);
         BillingAddress = Guard.Against.Null(billingAddress);
-        OrderDate = Guard.Against.Null(dateTimeService).Now;
+        OrderDate = Guard.Against.Null(timeProvider).GetUtcNow().UtcDateTime;
         OrderStatus = OrderStatus.Submitted;
         BuyerId = buyerId;
         PaymentMethodId = Guard.Against.Null(paymentMethod).Id;
@@ -31,9 +30,9 @@ public class Order : AggregateRootBase<int>
 
     public static Order NewDraft() => new() { _isDraft = true };
 
-    public static Order New(IDateTimeService dateTimeService, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, string username,
+    public static Order New(TimeProvider timeProvider, Address shippingAddress, Address billingAddress, long buyerId, FullName buyerName, string username,
         PaymentMethod paymentMethod)
-        => new(dateTimeService, shippingAddress, billingAddress, buyerId, buyerName, username, paymentMethod);
+        => new(timeProvider, shippingAddress, billingAddress, buyerId, buyerName, username, paymentMethod);
 
     public long BuyerId { get; private set; }
 

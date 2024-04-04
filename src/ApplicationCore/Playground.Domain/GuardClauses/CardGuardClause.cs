@@ -1,14 +1,15 @@
 ﻿namespace Playground.Domain.GuardClauses;
 
 using Exceptions;
-using Services;
 
 internal static class CardGuardClause
 {
-    public static DateTime ExpiredCard(this IGuardClause guardClause, DateTime expiration, IDateTimeService dateTimeService)
+    public static DateTime ExpiredCard(this IGuardClause guardClause, DateTime expiration, TimeProvider timeProvider)
     {
-        Guard.Against.Null(dateTimeService);
+        Guard.Against.Null(timeProvider);
 
-        return expiration < dateTimeService.Now ? throw new CardExpiredException(expiration) : expiration;
+        var now = timeProvider.GetUtcNow().UtcDateTime;
+
+        return expiration < now ? throw new CardExpiredException(expiration) : expiration;
     }
 }

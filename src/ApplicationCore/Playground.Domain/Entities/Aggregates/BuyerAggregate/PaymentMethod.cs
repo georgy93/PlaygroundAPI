@@ -1,19 +1,18 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate;
 
 using GuardClauses;
-using Services;
 
 public class PaymentMethod : Entity<int>
 {
     protected PaymentMethod() { }
 
-    public PaymentMethod(CardType cardType, string alias, string cardNumber, string securityNumber, string cardHolderName, DateTime expiration, IDateTimeService dateTimeService)
+    public PaymentMethod(CardType cardType, string alias, string cardNumber, string securityNumber, string cardHolderName, DateTime expiration, TimeProvider timeProvider)
     {
         CardNumber = Guard.Against.NullOrWhiteSpace(cardNumber, nameof(cardNumber));
         SecurityNumber = Guard.Against.NullOrWhiteSpace(securityNumber, nameof(securityNumber));
         CardHolderName = Guard.Against.NullOrWhiteSpace(cardHolderName, nameof(cardHolderName));
         Alias = alias;
-        Expiration = Guard.Against.ExpiredCard(expiration, dateTimeService);
+        Expiration = Guard.Against.ExpiredCard(expiration, timeProvider);
         CardType = Guard.Against.Null(cardType);
     }
 

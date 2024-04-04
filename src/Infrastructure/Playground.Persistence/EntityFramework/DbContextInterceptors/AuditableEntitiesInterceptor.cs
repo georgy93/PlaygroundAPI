@@ -6,12 +6,12 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 internal class AuditableEntitiesInterceptor : ISaveChangesInterceptor
 {
-    private readonly IDateTimeService _dateTimeService;
+    private readonly TimeProvider _dateTimeService;
     private readonly ICurrentUserService _currentUserService;
 
-    public AuditableEntitiesInterceptor(IDateTimeService dateTimeService, ICurrentUserService currentUserService)
+    public AuditableEntitiesInterceptor(TimeProvider timeProvider, ICurrentUserService currentUserService)
     {
-        _dateTimeService = dateTimeService;
+        _dateTimeService = timeProvider;
         _currentUserService = currentUserService;
     }
 
