@@ -4,7 +4,7 @@ using Microsoft.Extensions.Time.Testing;
 
 public class PaymentMethodTests
 {
-    private readonly TimeProvider _timeProvider;
+    private readonly FakeTimeProvider _timeProvider;
 
     public PaymentMethodTests()
     {

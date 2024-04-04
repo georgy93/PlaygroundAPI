@@ -105,7 +105,7 @@
             order.SetShippedStatus();
 
             // Assert             
-            Assert.Throws<InvalidOperationException>(() => order.SetCancelledStatus());
+            Assert.Throws<InvalidOperationException>(order.SetCancelledStatus);
         }
 
         [Fact]
