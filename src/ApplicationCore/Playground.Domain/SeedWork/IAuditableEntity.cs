@@ -14,5 +14,5 @@ public interface IAuditableEntity
 
     void SetCreationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService);
 
-    void SetUpdatationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService);
+    void SetUpdationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService);
 }

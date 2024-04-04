@@ -23,7 +23,7 @@ public abstract class AuditableEntity<TKey> : Entity<TKey>, IAuditableEntity
         LastModified = now;
     }
 
-    public void SetUpdatationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService)
+    public void SetUpdationInfo(TimeProvider timeProvider, ICurrentUserService currentUserService)
     {
         LastModifiedBy = currentUserService.UserId;
         LastModified = timeProvider.GetUtcNow().UtcDateTime;

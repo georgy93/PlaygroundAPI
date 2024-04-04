@@ -2,7 +2,7 @@
 
 public record OrderDraftDTO
 {
-    public IEnumerable<OrderItemDTO> OrderItems { get; init; } = Enumerable.Empty<OrderItemDTO>();
+    public IEnumerable<OrderItemDTO> OrderItems { get; init; } = [];
 
     public decimal Total { get; init; }
 

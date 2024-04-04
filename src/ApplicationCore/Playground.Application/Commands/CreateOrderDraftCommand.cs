@@ -18,7 +18,7 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
         public Task<OrderDraftDTO> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
         {
             var order = Order.NewDraft();
-            var orderItems = request.Items.Select(i => i.ToOrderItemDTO());
+            var orderItems = request.Items.ToOrderItemsDTO();
 
             foreach (var item in orderItems)
             {

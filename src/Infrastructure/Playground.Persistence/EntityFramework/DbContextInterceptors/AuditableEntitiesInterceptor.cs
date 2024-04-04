@@ -3,15 +3,16 @@
 using Domain.SeedWork;
 using Domain.Services;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System;
 
 internal class AuditableEntitiesInterceptor : ISaveChangesInterceptor
 {
-    private readonly TimeProvider _dateTimeService;
+    private readonly TimeProvider _timeProvider;
     private readonly ICurrentUserService _currentUserService;
 
     public AuditableEntitiesInterceptor(TimeProvider timeProvider, ICurrentUserService currentUserService)
     {
-        _dateTimeService = timeProvider;
+        _timeProvider = timeProvider;
         _currentUserService = currentUserService;
     }
 
@@ -32,10 +33,10 @@ internal class AuditableEntitiesInterceptor : ISaveChangesInterceptor
             switch (entry.State)
             {
                 case EntityState.Added:
-                    entry.Entity.SetCreationInfo(_dateTimeService, _currentUserService);
+                    entry.Entity.SetCreationInfo(_timeProvider, _currentUserService);
                     break;
                 case EntityState.Modified:
-                    entry.Entity.SetUpdatationInfo(_dateTimeService, _currentUserService);
+                    entry.Entity.SetUpdationInfo(_timeProvider, _currentUserService);
                     break;
                 default:
                     continue;
