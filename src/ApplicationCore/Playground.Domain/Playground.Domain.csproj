@@ -12,9 +12,9 @@
 		<PackageReference Include="Ardalis.GuardClauses" Version="4.5.0" />
 		<PackageReference Include="Ardalis.SmartEnum" Version="8.0.0" />
 		<PackageReference Include="Ardalis.SmartEnum.EFCore" Version="8.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="8.0.6" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-		<PackageReference Include="MediatR" Version="12.2.0" />
+		<PackageReference Include="MediatR" Version="12.3.0" />
 	</ItemGroup>
 
 	<ItemGroup>

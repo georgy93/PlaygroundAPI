@@ -1,7 +1,6 @@
 ﻿namespace Playground.Domain.Entities.Aggregates.BuyerAggregate;
 
 using Events;
-using Services;
 
 public class Buyer : AggregateRootBase<long>
 {

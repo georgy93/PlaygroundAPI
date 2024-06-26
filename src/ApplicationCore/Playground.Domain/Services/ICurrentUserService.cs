@@ -1,7 +1,6 @@
-﻿namespace Playground.Domain.Services
+﻿namespace Playground.Domain.Services;
+
+public interface ICurrentUserService
 {
-    public interface ICurrentUserService
-    {
-        string UserId { get; }
-    }
+    string UserId { get; }
 }

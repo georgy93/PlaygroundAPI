@@ -1,7 +1,6 @@
-﻿namespace Playground.Domain.Services
+﻿namespace Playground.Domain.Services;   
+
+public interface ICurrencyLookupService
 {
-    public interface ICurrencyLookupService
-    {
-        public bool IsSupported(string currencyCode);
-    }
+    public bool IsSupported(string currencyCode);
 }
