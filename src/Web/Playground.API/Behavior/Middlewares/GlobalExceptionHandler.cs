@@ -10,14 +10,14 @@ using Utils.Extensions;
 
 public class GlobalExceptionHandler : IExceptionHandler
 {
-    private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
+    private readonly ILogger<GlobalExceptionHandler> _logger;
     private readonly IOptionsMonitor<ErrorHandlingSettings> _errorHandlingSettings;
     private readonly IActionResultExecutor<ObjectResult> _executor;
     private readonly BusinessExceptionContractResolver _businessExceptionContractResolver;
 
     public GlobalExceptionHandler(IOptionsMonitor<ErrorHandlingSettings> errorHandlingSettings,
                                   IActionResultExecutor<ObjectResult> executor,
-                                  ILogger<GlobalExceptionHandlingMiddleware> logger)
+                                  ILogger<GlobalExceptionHandler> logger)
     {
         _errorHandlingSettings = errorHandlingSettings;
         _executor = executor;
