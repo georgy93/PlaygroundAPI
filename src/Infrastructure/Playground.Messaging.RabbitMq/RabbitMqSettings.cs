@@ -1,17 +1,16 @@
-﻿namespace Playground.Messaging.RabbitMq
+﻿namespace Playground.Messaging.RabbitMq;
+
+internal record RabbitMqSettings
 {
-    internal class RabbitMqSettings
-    {
-        public string ClientProvidedConnectionName { get; set; }
+    public string ClientProvidedConnectionName { get; init; }
 
-        public int CreateConnectionRetryCount { get; set; }
+    public int CreateConnectionRetryCount { get; init; }
 
-        public string HostName { get; set; }
+    public string HostName { get; init; }
 
-        public string Password { get; set; }
+    public string Password { get; init; }
 
-        public int PublishRetryCount { get; set; }
+    public int PublishRetryCount { get; init; }
 
-        public string UserName { get; set; }
-    }
+    public string UserName { get; init; }
 }

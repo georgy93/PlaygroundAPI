@@ -1,13 +1,12 @@
-﻿namespace Playground.Messaging.RabbitMq
+﻿namespace Playground.Messaging.RabbitMq;
+
+internal static class Extensions
 {
-    internal static class Extensions
+    public static IConnectionFactory ToConnectionFactory(this RabbitMqSettings rabbitMqSettings) => new ConnectionFactory
     {
-        public static IConnectionFactory ToConnectionFactory(this RabbitMqSettings rabbitMqSettings) => new ConnectionFactory
-        {
-            UserName = rabbitMqSettings.UserName,
-            Password = rabbitMqSettings.Password,
-            HostName = rabbitMqSettings.HostName,
-            ClientProvidedName = rabbitMqSettings.ClientProvidedConnectionName
-        };
-    }
+        UserName = rabbitMqSettings.UserName,
+        Password = rabbitMqSettings.Password,
+        HostName = rabbitMqSettings.HostName,
+        ClientProvidedName = rabbitMqSettings.ClientProvidedConnectionName
+    };
 }
