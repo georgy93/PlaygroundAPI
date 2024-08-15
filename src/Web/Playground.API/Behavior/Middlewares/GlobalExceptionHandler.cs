@@ -54,7 +54,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         var logData = new { context.Request.Path, Error = businessException };
 
-        _logger.LogError(businessException, "{exception}", logData.Beautify(_businessExceptionContractResolver));
+        _logger.LogError(businessException, "{Exception}", logData.Beautify(_businessExceptionContractResolver));
 
         var errorResponse = CreateErrorResponse(businessException);
 
@@ -63,7 +63,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, "{path}", context.Request.Path);
+        _logger.LogError(exception, "{Path}", context.Request.Path);
 
         var errorResponse = CreateDefaultErrorResponse(exception);
 
