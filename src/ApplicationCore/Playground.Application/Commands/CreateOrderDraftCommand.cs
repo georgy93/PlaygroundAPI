@@ -1,12 +1,12 @@
 ﻿namespace Playground.Application.Commands;
 
-public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
+public class CreateOrderDraftCommand : IRequest<OrderDraftDto>
 {
     public string BuyerId { get; init; }
 
     public IEnumerable<BasketItem> Items { get; init; } = [];
 
-    internal class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDraftDTO>
+    internal class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDraftDto>
     {
         private readonly IOrderRepository _orderRepository;
 
@@ -15,7 +15,7 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
         {
         }
 
-        public Task<OrderDraftDTO> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
+        public Task<OrderDraftDto> Handle(CreateOrderDraftCommand request, CancellationToken cancellationToken)
         {
             var order = Order.NewDraft();
             var orderItems = request.Items.ToOrderItemsDTO();
@@ -25,7 +25,7 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDTO>
                 order.AddOrderItem(item.ProductId, item.ProductName, item.UnitPrice, item.Discount, new Uri(item.PictureUrl), item.Units);
             }
 
-            return Task.FromResult(OrderDraftDTO.FromOrder(order));
+            return Task.FromResult(OrderDraftDto.FromOrder(order));
         }
     }
 }
@@ -49,9 +49,9 @@ public record BasketItem
 
 public static class BasketItemExtensions
 {
-    public static IEnumerable<OrderItemDTO> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems) => basketItems.Select(item => item.ToOrderItemDTO());
+    public static IEnumerable<OrderDraftDto> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems) => basketItems.Select(item => item.ToOrderItemDTO());
 
-    public static OrderItemDTO ToOrderItemDTO(this BasketItem item) => new()
+    public static OrderDraftDto ToOrderItemDTO(this BasketItem item) => new()
     {
         ProductId = item.ProductId,
         ProductName = item.ProductName,

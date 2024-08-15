@@ -34,7 +34,7 @@ public class Program
         }
         finally
         {
-            Log.CloseAndFlush();
+            await Log.CloseAndFlushAsync();
         }
     }
 
@@ -70,7 +70,7 @@ public class Program
 
     private static readonly EventHandler<UnobservedTaskExceptionEventArgs> OnUnobservedTaskException = (obj, eventArgs) =>
     {
-        Log.Error(eventArgs.Exception, $"UnobservedTaskException caught");
+        Log.Error(eventArgs.Exception, "UnobservedTaskException caught");
 
         foreach (var innerException in eventArgs.Exception.InnerExceptions)
         {

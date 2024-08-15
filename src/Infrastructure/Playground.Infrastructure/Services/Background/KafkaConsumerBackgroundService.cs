@@ -44,9 +44,9 @@
                 {
                     StartConsumerLoop(stoppingToken);
                 }
-                catch (OperationCanceledException)
+                catch (OperationCanceledException ocex)
                 {
-                    _logger.LogInformation("Consumer stopped");
+                    _logger.LogInformation(ocex, "Consumer stopped");
                 }
                 finally
                 {

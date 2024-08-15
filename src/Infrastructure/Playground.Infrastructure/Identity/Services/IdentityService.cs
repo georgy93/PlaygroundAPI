@@ -77,8 +77,7 @@ internal class IdentityService : IIdentityService
 
         var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
 
-        var expiryDateTimeUtc = new DateTime(year: 1970, month: 1, day: 1, hour: 0, minute: 0, second: 0, DateTimeKind.Utc)
-            .AddSeconds(expiryDateUnix);
+        var expiryDateTimeUtc = DateTime.UnixEpoch.AddSeconds(expiryDateUnix);
 
         var now = _timeProvider.GetUtcNow().UtcDateTime;
 

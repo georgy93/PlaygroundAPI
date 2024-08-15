@@ -94,7 +94,7 @@
             try
             {
                 await SaveChangesAsync(CancellationToken.None);
-                transaction.Commit();
+                await transaction.CommitAsync();
             }
             catch
             {

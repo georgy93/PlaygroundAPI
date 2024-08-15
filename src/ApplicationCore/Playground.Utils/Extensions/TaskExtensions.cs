@@ -12,7 +12,7 @@ public static class TaskExtensions
         var completedTask = await Task.WhenAny(originalTask, Task.Delay(Timeout.Infinite, tokenSource.Token));
         if (completedTask == originalTask)
         {
-            tokenSource.Cancel(); // cancel the delay task
+            await tokenSource.CancelAsync(); // cancel the delay task
 
             await originalTask; // unwrap the result
         }

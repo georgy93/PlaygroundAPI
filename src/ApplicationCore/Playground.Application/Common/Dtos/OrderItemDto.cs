@@ -1,6 +1,6 @@
 ﻿namespace Playground.Application.Common.Dtos;
 
-public record OrderItemDTO
+public record OrderItemDto
 {
     public int ProductId { get; init; }
 

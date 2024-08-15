@@ -47,7 +47,7 @@ public class GlobalExceptionHandlingMiddleware
     {
         var logData = new { context.Request.Path, Error = businessException };
 
-        _logger.LogError(businessException, "{exception}", logData.Beautify(_businessExceptionContractResolver));
+        _logger.LogError(businessException, "{Exception}", logData.Beautify(_businessExceptionContractResolver));
 
         ReThrowIfResponseHasStarted(context, businessException);
 
@@ -58,7 +58,7 @@ public class GlobalExceptionHandlingMiddleware
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        _logger.LogError(exception, "{path}", context.Request.Path);
+        _logger.LogError(exception, "{Path}", context.Request.Path);
 
         ReThrowIfResponseHasStarted(context, exception);
 
@@ -71,7 +71,7 @@ public class GlobalExceptionHandlingMiddleware
     {
         if (context.Response.HasStarted)
         {
-            _logger.LogWarning($"Cannot handle error. The response has already started.");
+            _logger.LogWarning("Cannot handle error. The response has already started.");
             ExceptionDispatchInfo.Throw(exception);
         }
     }

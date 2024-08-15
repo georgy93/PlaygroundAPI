@@ -42,7 +42,7 @@ public class GlobalExceptionHandler : IExceptionHandler
     {
         if (context.Response.HasStarted)
         {
-            _logger.LogWarning($"Cannot handle error. The response has already started.");
+            _logger.LogWarning("Cannot handle error. The response has already started.");
 
             return false;
         }

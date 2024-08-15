@@ -19,11 +19,11 @@
 
             await strategy.ExecuteAsync(async () =>
             {
-                using var transaction = _context.Database.BeginTransaction();
+                using var transaction = await _context.Database.BeginTransactionAsync();
 
                 await action();
 
-                transaction.Commit();
+                await transaction.CommitAsync();
             });
         }
 

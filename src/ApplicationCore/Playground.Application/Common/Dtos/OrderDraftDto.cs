@@ -1,14 +1,14 @@
 ﻿namespace Playground.Application.Common.Dtos;
 
-public record OrderDraftDTO
+public record OrderDraftDto
 {
-    public IEnumerable<OrderItemDTO> OrderItems { get; init; } = [];
+    public IEnumerable<OrderItemDto> OrderItems { get; init; } = [];
 
     public decimal Total { get; init; }
 
-    public static OrderDraftDTO FromOrder(Order order) => new()
+    public static OrderDraftDto FromOrder(Order order) => new()
     {
-        OrderItems = order.OrderItems.Select(oi => new OrderItemDTO
+        OrderItems = order.OrderItems.Select(oi => new OrderItemDto
         {
             Discount = oi.Discount,
             ProductId = oi.ProductId,

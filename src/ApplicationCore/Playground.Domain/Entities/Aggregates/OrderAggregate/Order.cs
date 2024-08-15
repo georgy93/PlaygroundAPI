@@ -58,7 +58,7 @@ public class Order : AggregateRootBase<int>
 
     public void AddOrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
     {
-        var orderItem = _orderItems.Where(o => o.ProductId == productId).SingleOrDefault();
+        var orderItem = _orderItems.SingleOrDefault(o => o.ProductId == productId);
         if (orderItem is null)
         {
             orderItem = new OrderItem(productId, productName, unitPrice, discount, pictureUrl, units);
