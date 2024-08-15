@@ -49,9 +49,9 @@ public record BasketItem
 
 public static class BasketItemExtensions
 {
-    public static IEnumerable<OrderDraftDto> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems) => basketItems.Select(item => item.ToOrderItemDTO());
+    public static IEnumerable<OrderItemDto> ToOrderItemsDTO(this IEnumerable<BasketItem> basketItems) => basketItems.Select(item => item.ToOrderItemDTO());
 
-    public static OrderDraftDto ToOrderItemDTO(this BasketItem item) => new()
+    public static OrderItemDto ToOrderItemDTO(this BasketItem item) => new()
     {
         ProductId = item.ProductId,
         ProductName = item.ProductName,

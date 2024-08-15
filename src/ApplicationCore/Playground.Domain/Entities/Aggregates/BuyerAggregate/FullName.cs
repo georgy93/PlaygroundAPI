@@ -8,9 +8,9 @@ public class FullName : ValueObject
 
     public FullName(string firstName, string surname, string lastName)
     {
-        FirstName = Guard.Against.NullOrWhiteSpace(firstName, nameof(firstName), "firstName is not supplied");
-        Surname = Guard.Against.NullOrWhiteSpace(surname, nameof(surname), "surname is not supplied");
-        LastName = Guard.Against.NullOrWhiteSpace(lastName, nameof(lastName), "lastName is not supplied");
+        FirstName = Guard.Against.NullOrWhiteSpace(firstName, message: "firstName is not supplied");
+        Surname = Guard.Against.NullOrWhiteSpace(surname, message: "surname is not supplied");
+        LastName = Guard.Against.NullOrWhiteSpace(lastName, message: "lastName is not supplied");
     }
 
     public string FirstName { get; private set; }

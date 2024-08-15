@@ -14,8 +14,8 @@
 
         internal Money(decimal amount, string currency)
         {
-            Amount = Guard.Against.Negative(amount, nameof(amount), "Amount cannot be negative!"); ;
-            Currency = Guard.Against.NullOrWhiteSpace(currency, nameof(currency), "Currency not provided!").ToUpper();
+            Amount = Guard.Against.Negative(amount, message: "Amount cannot be negative!"); ;
+            Currency = Guard.Against.NullOrWhiteSpace(currency, message: "Currency not provided!").ToUpper();
         }
 
         public static Money FromAmount(decimal amount, string currency, ICurrencyLookupService currencyLookupService) => currencyLookupService.IsSupported(currency)

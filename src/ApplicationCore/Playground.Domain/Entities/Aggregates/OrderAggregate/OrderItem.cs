@@ -7,10 +7,10 @@ public class OrderItem : Entity<int>
     internal OrderItem(int productId, string productName, decimal unitPrice, decimal discount, Uri pictureUrl, int units = 1)
     {
         ProductId = productId;
-        Units = Guard.Against.NegativeOrZero(units, nameof(units), "Invalid number of units");
-        UnitPrice = Guard.Against.NegativeOrZero(unitPrice, nameof(unitPrice), "Invalid price");
-        Discount = Guard.Against.Negative(discount, nameof(discount), "Invalid discount");
-        ProductName = Guard.Against.NullOrWhiteSpace(productName, nameof(productName));
+        Units = Guard.Against.NegativeOrZero(units, message: "Invalid number of units");
+        UnitPrice = Guard.Against.NegativeOrZero(unitPrice, message: "Invalid price");
+        Discount = Guard.Against.Negative(discount, message: "Invalid discount");
+        ProductName = Guard.Against.NullOrWhiteSpace(productName);
         PictureUri = Guard.Against.Null(pictureUrl).ToString();
 
         if (GetTotalWithoutDiscount() < discount)
@@ -35,14 +35,14 @@ public class OrderItem : Entity<int>
 
     internal void AddUnits(int units)
     {
-        Guard.Against.Negative(units, nameof(units), "Invalid number of units");
+        Guard.Against.Negative(units, message: "Invalid number of units");
 
         Units += units;
     }
 
     internal void SetNewDiscount(decimal discount)
     {
-        Guard.Against.Negative(discount, nameof(discount), "Discount is not valid");
+        Guard.Against.Negative(discount, message: "Discount is not valid");
 
         if (GetTotalWithoutDiscount() < discount)
             throw new InvalidOperationException("The total value of order item is lower than applied discount");

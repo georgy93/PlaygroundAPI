@@ -7,7 +7,7 @@ using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 using Utils.Helpers;
 
-public class Program
+public static class Program
 {
     // Run as HTTPS https://tomssl.com/how-to-run-asp-net-core-3-1-over-https-in-docker-using-linux-containers/
     public static async Task Main(string[] args)
@@ -44,10 +44,10 @@ public class Program
         .ConfigureWebHostDefaults(webBuilder =>
         {
             webBuilder.UseKestrel();
-                //webBuilder.UseUrls("http://*:80", "https://*:443");
-                webBuilder.UseIISIntegration();
-                // for multiple startups
-                webBuilder.UseStartup(Assembly.GetEntryAssembly().FullName);
+            //webBuilder.UseUrls("http://*:80", "https://*:443");
+            webBuilder.UseIISIntegration();
+            // for multiple startups
+            webBuilder.UseStartup(Assembly.GetEntryAssembly().FullName);
         })
         .Build();
 

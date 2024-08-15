@@ -6,7 +6,7 @@ public class UserId : ValueObject
 
     public UserId(Guid value)
     {
-        Value = Guard.Against.Default(value, nameof(value));
+        Value = Guard.Against.Default(value);
     }
 
     public Guid Value { get; private set; }

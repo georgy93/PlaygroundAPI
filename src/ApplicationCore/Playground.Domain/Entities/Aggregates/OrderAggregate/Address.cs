@@ -7,11 +7,11 @@ public class Address : ValueObject
 
     public Address(string street, string city, string state, string country, string zipCode)
     {
-        Street = Guard.Against.NullOrWhiteSpace(street, nameof(street), "invalid street");
-        City = Guard.Against.NullOrWhiteSpace(city, nameof(city), "invalid city");
-        State = Guard.Against.NullOrWhiteSpace(state, nameof(state), "invalid state");
-        Country = Guard.Against.NullOrWhiteSpace(country, nameof(country), "invalid country");
-        ZipCode = Guard.Against.NullOrWhiteSpace(zipCode, nameof(zipCode), "invalid zipCode");
+        Street = Guard.Against.NullOrWhiteSpace(street, message: "invalid street");
+        City = Guard.Against.NullOrWhiteSpace(city, message: "invalid city");
+        State = Guard.Against.NullOrWhiteSpace(state, message: "invalid state");
+        Country = Guard.Against.NullOrWhiteSpace(country, message: "invalid country");
+        ZipCode = Guard.Against.NullOrWhiteSpace(zipCode, message: "invalid zipCode");
     }
 
     public string Street { get; private set; }

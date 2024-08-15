@@ -8,7 +8,7 @@ internal static partial class EmailGuardClause
 
     public static string InvalidEmail(this IGuardClause guardClause, string input, string parameterName)
     {
-        Guard.Against.NullOrWhiteSpace(input, parameterName, "email is not supplied");
+        Guard.Against.NullOrWhiteSpace(input, message: "email is not supplied");
 
         return EmailRegex().IsMatch(input)
             ? input
