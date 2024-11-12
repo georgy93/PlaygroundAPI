@@ -9,6 +9,6 @@
         { }
 
         public override async Task<Buyer> LoadAsync(long id, CancellationToken cancellationToken) => await DbSet
-            .FindAsync(new object[] { id, cancellationToken }, cancellationToken);
+            .FindAsync([id], cancellationToken);
     }
 }

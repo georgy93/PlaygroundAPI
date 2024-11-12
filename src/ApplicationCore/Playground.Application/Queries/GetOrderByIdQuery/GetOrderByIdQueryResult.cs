@@ -18,7 +18,7 @@
 
         public string Country { get; init; }
 
-        public IEnumerable<OrderitemDto> OrderItems { get; init; } = Enumerable.Empty<OrderitemDto>();
+        public IEnumerable<OrderitemDto> OrderItems { get; init; } = [];
 
         public decimal Total { get; init; }
     }

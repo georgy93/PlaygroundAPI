@@ -4,7 +4,7 @@ using Events;
 
 public class Order : AggregateRootBase<int>
 {
-    private readonly List<OrderItem> _orderItems = [];
+    private readonly List<OrderItem> _orderItems;
 
     private string _description;
     private bool _isDraft;

@@ -2,7 +2,7 @@
 
 public record OrderStatusChangedToAwaitingValidationIntegrationEvent : OrderStatusChangedBaseIntegrationEvent
 {
-    public IEnumerable<OrderStockItem> OrderStockItems { get; init; } = Enumerable.Empty<OrderStockItem>();
+    public IEnumerable<OrderStockItem> OrderStockItems { get; init; } = [];
 }
 
 public record OrderStockItem(int ProductId, int Units);

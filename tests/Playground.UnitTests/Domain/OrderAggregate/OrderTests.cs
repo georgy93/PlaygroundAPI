@@ -116,7 +116,7 @@
 
             // Act
             order.SetAwaitingValidationStatus();
-            order.SetCancelledStatusWhenStockIsRejected(Enumerable.Empty<int>());
+            order.SetCancelledStatusWhenStockIsRejected([]);
 
             // Assert
             Assert.Equal(OrderStatus.Cancelled, order.OrderStatus);

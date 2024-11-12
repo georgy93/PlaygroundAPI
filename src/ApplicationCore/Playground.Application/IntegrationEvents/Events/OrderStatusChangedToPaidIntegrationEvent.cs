@@ -2,5 +2,5 @@
 
 public record OrderStatusChangedToPaidIntegrationEvent : OrderStatusChangedBaseIntegrationEvent
 {
-    public IEnumerable<OrderStockItem> OrderStockItems { get; init; } = Enumerable.Empty<OrderStockItem>();
+    public IEnumerable<OrderStockItem> OrderStockItems { get; init; } = [];
 }

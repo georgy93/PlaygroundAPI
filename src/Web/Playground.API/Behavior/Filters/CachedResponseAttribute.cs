@@ -9,7 +9,7 @@ public sealed class CachedResponseAttribute : TypeFilterAttribute
 {
     public CachedResponseAttribute(int timeToLiveSeconds) : base(typeof(CachedResponseAttributeImplementation))
     {
-        Arguments = new object[] { timeToLiveSeconds };
+        Arguments = [timeToLiveSeconds];
     }
 
     public class CachedResponseAttributeImplementation : IAsyncActionFilter
@@ -45,13 +45,13 @@ public sealed class CachedResponseAttribute : TypeFilterAttribute
                 _cacheService.CacheResponse(cacheKey, okObjectResult.Value, TimeSpan.FromSeconds(_timeToLiveSeconds));
             }
         }
-    }
 
-    // TODO: Use other return type
-    private static ContentResult CreateOkContentResult(string data) => new()
-    {
-        Content = data,
-        ContentType = MediaTypeNames.Application.Json,
-        StatusCode = StatusCodes.Status200OK
-    };
+        // TODO: Use other return type
+        private static ContentResult CreateOkContentResult(string data) => new()
+        {
+            Content = data,
+            ContentType = MediaTypeNames.Application.Json,
+            StatusCode = StatusCodes.Status200OK
+        };
+    }
 }

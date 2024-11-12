@@ -5,13 +5,14 @@ using Microsoft.Extensions.Logging;
 using Polly;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading;
 
 internal class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnection
 {
     private readonly IConnectionFactory _connectionFactory;
     private readonly ILogger<DefaultRabbitMQPersistentConnection> _logger;
     private readonly int _retryCount;
-    private readonly object lockObj = new();
+    private readonly Lock lockObj = new();
 
     private IConnection _connection;
     private volatile bool _disposed;

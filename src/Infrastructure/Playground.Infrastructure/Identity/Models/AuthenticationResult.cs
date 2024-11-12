@@ -9,7 +9,7 @@
             RefreshToken = refreshtoken;
         }
 
-        private AuthenticationResult(params string[] errors)
+        private AuthenticationResult(params IReadOnlyCollection<string> errors)
         {
             IsSuccess = false;
             Errors = errors;
@@ -25,7 +25,7 @@
 
         public static AuthenticationResult Success(string token, string refreshToken) => new(token, refreshToken);
 
-        public static AuthenticationResult Fail(params string[] errors) => new(errors);
+        public static AuthenticationResult Fail(params IReadOnlyCollection<string> errors) => new(errors);
 
         public static implicit operator bool(AuthenticationResult result) => result.IsSuccess;
     }
