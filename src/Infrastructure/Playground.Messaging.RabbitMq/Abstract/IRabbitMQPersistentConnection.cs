@@ -1,11 +1,10 @@
-﻿namespace Playground.Messaging.RabbitMq.Abstract
+﻿namespace Playground.Messaging.RabbitMq.Abstract;
+
+public interface IRabbitMQPersistentConnection : IAsyncDisposable
 {
-    public interface IRabbitMQPersistentConnection : IDisposable
-    {
-        bool IsConnected { get; }
+    bool IsConnected { get; }
 
-        bool TryConnect();
+    Task<bool> TryConnectAsync(CancellationToken cancellationToken);
 
-        IModel CreateChannel();
-    }
+    Task<IChannel> CreateChannelAsync(CancellationToken cancellationToken);
 }

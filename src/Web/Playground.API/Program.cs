@@ -47,7 +47,7 @@ public static class Program
             //webBuilder.UseUrls("http://*:80", "https://*:443");
             webBuilder.UseIISIntegration();
             // for multiple startups
-            webBuilder.UseStartup(Assembly.GetEntryAssembly().FullName);
+            webBuilder.UseStartup((typeof(Startup).GetTypeInfo().Assembly.GetName().Name));
         })
         .Build();
 
