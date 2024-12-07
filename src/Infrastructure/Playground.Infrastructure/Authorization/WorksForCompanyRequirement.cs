@@ -1,14 +1,13 @@
-﻿namespace Playground.Infrastructure.Authorization
+﻿namespace Playground.Infrastructure.Authorization;
+
+using Microsoft.AspNetCore.Authorization;
+
+public class WorksForCompanyRequirement : IAuthorizationRequirement
 {
-    using Microsoft.AspNetCore.Authorization;
-
-    public class WorksForCompanyRequirement : IAuthorizationRequirement
+    public WorksForCompanyRequirement(string domainName)
     {
-        public WorksForCompanyRequirement(string domainName)
-        {
-            DomainName = domainName;
-        }
-
-        public string DomainName { get; }
+        DomainName = domainName;
     }
+
+    public string DomainName { get; }
 }

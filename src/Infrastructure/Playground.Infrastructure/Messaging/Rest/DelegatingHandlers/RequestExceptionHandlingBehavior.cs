@@ -1,38 +1,37 @@
-﻿namespace Playground.Infrastructure.Messaging.Rest.DelegatingHandlers
+﻿namespace Playground.Infrastructure.Messaging.Rest.DelegatingHandlers;
+
+using Microsoft.Extensions.Logging;
+using System.Net.Http;
+using Utils.Extensions;
+
+internal class RequestExceptionHandlingBehavior : DelegatingHandler
 {
-    using Microsoft.Extensions.Logging;
-    using System.Net.Http;
-    using Utils.Extensions;
+    private readonly ILogger<RequestExceptionHandlingBehavior> _logger;
 
-    internal class RequestExceptionHandlingBehavior : DelegatingHandler
+    public RequestExceptionHandlingBehavior(ILogger<RequestExceptionHandlingBehavior> logger)
     {
-        private readonly ILogger<RequestExceptionHandlingBehavior> _logger;
+        _logger = logger;
+    }
 
-        public RequestExceptionHandlingBehavior(ILogger<RequestExceptionHandlingBehavior> logger)
+    protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+        try
         {
-            _logger = logger;
+            return await base.SendAsync(request, cancellationToken);  // await so that exceptions are unwrapped
         }
-
-        protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        catch (Exception ex)
         {
-            try
+            var logData = new
             {
-                return await base.SendAsync(request, cancellationToken);  // await so that exceptions are unwrapped
-            }
-            catch (Exception ex)
-            {
-                var logData = new
-                {
-                    HttpMethod = request.Method,
-                    Uri = request.RequestUri,
-                    RequestPayload = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
-                };
+                HttpMethod = request.Method,
+                Uri = request.RequestUri,
+                RequestPayload = request.Content is null ? null : await request.Content.ReadAsStringAsync(cancellationToken)
+            };
 
-                _logger.LogError(ex, "{Exception}", logData.Beautify());
+            _logger.LogError(ex, "{Exception}", logData.Beautify());
 
-                // TODO: throw new ServiceNotAvailableException(request.RequestUri);
-                throw new Exception("error", ex);
-            }
+            // TODO: throw new ServiceNotAvailableException(request.RequestUri);
+            throw new Exception("error", ex);
         }
     }
 }

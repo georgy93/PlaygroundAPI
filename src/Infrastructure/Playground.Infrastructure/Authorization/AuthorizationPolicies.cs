@@ -1,7 +1,6 @@
-﻿namespace Playground.Infrastructure.Authorization
+﻿namespace Playground.Infrastructure.Authorization;
+
+public static class AuthorizationPolicies
 {
-    public static class AuthorizationPolicies
-    {
-        public const string MustWorkForMe = "MustWorkForMe";
-    }
+    public const string MustWorkForMe = "MustWorkForMe";
 }

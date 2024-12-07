@@ -1,52 +1,51 @@
-﻿namespace Playground.Infrastructure.Services.Background
+﻿namespace Playground.Infrastructure.Services.Background;
+
+using Application.Common.Integration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+internal class IntegrationEventsPublisherBackgroundService : BackgroundService
 {
-    using Application.Common.Integration;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger<IntegrationEventsPublisherBackgroundService> _logger;
+    private readonly IServiceScopeFactory _serviceScopeFactory;
+    private readonly PeriodicTimer _periodicTimer;
 
-    internal class IntegrationEventsPublisherBackgroundService : BackgroundService
+    public IntegrationEventsPublisherBackgroundService(ILogger<IntegrationEventsPublisherBackgroundService> logger, IServiceScopeFactory serviceScopeFactory)
     {
-        private readonly ILogger<IntegrationEventsPublisherBackgroundService> _logger;
-        private readonly IServiceScopeFactory _serviceScopeFactory;
-        private readonly PeriodicTimer _periodicTimer;
+        _logger = logger;
+        _serviceScopeFactory = serviceScopeFactory;
+        _periodicTimer = new(TimeSpan.FromSeconds(3));
+    }
 
-        public IntegrationEventsPublisherBackgroundService(ILogger<IntegrationEventsPublisherBackgroundService> logger, IServiceScopeFactory serviceScopeFactory)
+    protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(async () =>
+    {
+        while (await _periodicTimer.WaitForNextTickAsync(stoppingToken) && !stoppingToken.IsCancellationRequested)
         {
-            _logger = logger;
-            _serviceScopeFactory = serviceScopeFactory;
-            _periodicTimer = new(TimeSpan.FromSeconds(3));
+            try
+            {
+                using var scope = _serviceScopeFactory.CreateScope();
+
+                await ProcessFailedMessagesAsync(scope, stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error while publishing failed integration events");
+            }
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(async () =>
+    }, stoppingToken);
+
+    private static async Task ProcessFailedMessagesAsync(IServiceScope serviceScope, CancellationToken cancellationToken)
+    {
+        var integrationEventsPublisher = serviceScope.ServiceProvider.GetService<IIntegrationEventsService>();
+        var integrationEventLogService = serviceScope.ServiceProvider.GetService<IIntegrationEventLogService>();
+
+        var failedIntegrationEventLogEntries = await integrationEventLogService.RetrieveEventLogsFailedToPublishPublishAsync(cancellationToken);
+
+        foreach (var integrationEventLogEntry in failedIntegrationEventLogEntries)
         {
-            while (await _periodicTimer.WaitForNextTickAsync(stoppingToken) && !stoppingToken.IsCancellationRequested)
-            {
-                try
-                {
-                    using var scope = _serviceScopeFactory.CreateScope();
-
-                    await ProcessFailedMessagesAsync(scope, stoppingToken);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Error while publishing failed integration events");
-                }
-            }
-
-        }, stoppingToken);
-
-        private static async Task ProcessFailedMessagesAsync(IServiceScope serviceScope, CancellationToken cancellationToken)
-        {
-            var integrationEventsPublisher = serviceScope.ServiceProvider.GetService<IIntegrationEventsService>();
-            var integrationEventLogService = serviceScope.ServiceProvider.GetService<IIntegrationEventLogService>();
-
-            var failedIntegrationEventLogEntries = await integrationEventLogService.RetrieveEventLogsFailedToPublishPublishAsync(cancellationToken);
-
-            foreach (var integrationEventLogEntry in failedIntegrationEventLogEntries)
-            {
-                await integrationEventsPublisher.PublishThroughEventBusAsync(integrationEventLogEntry.IntegrationEvent);
-            }
+            await integrationEventsPublisher.PublishThroughEventBusAsync(integrationEventLogEntry.IntegrationEvent);
         }
     }
 }

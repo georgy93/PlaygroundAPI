@@ -1,13 +1,12 @@
-﻿namespace Playground.Infrastructure.Identity.Services
+﻿namespace Playground.Infrastructure.Identity.Services;
+
+using Models;
+
+public interface IIdentityService
 {
-    using Models;
+    Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest request);
 
-    public interface IIdentityService
-    {
-        Task<AuthenticationResult> RegisterAsync(UserRegistrationRequest request);
+    Task<AuthenticationResult> LoginAsync(UserLoginRequest request);
 
-        Task<AuthenticationResult> LoginAsync(UserLoginRequest request);
-
-        Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request);
-    }
+    Task<AuthenticationResult> RefreshTokenAsync(RefreshTokenRequest request);
 }

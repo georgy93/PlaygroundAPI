@@ -1,94 +1,93 @@
-﻿namespace Playground.Infrastructure.Services.Background
+﻿namespace Playground.Infrastructure.Services.Background;
+
+using Confluent.Kafka;
+using Domain.ValueObjects;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Playground.Messaging.Kafka.Serialization.Json;
+
+internal class KafkaConsumerBackgroundService : BackgroundService
 {
-    using Confluent.Kafka;
-    using Domain.ValueObjects;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
-    using Playground.Messaging.Kafka.Serialization.Json;
+    private readonly ILogger<KafkaConsumerBackgroundService> _logger;
+    private readonly string _topic;
+    private readonly IConsumer<Null, Ping> _consumer;
 
-    internal class KafkaConsumerBackgroundService : BackgroundService
+    public KafkaConsumerBackgroundService(ILogger<KafkaConsumerBackgroundService> logger)
     {
-        private readonly ILogger<KafkaConsumerBackgroundService> _logger;
-        private readonly string _topic;
-        private readonly IConsumer<Null, Ping> _consumer;
-
-        public KafkaConsumerBackgroundService(ILogger<KafkaConsumerBackgroundService> logger)
+        var consumerConfig = new ConsumerConfig
         {
-            var consumerConfig = new ConsumerConfig
-            {
-                EnableAutoCommit = false,
-                BootstrapServers = "kafka:9092",
-                GroupId = $"PongConsumer-{Guid.NewGuid()}",
-                AutoOffsetReset = AutoOffsetReset.Earliest,
-                FetchWaitMaxMs = 1,
-                FetchErrorBackoffMs = 1, // retry immediately in case of fetch error
-            };
+            EnableAutoCommit = false,
+            BootstrapServers = "kafka:9092",
+            GroupId = $"PongConsumer-{Guid.NewGuid()}",
+            AutoOffsetReset = AutoOffsetReset.Earliest,
+            FetchWaitMaxMs = 1,
+            FetchErrorBackoffMs = 1, // retry immediately in case of fetch error
+        };
 
-            _consumer = new ConsumerBuilder<Null, Ping>(consumerConfig)
-                .SetValueDeserializer(new JsonMessageDeserializer<Ping>())
-                .Build();
+        _consumer = new ConsumerBuilder<Null, Ping>(consumerConfig)
+            .SetValueDeserializer(new JsonMessageDeserializer<Ping>())
+            .Build();
 
-            _logger = logger;
-            _topic = "ping-pong";
-        }
+        _logger = logger;
+        _topic = "ping-pong";
+    }
 
-        public int MessagesConsumed { get; private set; }
+    public int MessagesConsumed { get; private set; }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(() =>
+    protected override Task ExecuteAsync(CancellationToken stoppingToken) => Task.Run(() =>
+    {
+        using (_consumer)
         {
-            using (_consumer)
-            {
-                _consumer.Subscribe(_topic);
+            _consumer.Subscribe(_topic);
 
-                try
-                {
-                    StartConsumerLoop(stoppingToken);
-                }
-                catch (OperationCanceledException ocex)
-                {
-                    _logger.LogInformation(ocex, "Consumer stopped");
-                }
-                finally
-                {
-                    // Ensure the consumer leaves the group cleanly and final offsets are committed
-                    _consumer.Close();
-                }
+            try
+            {
+                StartConsumerLoop(stoppingToken);
             }
-        }, stoppingToken);
-
-        private void StartConsumerLoop(CancellationToken cancellationToken)
-        {
-            while (!cancellationToken.IsCancellationRequested)
+            catch (OperationCanceledException ocex)
             {
-                try
-                {
-                    var consumeResult = _consumer.Consume(cancellationToken);
-                    if (consumeResult.IsPartitionEOF)
-                        continue;
-
-                    MessagesConsumed++;
-
-                    HandleResult(consumeResult.Message.Value);
-                }
-                catch (ConsumeException consumeEx)
-                {
-                    _logger.LogError(consumeEx, "Consumer for topic '{Topic}'. Error: {ErrorReason}", consumeEx.ConsumerRecord.Topic, consumeEx.Error.Reason);
-                }
+                _logger.LogInformation(ocex, "Consumer stopped");
+            }
+            finally
+            {
+                // Ensure the consumer leaves the group cleanly and final offsets are committed
+                _consumer.Close();
             }
         }
+    }, stoppingToken);
 
-        private void HandleResult(Ping ping)
+    private void StartConsumerLoop(CancellationToken cancellationToken)
+    {
+        while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
-                var delayMs = DateTime.Now.Subtract(ping.CreatedAt).TotalSeconds;
+                var consumeResult = _consumer.Consume(cancellationToken);
+                if (consumeResult.IsPartitionEOF)
+                    continue;
 
-                _logger.LogInformation("Pong for {Number} after {DelayMs} ms delay", ping.Number, delayMs);
+                MessagesConsumed++;
+
+                HandleResult(consumeResult.Message.Value);
             }
-            catch (Exception ex)
+            catch (ConsumeException consumeEx)
             {
-                _logger.LogError(ex, "Error occured");
+                _logger.LogError(consumeEx, "Consumer for topic '{Topic}'. Error: {ErrorReason}", consumeEx.ConsumerRecord.Topic, consumeEx.Error.Reason);
             }
+        }
+    }
+
+    private void HandleResult(Ping ping)
+    {
+        try
+        {
+            var delayMs = DateTime.Now.Subtract(ping.CreatedAt).TotalSeconds;
+
+            _logger.LogInformation("Pong for {Number} after {DelayMs} ms delay", ping.Number, delayMs);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occured");
         }
     }
 }

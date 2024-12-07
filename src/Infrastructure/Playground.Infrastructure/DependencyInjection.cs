@@ -97,7 +97,7 @@ public static class DependencyInjection
             .ConfigureHttpClient(client =>
             {
                 client.BaseAddress = new Uri("https://www.githudb.com"); // error in link so that exception handlers are called
-                    client.Timeout = TimeSpan.FromSeconds(3);
+                client.Timeout = TimeSpan.FromSeconds(3);
             })
             .AddHttpMessageHandler<RequestExceptionHandlingBehavior>()
             .AddHttpMessageHandler<RequestStatisticsBehavior>()

@@ -75,10 +75,9 @@ internal class IdentityService : IIdentityService
         if (validatedToken is null)
             return AuthenticationResult.Fail(IdentityErrors.InvalidToken);
 
-        var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
+        var expirationValue = validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value;
+        var expiryDateUnix = long.Parse(expirationValue);
         var expiryDateTimeUtc = DateTime.UnixEpoch.AddSeconds(expiryDateUnix);
-
         var now = _timeProvider.GetUtcNow().UtcDateTime;
 
         if (expiryDateTimeUtc > now)
@@ -108,6 +107,7 @@ internal class IdentityService : IIdentityService
         //await _authenticationGateWay.UpdateRefreshToken(storedRefreshToken);
 
         var userId = validatedToken.Claims.Single(x => x.Type == "id").Value;
+
         var user = await _userManager.FindByIdAsync(userId);
 
         return await GenerateAuthenticationResultForUserAsync(user);
@@ -155,12 +155,14 @@ internal class IdentityService : IIdentityService
 
         var now = _timeProvider.GetUtcNow().UtcDateTime;
         var key = Encoding.ASCII.GetBytes(_jwtSettings.CurrentValue.Secret);
+
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = now.AddHours(_jwtSettings.CurrentValue.TokenLifetime.Minutes),
             SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
         };
+
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
 

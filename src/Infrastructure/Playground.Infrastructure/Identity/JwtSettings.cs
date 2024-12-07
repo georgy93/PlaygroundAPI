@@ -1,9 +1,8 @@
-﻿namespace Playground.Infrastructure.Identity
-{
-    internal class JwtSettings
-    {
-        public string Secret { get; set; }
+﻿namespace Playground.Infrastructure.Identity;
 
-        public TimeSpan TokenLifetime { get; set; }
-    }
+internal record JwtSettings
+{
+    public string Secret { get; init; }
+
+    public TimeSpan TokenLifetime { get; init; }
 }
