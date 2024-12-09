@@ -1,66 +1,65 @@
-﻿namespace Playground.IntegrationTests
+﻿namespace Playground.IntegrationTests;
+
+using API;
+using Configuration;
+using Infrastructure.Identity.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Testing;
+using System;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+
+public abstract class IntegrationTest : IDisposable
 {
-    using API;
-    using Configuration;
-    using Infrastructure.Identity.Models;
-    using Microsoft.AspNetCore.Authentication.JwtBearer;
-    using Microsoft.AspNetCore.Mvc.Testing;
-    using System;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Net.Http.Json;
-    using System.Threading.Tasks;
-
-    public abstract class IntegrationTest : IDisposable
+    protected IntegrationTest()
     {
-        protected IntegrationTest()
+        WebApplicationFactory = new CustomWebApplicationFactory();
+        TestClient = WebApplicationFactory.CreateClient();
+    }
+
+    protected HttpClient TestClient { get; }
+
+    protected WebApplicationFactory<Startup> WebApplicationFactory { get; }
+
+    public virtual void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
         {
-            WebApplicationFactory = new CustomWebApplicationFactory();
-            TestClient = WebApplicationFactory.CreateClient();
+            WebApplicationFactory.Dispose();
+            TestClient.Dispose();
         }
+    }
 
-        protected HttpClient TestClient { get; }
+    protected async Task AuthenticateAsync()
+    {
+        var jwt = await GetJwtAsync();
 
-        protected WebApplicationFactory<Startup> WebApplicationFactory { get; }
+        TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, jwt);
+    }
 
-        public virtual void Dispose()
+    private async Task<string> GetJwtAsync()
+    {
+        var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new UserRegistrationRequest
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
+            Email = "test@integration.com",
+            Password = "somePassword1234!"
+        });
 
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                WebApplicationFactory.Dispose();
-                TestClient.Dispose();
-            }
-        }
+        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>();
 
-        protected async Task AuthenticateAsync()
-        {
-            var jwt = await GetJwtAsync();
+        return authenticationResult.Token;
+    }
 
-            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, jwt);
-        }
-
-        private async Task<string> GetJwtAsync()
-        {
-            var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new UserRegistrationRequest
-            {
-                Email = "test@integration.com",
-                Password = "somePassword1234!"
-            });
-
-            var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>();
-
-            return authenticationResult.Token;
-        }
-
-        ~IntegrationTest()
-        {
-            Dispose(false);
-        }
+    ~IntegrationTest()
+    {
+        Dispose(false);
     }
 }

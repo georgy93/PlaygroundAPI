@@ -1,77 +1,76 @@
-﻿namespace Playground.IntegrationTests
+﻿namespace Playground.IntegrationTests;
+
+using API;
+using API.Behavior.Settings;
+using API.Controllers;
+using Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Xunit;
+
+public sealed class SecretControllerTests : IntegrationTest
 {
-    using API;
-    using API.Behavior.Settings;
-    using API.Controllers;
-    using Extensions;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.DependencyInjection;
-    using Microsoft.Extensions.Options;
-    using System.Net;
-    using System.Net.Http;
-    using System.Threading.Tasks;
-    using Xunit;
+    private static readonly string ApiKeyHeaderName = "ApiKey";
 
-    public sealed class SecretControllerTests : IntegrationTest
+    [Fact]
+    public void SecretController_Should_Contain_Correct_Endpoints()
     {
-        private static readonly string ApiKeyHeaderName = "ApiKey";
+        // Arrange
+        // Act
+        var controller = new SecretController();
 
-        [Fact]
-        public void SecretController_Should_Contain_Correct_Endpoints()
-        {
-            // Arrange
-            // Act
-            var controller = new SecretController();
+        // Assert
+        controller.ValidateEndpoint<HttpGetAttribute>(nameof(SecretController.GetSecret), ApiRoutes.Secret.Get);
+        controller.ValidateEndpoint<HttpGetAttribute>(nameof(SecretController.MapRequestAbortedToCancellationTokenParameterAsync), ApiRoutes.Secret.CancellationTokenMap);
+    }
 
-            // Assert
-            controller.ValidateEndpoint<HttpGetAttribute>(nameof(SecretController.GetSecret), ApiRoutes.Secret.Get);
-            controller.ValidateEndpoint<HttpGetAttribute>(nameof(SecretController.MapRequestAbortedToCancellationTokenParameterAsync), ApiRoutes.Secret.CancellationTokenMap);
-        }
+    [Fact]
+    public async Task Caling_SecretController_Get_WithCorrectApiKey_Should_SucceedAsync()
+    {
+        // Arrange
+        var apiKeySettings = WebApplicationFactory.Services.GetRequiredService<IOptions<ApiKeySettings>>();
+        var apiKey = apiKeySettings.Value.Key;
 
-        [Fact]
-        public async Task Caling_SecretController_Get_WithCorrectApiKey_Should_SucceedAsync()
-        {
-            // Arrange
-            var apiKeySettings = WebApplicationFactory.Services.GetRequiredService<IOptions<ApiKeySettings>>();
-            var apiKey = apiKeySettings.Value.Key;
+        // Act
+        var response = await SendRequestToSecretGetWithApiKeyAsync(apiKey);
 
-            // Act
-            var response = await SendRequestToSecretGetWithApiKeyAsync(apiKey);
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
 
-            // Assert
-            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-        }
+    [Fact]
+    public async Task Caling_SecretController_Get_WithIncorrectApiKey_Should_FailAsync()
+    {
+        // Arrange
+        var apiKeySettings = WebApplicationFactory.Services.GetRequiredService<IOptions<ApiKeySettings>>();
+        var wrongApiKey = apiKeySettings.Value.Key + "!@#";
 
-        [Fact]
-        public async Task Caling_SecretController_Get_WithIncorrectApiKey_Should_FailAsync()
-        {
-            // Arrange
-            var apiKeySettings = WebApplicationFactory.Services.GetRequiredService<IOptions<ApiKeySettings>>();
-            var wrongApiKey = apiKeySettings.Value.Key + "!@#";
+        // Act
+        var response = await SendRequestToSecretGetWithApiKeyAsync(wrongApiKey);
 
-            // Act
-            var response = await SendRequestToSecretGetWithApiKeyAsync(wrongApiKey);
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
 
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
+    [Fact]
+    public async Task Caling_SecretController_Get_WithMissingApiKey_Should_FailAsync()
+    {
+        // Arrange
+        // Act
+        var response = await TestClient.GetAsync(ApiRoutes.Secret.Get);
 
-        [Fact]
-        public async Task Caling_SecretController_Get_WithMissingApiKey_Should_FailAsync()
-        {
-            // Arrange
-            // Act
-            var response = await TestClient.GetAsync(ApiRoutes.Secret.Get);
+        // Assert
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+    }
 
-            // Assert
-            Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
-        }
+    private Task<HttpResponseMessage> SendRequestToSecretGetWithApiKeyAsync(string apiKey)
+    {
+        TestClient.DefaultRequestHeaders.Add(ApiKeyHeaderName, apiKey);
 
-        private Task<HttpResponseMessage> SendRequestToSecretGetWithApiKeyAsync(string apiKey)
-        {
-            TestClient.DefaultRequestHeaders.Add(ApiKeyHeaderName, apiKey);
-
-            return TestClient.GetAsync(ApiRoutes.Secret.Get);
-        }
+        return TestClient.GetAsync(ApiRoutes.Secret.Get);
     }
 }

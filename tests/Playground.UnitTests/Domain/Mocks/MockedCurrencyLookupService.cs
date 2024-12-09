@@ -1,10 +1,6 @@
-﻿namespace Playground.UnitTests.Domain.Mocks
+﻿namespace Playground.UnitTests.Domain.Mocks;
+
+internal class MockedCurrencyLookupService : ICurrencyLookupService
 {
-    internal class MockedCurrencyLookupService : ICurrencyLookupService
-    {
-        public bool IsSupported(string currencyCode)
-        {
-            return true;
-        }
-    }
+    public bool IsSupported(string currencyCode) => true;
 }
