@@ -1,77 +1,76 @@
-﻿namespace Playground.Domain.ValueObjects
+﻿namespace Playground.Domain.ValueObjects;
+
+using Services;
+
+public class Money : ValueObject
 {
-    using Playground.Domain.Services;
+    private string _displayValue;
 
-    public class Money : ValueObject
+    /// <summary>
+    /// Constructor for EF
+    /// </summary>
+    protected Money()
+    { }
+
+    internal Money(decimal amount, string currency)
     {
-        private string _displayValue;
+        Amount = Guard.Against.Negative(amount, message: "Amount cannot be negative!"); ;
+        Currency = Guard.Against.NullOrWhiteSpace(currency, message: "Currency not provided!").ToUpper();
+    }
 
-        /// <summary>
-        /// Constructor for EF
-        /// </summary>
-        protected Money()
-        { }
+    public static Money FromAmount(decimal amount, string currency, ICurrencyLookupService currencyLookupService) => currencyLookupService.IsSupported(currency)
+        ? new Money(amount, currency)
+        : throw new CurrencyNotSupportedException(currency);
 
-        internal Money(decimal amount, string currency)
+    public decimal Amount { get; private init; }
+
+    public string Currency { get; private init; }
+
+    public override string ToString()
+    {
+        if (string.IsNullOrEmpty(_displayValue))
         {
-            Amount = Guard.Against.Negative(amount, message: "Amount cannot be negative!"); ;
-            Currency = Guard.Against.NullOrWhiteSpace(currency, message: "Currency not provided!").ToUpper();
+            var formattedAmount = Amount.ToString("0.00");
+
+            _displayValue = string.Join(' ', formattedAmount, Currency);
         }
 
-        public static Money FromAmount(decimal amount, string currency, ICurrencyLookupService currencyLookupService) => currencyLookupService.IsSupported(currency)
-            ? new Money(amount, currency)
-            : throw new CurrencyNotSupportedException(currency);
+        return _displayValue;
+    }
 
-        public decimal Amount { get; private init; }
+    protected override IEnumerable<object> GetEqualityComponents()
+    {
+        yield return Amount;
+        yield return Currency;
+    }
 
-        public string Currency { get; private init; }
+    public static Money operator +(Money left, Money right)
+    {
+        Guard.Against.Null(left);
+        Guard.Against.Null(right);
 
-        public override string ToString()
-        {
-            if (string.IsNullOrEmpty(_displayValue))
-            {
-                var formattedAmount = Amount.ToString("0.00");
+        ValidateEqualCurrency(left, right);
 
-                _displayValue = string.Join(' ', formattedAmount, Currency);
-            }
+        return new Money(left.Amount + right.Amount, left.Currency);
+    }
 
-            return _displayValue;
-        }
+    public static Money operator -(Money left, Money right)
+    {
+        Guard.Against.Null(left);
+        Guard.Against.Null(right);
 
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Amount;
-            yield return Currency;
-        }
+        ValidateEqualCurrency(left, right);
 
-        public static Money operator +(Money left, Money right)
-        {
-            Guard.Against.Null(left);
-            Guard.Against.Null(right);
+        var newAmount = left.Amount - right.Amount;
+        if (newAmount < 0)
+            throw new InvalidOperationException("Ammount cannot be negative");
 
-            ValidateEqualCurrency(left, right);
+        return new Money(newAmount, left.Currency);
+    }
 
-            return new Money(left.Amount + right.Amount, left.Currency);
-        }
-
-        public static Money operator -(Money left, Money right)
-        {
-            Guard.Against.Null(left);
-            Guard.Against.Null(right);
-
-            ValidateEqualCurrency(left, right);
-
-            var newAmount = left.Amount - right.Amount;
-            if (newAmount < 0)
-                throw new InvalidOperationException("Ammount cannot be negative");
-
-            return new Money(newAmount, left.Currency);
-        }
-
-        private static void ValidateEqualCurrency(Money left, Money right)
-        {
-            if (!string.Equals(left.Currency, right.Currency))
-                throw new CurrencyMismatchException(left, right);
-        }
+    private static void ValidateEqualCurrency(Money left, Money right)
+    {
+        if (!string.Equals(left.Currency, right.Currency))
+            throw new CurrencyMismatchException(left, right);
     }
 }

@@ -1,15 +1,14 @@
-﻿namespace Playground.API.Swagger
+﻿namespace Playground.API.Swagger;
+
+public record SwaggerSettings
 {
-    public class SwaggerSettings
-    {
-        public string Description { get; set; }
+    public string Description { get; init; }
 
-        public string JsonRoute { get; set; }
+    public string JsonRoute { get; init; }
 
-        public string Title { get; set; }
+    public string Title { get; init; }
 
-        public string UIEndpoint { get; set; }
+    public string UIEndpoint { get; init; }
 
-        public string Version { get; set; }
-    }
+    public string Version { get; init; }
 }

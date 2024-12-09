@@ -2,5 +2,5 @@
 
 public interface ICurrencyLookupService
 {
-    public bool IsSupported(string currencyCode);
+    bool IsSupported(string currencyCode);
 }
