@@ -15,7 +15,6 @@ internal class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnecti
     private readonly int _retryCount;
     private readonly SemaphoreSlim _semaphoreSlim = new(1, 1);
 
-    private IConnection _connection;
     private volatile bool _disposed;
 
     public DefaultRabbitMQPersistentConnection(IConnectionFactory connectionFactory, ILogger<DefaultRabbitMQPersistentConnection> logger, int retryCount = 3)
@@ -25,12 +24,14 @@ internal class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnecti
         _retryCount = retryCount;
     }
 
-    public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
+    public IConnection Connection { get; private set; }
+
+    public bool IsConnected => Connection is { IsOpen: true } && !_disposed;
 
     public async Task<IChannel> CreateChannelAsync(CancellationToken cancellationToken)
     {
         if (IsConnected)
-            return await _connection.CreateChannelAsync(cancellationToken: cancellationToken);
+            return await Connection.CreateChannelAsync(cancellationToken: cancellationToken);
 
         throw new InvalidOperationException("No RabbitMQ connections are available to perform this action");
     }
@@ -42,7 +43,8 @@ internal class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnecti
 
         try
         {
-            await _connection.DisposeAsync();
+            if (Connection is not null)
+                await Connection.DisposeAsync();
         }
         catch (IOException ex)
         {
@@ -54,21 +56,27 @@ internal class DefaultRabbitMQPersistentConnection : IRabbitMQPersistentConnecti
 
     public async Task<bool> TryConnectAsync(CancellationToken cancellationToken)
     {
+        if (IsConnected)
+            return true;
+
         _logger.LogInformation("RabbitMQ Client is trying to connect");
 
         await _semaphoreSlim.WaitAsync(cancellationToken);
 
+        if (IsConnected)
+            return true;
+
         try
         {
-            await CreateRetryPolicy().ExecuteAsync(async () => _connection = await _connectionFactory.CreateConnectionAsync(cancellationToken));
+            await CreateRetryPolicy().ExecuteAsync(async () => Connection = await _connectionFactory.CreateConnectionAsync(cancellationToken));
 
             if (IsConnected)
             {
-                _connection.ConnectionShutdownAsync += OnConnectionShutdownAsync;
-                _connection.CallbackExceptionAsync += OnCallbackExceptionAsync;
-                _connection.ConnectionBlockedAsync += OnConnectionBlockedAsync;
+                Connection.ConnectionShutdownAsync += OnConnectionShutdownAsync;
+                Connection.CallbackExceptionAsync += OnCallbackExceptionAsync;
+                Connection.ConnectionBlockedAsync += OnConnectionBlockedAsync;
 
-                _logger.LogInformation("RabbitMQ Client acquired a persistent connection to '{HostName}' and is subscribed to failure events", _connection.Endpoint.HostName);
+                _logger.LogInformation("RabbitMQ Client acquired a persistent connection to '{HostName}' and is subscribed to failure events", Connection.Endpoint.HostName);
 
                 return true;
             }

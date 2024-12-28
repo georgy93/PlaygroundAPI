@@ -13,15 +13,15 @@ public static class DependencyInjection
     {
         services
             .AddHealthChecks()
-            .AddRabbitMQ((sp, options) =>
+            .AddRabbitMQ(async sp =>
             {
-                var rabbitMqSettings = sp.GetRequiredService<IOptions<RabbitMqSettings>>().Value;
-                var connectionFactory = rabbitMqSettings.ToConnectionFactory();
+                var connection = sp.GetRequiredService<IRabbitMQPersistentConnection>();
 
-                connectionFactory.ClientProvidedName = $"{rabbitMqSettings.ClientProvidedConnectionName}_HealthCheck";
-                options.ConnectionFactory = connectionFactory;
+                await connection.TryConnectAsync(CancellationToken.None);
 
-            }, name: "RabbitMQ");
+                return connection.Connection;
+
+            }, name: "RabbitMQ", timeout: TimeSpan.FromSeconds(3));
 
         return services
             .Configure<RabbitMqSettings>(configuration.GetSection(nameof(RabbitMqSettings)))

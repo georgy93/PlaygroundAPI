@@ -19,7 +19,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Startup>
         {
             builder.ConfigureServices(services =>
             {
-                services.RemoveAll(typeof(AppDbContext));
+                services.RemoveAll<AppDbContext>();
                 services.AddDbContext<AppDbContext>(opts => opts.UseInMemoryDatabase("IntegrationTestsDb"));
             });
             builder.UseStartup<Startup>().UseTestServer();

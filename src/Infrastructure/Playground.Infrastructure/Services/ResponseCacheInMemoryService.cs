@@ -13,7 +13,7 @@ internal class ResponseCacheInMemoryService : IResponseCacheService
         _memoryCache = memoryCache;
     }
 
-    public string GetCachedResponse(string Key) => _memoryCache.Get<string>(Key);
+    public string GetCachedResponse(string key) => _memoryCache.Get<string>(key);
 
     public void RemoveCacheResponse(string key) => _memoryCache.Remove(key);
 

@@ -2,6 +2,8 @@
 
 public interface IRabbitMQPersistentConnection : IAsyncDisposable
 {
+    IConnection Connection { get; }
+
     bool IsConnected { get; }
 
     Task<bool> TryConnectAsync(CancellationToken cancellationToken);

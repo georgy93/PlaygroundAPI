@@ -87,7 +87,7 @@ public static class DependencyInjection
 
         services
             .AddHealthChecks()
-            .AddMongoDb(mongoConnectionString, timeout: TimeSpan.FromSeconds(3));
+            .AddMongoDb(timeout: TimeSpan.FromSeconds(3));
 
         return services.AddSingleton(provider =>
         {

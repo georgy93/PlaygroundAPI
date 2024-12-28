@@ -8,9 +8,6 @@ public class CreateOrderDraftCommand : IRequest<OrderDraftDto>
 
     internal class CreateOrderDraftCommandHandler : IRequestHandler<CreateOrderDraftCommand, OrderDraftDto>
     {
-        private readonly IOrderRepository _orderRepository;
-
-        // Using DI to inject infrastructure persistence Repositories
         public CreateOrderDraftCommandHandler()
         {
         }

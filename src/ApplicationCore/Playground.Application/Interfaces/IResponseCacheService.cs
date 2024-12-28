@@ -2,9 +2,9 @@
 
 public interface IResponseCacheService
 {
-    string GetCachedResponse(string cacheKey);
+    string GetCachedResponse(string key);
 
-    void CacheResponse(string cacheKey, object response, TimeSpan timeToLive);
+    void CacheResponse(string key, object response, TimeSpan timeToLive);
 
     void RemoveCacheResponse(string key);
 

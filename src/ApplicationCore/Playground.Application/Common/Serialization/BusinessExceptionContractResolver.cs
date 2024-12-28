@@ -2,10 +2,11 @@
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using System.Collections.Frozen;
 
 public class BusinessExceptionContractResolver : DefaultContractResolver
 {
-    private readonly IReadOnlySet<string> _excludedProperties = new HashSet<string>
+    private static readonly FrozenSet<string> _excludedProperties = new HashSet<string>
     {
         nameof(Exception.Data),
         nameof(Exception.HelpLink),
@@ -13,7 +14,8 @@ public class BusinessExceptionContractResolver : DefaultContractResolver
         nameof(Exception.Source),
         nameof(Exception.StackTrace),
         nameof(Exception.TargetSite)
-    };
+    }
+    .ToFrozenSet();
 
     public BusinessExceptionContractResolver()
     {

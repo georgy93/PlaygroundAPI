@@ -1,9 +1,9 @@
 ﻿namespace Playground.Application.Queries.GetOrderByIdQuery;
 
-using Common.Exceptions;  
+using Common.Exceptions;
 using Domain.Entities.Aggregates.OrderAggregate;
+using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
 
 public record GetOrderByIdQuery(int OrderId) : IRequest<GetOrderByIdQueryResult>
 {
@@ -43,7 +43,7 @@ public record GetOrderByIdQuery(int OrderId) : IRequest<GetOrderByIdQueryResult>
                 LEFT JOIN ordering.orderstatus os on o.OrderStatusId = os.Id
                 WHERE o.Id = {request.OrderId}");
 
-            var result = await query.QueryAsync<dynamic>(commandTimeout: 10);
+            var result = await query.QueryAsync<dynamic>(commandTimeout: 5, cancellationToken: cancellationToken);
 
             if (!result.Any())
                 throw new RecordNotFoundException(request.OrderId); // TODO: Use other exception

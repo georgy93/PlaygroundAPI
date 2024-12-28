@@ -1,9 +1,11 @@
 ﻿namespace Playground.Infrastructure.Messaging.Integration;
 
 using Application.Common.Integration;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.Extensions.Logging;
 using Polly;
 using Polly.Retry;
+using RabbitMQ.Client;
 
 internal class IntegrationEventsService : IIntegrationEventsService
 {
@@ -30,12 +32,13 @@ internal class IntegrationEventsService : IIntegrationEventsService
 
             await policy.ExecuteAsync(async () =>
             {
-                //var properties = channel.CreateBasicProperties();
+                //IChannel channel; // get this from rabit mq;
+                //var properties = channel.b();
                 //properties.DeliveryMode = 2; // persistent
 
                 _logger.LogTrace("Publishing event to RabbitMQ: {Id}", integrationEvent.Id);
-
-                //channel.BasicPublish(
+                await Task.Delay(1);
+                //await channel.BasicPublishAsync(
                 //    exchange: BROKER_NAME,
                 //    routingKey: eventName,
                 //    mandatory: true,
@@ -53,10 +56,7 @@ internal class IntegrationEventsService : IIntegrationEventsService
         }
     }
 
-    public Task SaveEventAndPlaygroundChangesAsync(IntegrationEvent integrationEvent)
-    {
-        return _integrationEventLogService.SaveEventAndPlaygroundChangesAsync(integrationEvent);
-    }
+    public Task SaveEventAndPlaygroundChangesAsync(IntegrationEvent integrationEvent) => _integrationEventLogService.SaveEventAndPlaygroundChangesAsync(integrationEvent);
 
     public void Dispose()
     {
