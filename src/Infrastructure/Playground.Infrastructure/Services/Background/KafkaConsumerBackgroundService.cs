@@ -81,7 +81,7 @@ internal class KafkaConsumerBackgroundService : BackgroundService
     {
         try
         {
-            var delayMs = DateTime.Now.Subtract(ping.CreatedAt).TotalSeconds;
+            var delayMs = DateTimeOffset.Now.Subtract(ping.CreatedAt).TotalSeconds;
 
             _logger.LogInformation("Pong for {Number} after {DelayMs} ms delay", ping.Number, delayMs);
         }
