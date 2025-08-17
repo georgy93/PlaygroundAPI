@@ -1,13 +1,12 @@
-﻿namespace Playground.Persistence.EntityFramework.EntitiesConfiguration
-{
-    using Domain.Entities;
+﻿namespace Playground.Persistence.EntityFramework.EntitiesConfiguration;
 
-    internal class VersionedEntityConfiguration : IEntityTypeConfiguration<VersionedEntity>
+using Domain.Entities;
+
+internal class VersionedEntityConfiguration : IEntityTypeConfiguration<VersionedEntity>
+{
+    public void Configure(EntityTypeBuilder<VersionedEntity> builder)
     {
-        public void Configure(EntityTypeBuilder<VersionedEntity> builder)
-        {
-            // Versioned entity https://www.learnentityframeworkcore.com/concurrency
-            builder.Property(x => x.RowVersion).IsRowVersion();
-        }
+        // Versioned entity https://www.learnentityframeworkcore.com/concurrency
+        builder.Property(x => x.RowVersion).IsRowVersion();
     }
 }

@@ -1,27 +1,26 @@
-﻿namespace Playground.Persistence.EntityFramework.Extensions
+﻿namespace Playground.Persistence.EntityFramework.Extensions;
+
+using Domain.SeedWork;
+using MediatR;
+
+internal static class DbContextExtensions
 {
-    using Domain.SeedWork;
-    using MediatR;
-
-    internal static class DbContextExtensions
+    public static async Task DispatchDomainEventsAsync(this AppDbContext appDbContext, IMediator mediator)
     {
-        public static async Task DispatchDomainEventsAsync(this AppDbContext appDbContext, IMediator mediator)
-        {
-            var domainEntitiesWithPendingEvents = appDbContext
-                .ChangeTracker
-                .Entries<IDomainEntity>()
-                .Where(entry => entry.Entity.DomainEvents.Any());
+        var domainEntitiesWithPendingEvents = appDbContext
+            .ChangeTracker
+            .Entries<IDomainEntity>()
+            .Where(entry => entry.Entity.DomainEvents.Any());
 
-            var domainEvents = domainEntitiesWithPendingEvents
-                .SelectMany(entry => entry.Entity.DomainEvents)
-                .ToList();
+        var domainEvents = domainEntitiesWithPendingEvents
+            .SelectMany(entry => entry.Entity.DomainEvents)
+            .ToList();
 
-            domainEntitiesWithPendingEvents
-                .ToList()
-                .ForEach(entity => entity.Entity.ClearDomainEvents());
+        domainEntitiesWithPendingEvents
+            .ToList()
+            .ForEach(entity => entity.Entity.ClearDomainEvents());
 
-            foreach (INotification domainEvent in domainEvents)
-                await mediator.Publish(domainEvent);
-        }
+        foreach (INotification domainEvent in domainEvents)
+            await mediator.Publish(domainEvent);
     }
 }
