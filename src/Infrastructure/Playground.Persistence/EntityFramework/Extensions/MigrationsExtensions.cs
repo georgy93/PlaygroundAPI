@@ -6,31 +6,34 @@ using Microsoft.Extensions.Logging;
 
 public static class MigrationsExtensions
 {
-    public static async Task MigrateDataBaseAsync<TDbContext>(this IHost host, Func<TDbContext, IServiceProvider, Task> seedAsync = null)
-        where TDbContext : DbContext
+    extension(IHost host)
     {
-        using var serviceScope = host.Services.CreateScope();
-
-        var services = serviceScope.ServiceProvider;
-        var logger = services.GetRequiredService<ILogger<TDbContext>>();
-        var dbContext = services.GetRequiredService<TDbContext>();
-        var dbContextName = typeof(TDbContext).Name;
-
-        try
+        public async Task MigrateDataBaseAsync<TDbContext>(Func<TDbContext, IServiceProvider, Task> seedAsync = null)
+            where TDbContext : DbContext
         {
-            logger.LogInformation("Migrating database associated with context {DbContextName}", dbContextName);
+            using var serviceScope = host.Services.CreateScope();
 
-            await dbContext.Database.MigrateAsync();
+            var services = serviceScope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<TDbContext>>();
+            var dbContext = services.GetRequiredService<TDbContext>();
+            var dbContextName = typeof(TDbContext).Name;
 
-            if (seedAsync != null)
-                await seedAsync(dbContext, services);
+            try
+            {
+                logger.LogInformation("Migrating database associated with context {DbContextName}", dbContextName);
 
-            logger.LogInformation("Migrated database associated with context {DbContextName}", dbContextName);
-        }
-        catch (Exception ex)
-        {
-            logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", dbContextName);
-            throw;
+                await dbContext.Database.MigrateAsync();
+
+                if (seedAsync != null)
+                    await seedAsync(dbContext, services);
+
+                logger.LogInformation("Migrated database associated with context {DbContextName}", dbContextName);
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", dbContextName);
+                throw;
+            }
         }
     }
 }

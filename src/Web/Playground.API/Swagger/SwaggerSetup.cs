@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Net.Http.Headers;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using System.IO;
 using System.Reflection;
 
@@ -29,7 +29,19 @@ public static class SwaggerSetup
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.ApiKey
             });
-            opt.AddSecurityRequirement(CreateSecurityRequirement());
+            opt.AddSecurityRequirement(x =>
+            {
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    //Reference = new OpenApiReference
+                    //{
+                    //    Id = JwtBearerDefaults.AuthenticationScheme,
+                    //    Type = ReferenceType.SecurityScheme
+                    //}
+                };
+
+                return new OpenApiSecurityRequirement()/* { { securityScheme, Array.Empty<string>() } }*/;
+            });
             opt.IncludeXmlComments(GetCommentsPath());
 
             /* <PropertyGroup>
@@ -40,20 +52,7 @@ public static class SwaggerSetup
         })
         .AddSwaggerGenNewtonsoftSupport() // fix performance issue on swagger UI
         .AddSwaggerExamplesFromAssemblyOf<Startup>();
-
-    private static OpenApiSecurityRequirement CreateSecurityRequirement()
-    {
-        var securityScheme = new OpenApiSecurityScheme
-        {
-            Reference = new OpenApiReference
-            {
-                Id = JwtBearerDefaults.AuthenticationScheme,
-                Type = ReferenceType.SecurityScheme
-            }
-        };
-
-        return new() { { securityScheme, Array.Empty<string>() } };
-    }
+   
 
     private static string GetCommentsPath()
     {
