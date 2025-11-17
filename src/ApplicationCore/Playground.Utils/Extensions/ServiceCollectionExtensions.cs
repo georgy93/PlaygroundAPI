@@ -5,27 +5,30 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection ReplaceWithSingleton<TService, TImplementation>(this IServiceCollection services)
-        where TService : class
-        where TImplementation : class, TService
-        => services.Replace(new ServiceDescriptor(typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton));
-
-    public static IServiceCollection ReplaceWithScoped<TService, TImplementation>(this IServiceCollection services)
-        where TService : class
-        where TImplementation : class, TService
-        => services.Replace(new ServiceDescriptor(typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped));
-
-    public static IServiceCollection ReplaceWithTransient<TService, TImplementation>(this IServiceCollection services)
-        where TService : class
-        where TImplementation : class, TService
-        => services.Replace(new ServiceDescriptor(typeof(TService), typeof(TImplementation), ServiceLifetime.Transient));
-
-    public static IServiceCollection RemoveFirstImplementationOf<TService>(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        var descriptor = services.FirstOrDefault(d => d.ImplementationType == typeof(TService));
-        if (descriptor is not null)
-            services.Remove(descriptor);
+        public IServiceCollection ReplaceWithSingleton<TService, TImplementation>()
+            where TService : class
+            where TImplementation : class, TService
+            => services.Replace(new ServiceDescriptor(typeof(TService), typeof(TImplementation), ServiceLifetime.Singleton));
 
-        return services;
+        public IServiceCollection ReplaceWithScoped<TService, TImplementation>()
+            where TService : class
+            where TImplementation : class, TService
+            => services.Replace(new ServiceDescriptor(typeof(TService), typeof(TImplementation), ServiceLifetime.Scoped));
+
+        public IServiceCollection ReplaceWithTransient<TService, TImplementation>()
+            where TService : class
+            where TImplementation : class, TService
+            => services.Replace(new ServiceDescriptor(typeof(TService), typeof(TImplementation), ServiceLifetime.Transient));
+
+        public IServiceCollection RemoveFirstImplementationOf<TService>()
+        {
+            var descriptor = services.FirstOrDefault(d => d.ImplementationType == typeof(TService));
+            if (descriptor is not null)
+                services.Remove(descriptor);
+
+            return services;
+        }
     }
 }

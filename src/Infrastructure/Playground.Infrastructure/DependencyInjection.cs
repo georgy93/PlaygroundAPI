@@ -25,98 +25,98 @@ using System.Text;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) => services
-        .AddMemoryCache()
-        .AddCustomAuthentication(configuration)
-        .AddCustomAuthorization()
-        .AddServices()
-        .AddBackgroundServices()
-        .AddGateways()
-        .AddKafkaMessaging()
-        .AddRabbitMqMessaging(configuration)
-        .AddIntegrationEventsMessaging();
-
-    private static IServiceCollection AddCustomAuthentication(this IServiceCollection services, IConfiguration configuration)
+    extension(IServiceCollection services)
     {
-        var jwtSettings = new JwtSettings();
-        var jwtSettingsConfig = configuration.GetSection(nameof(JwtSettings));
+        public IServiceCollection AddInfrastructure(IConfiguration configuration) => services
+            .AddMemoryCache()
+            .AddCustomAuthentication(configuration)
+            .AddCustomAuthorization()
+            .AddServices()
+            .AddBackgroundServices()
+            .AddGateways()
+            .AddKafkaMessaging()
+            .AddRabbitMqMessaging(configuration)
+            .AddIntegrationEventsMessaging();
 
-        jwtSettingsConfig.Bind(jwtSettings);
-
-        var tokenValidationParameters = new TokenValidationParameters
+        private IServiceCollection AddCustomAuthentication(IConfiguration configuration)
         {
-            ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
-            ValidateIssuer = false,
-            ValidateAudience = false,
-            RequireExpirationTime = false,
-            ValidateLifetime = true
-        };
+            var jwtSettings = new JwtSettings();
+            var jwtSettingsConfig = configuration.GetSection(nameof(JwtSettings));
 
-        services.AddAuthentication(auth =>
-        {
-            auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(jwt =>
-        {
-            jwt.SaveToken = true;
-            jwt.TokenValidationParameters = tokenValidationParameters;
-        });
+            jwtSettingsConfig.Bind(jwtSettings);
 
-        return services
-            .Configure<JwtSettings>(jwtSettingsConfig)
-            .AddSingleton(tokenValidationParameters)
-            .AddScoped<IIdentityService, IdentityService>();
-    }
-
-    private static IServiceCollection AddCustomAuthorization(this IServiceCollection services) => services
-        .AddSingleton<IAuthorizationHandler, WorksForCompanyHandler>()
-        .AddAuthorizationCore(options =>
-        {
-            options.AddPolicy(AuthorizationPolicies.MustWorkForMe, policy =>
+            var tokenValidationParameters = new TokenValidationParameters
             {
-                policy.AddRequirements(new WorksForCompanyRequirement("me.com"));
-            });
-        });
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Secret)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                RequireExpirationTime = false,
+                ValidateLifetime = true
+            };
 
-    private static IServiceCollection AddServices(this IServiceCollection services) => services
-        .AddSingleton<IResponseCacheService, ResponseCacheInMemoryService>()
-        .AddSingleton<TimeProvider>(TimeProvider.System);
-
-    private static IServiceCollection AddBackgroundServices(this IServiceCollection services) => services
-        .AddHostedService<KafkaConsumerBackgroundService>()
-        .AddHostedService<KafkaProducerBackgroundService>()
-        .AddHostedService<IntegrationEventsPublisherBackgroundService>();
-
-    private static IServiceCollection AddGateways(this IServiceCollection services)
-    {
-        services
-            .AddRefitClient<ISomeServiceGateway>(new RefitSettings())
-            .ConfigureHttpClient(client =>
+            services.AddAuthentication(auth =>
             {
-                client.BaseAddress = new Uri("https://www.githudb.com"); // error in link so that exception handlers are called
-                client.Timeout = TimeSpan.FromSeconds(3);
+                auth.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddHttpMessageHandler<RequestExceptionHandlingBehavior>()
-            .AddHttpMessageHandler<RequestStatisticsBehavior>()
-            .AddPolicyHandler(HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromMilliseconds(60)))
-            .AddPolicyHandler(HttpPolicyExtensions
-                .HandleTransientHttpError()
-                .CircuitBreakerAsync(3, TimeSpan.FromSeconds(1))
-            );
+            .AddJwtBearer(jwt =>
+            {
+                jwt.SaveToken = true;
+                jwt.TokenValidationParameters = tokenValidationParameters;
+            });
 
-        return services
-            .AddTransient<RequestExceptionHandlingBehavior>()
-            .AddTransient<RequestStatisticsBehavior>();
-    }
+            return services
+                .Configure<JwtSettings>(jwtSettingsConfig)
+                .AddSingleton(tokenValidationParameters)
+                .AddScoped<IIdentityService, IdentityService>();
+        }
 
-    private static IServiceCollection AddIntegrationEventsMessaging(this IServiceCollection services)
-    {
-        return services
+        private IServiceCollection AddCustomAuthorization() => services
+            .AddSingleton<IAuthorizationHandler, WorksForCompanyHandler>()
+            .AddAuthorizationCore(options =>
+            {
+                options.AddPolicy(AuthorizationPolicies.MustWorkForMe, policy =>
+                {
+                    policy.AddRequirements(new WorksForCompanyRequirement("me.com"));
+                });
+            });
+
+        private IServiceCollection AddServices() => services
+            .AddSingleton<IResponseCacheService, ResponseCacheInMemoryService>()
+            .AddSingleton<TimeProvider>(TimeProvider.System);
+
+        private IServiceCollection AddBackgroundServices() => services
+            .AddHostedService<KafkaConsumerBackgroundService>()
+            .AddHostedService<KafkaProducerBackgroundService>()
+            .AddHostedService<IntegrationEventsPublisherBackgroundService>();
+
+        private IServiceCollection AddGateways()
+        {
+            services
+                .AddRefitClient<ISomeServiceGateway>(new RefitSettings())
+                .ConfigureHttpClient(client =>
+                {
+                    client.BaseAddress = new Uri("https://www.githudb.com"); // error in link so that exception handlers are called
+                    client.Timeout = TimeSpan.FromSeconds(3);
+                })
+                .AddHttpMessageHandler<RequestExceptionHandlingBehavior>()
+                .AddHttpMessageHandler<RequestStatisticsBehavior>()
+                .AddPolicyHandler(HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromMilliseconds(60)))
+                .AddPolicyHandler(HttpPolicyExtensions
+                    .HandleTransientHttpError()
+                    .CircuitBreakerAsync(3, TimeSpan.FromSeconds(1))
+                );
+
+            return services
+                .AddTransient<RequestExceptionHandlingBehavior>()
+                .AddTransient<RequestStatisticsBehavior>();
+        }
+
+        private IServiceCollection AddIntegrationEventsMessaging() => services
             .AddScoped<IIntegrationEventsService, IntegrationEventsService>();
     }
 }

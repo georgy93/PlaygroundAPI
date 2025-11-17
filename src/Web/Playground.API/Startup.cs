@@ -23,10 +23,10 @@ public class Startup
     public virtual void ConfigureServices(IServiceCollection services)
     {
         services
-              .AddApplication()
-              .AddInfrastructure(Configuration)
-              .AddPersistence(Configuration)
-              .AddPresentation(Configuration);
+            .AddApplication()
+            .AddInfrastructure(Configuration)
+            .AddPersistence(Configuration)
+            .AddPresentation(Configuration);
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

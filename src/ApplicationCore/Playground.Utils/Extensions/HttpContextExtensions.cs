@@ -16,8 +16,8 @@ public static class HttpContextExtensions
     extension(HttpContext context)
     {
         public async Task WriteResultAsync<TResult>(IActionResultExecutor<ObjectResult> resultExecutor,
-                                                           TResult result,
-                                                           int statusCode = StatusCodes.Status500InternalServerError)
+                                                    TResult result,
+                                                    int statusCode = StatusCodes.Status500InternalServerError)
         {
             var routeData = context.GetRouteData() ?? EmptyRouteData;
             var actionContext = new ActionContext(context, routeData, EmptyActionDescriptor);
