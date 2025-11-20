@@ -1,14 +1,13 @@
-﻿namespace Playground.Persistence.EntityFramework
+﻿namespace Playground.Persistence.EntityFramework;
+
+public class IntegrationEventLogDbContextFactory : IDesignTimeDbContextFactory<IntegrationEventLogDbContext>
 {
-    public class IntegrationEventLogDbContextFactory : IDesignTimeDbContextFactory<IntegrationEventLogDbContext>
+    public IntegrationEventLogDbContext CreateDbContext(string[] args)
     {
-        public IntegrationEventLogDbContext CreateDbContext(string[] args)
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<IntegrationEventLogDbContext>();
+        var optionsBuilder = new DbContextOptionsBuilder<IntegrationEventLogDbContext>();
 
-            optionsBuilder.UseSqlServer(".", options => options.MigrationsAssembly(GetType().Assembly.GetName().Name));
+        optionsBuilder.UseSqlServer(".", options => options.MigrationsAssembly(GetType().Assembly.GetName().Name));
 
-            return new IntegrationEventLogDbContext(optionsBuilder.Options);
-        }
+        return new IntegrationEventLogDbContext(optionsBuilder.Options);
     }
 }

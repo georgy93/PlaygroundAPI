@@ -1,14 +1,13 @@
-﻿namespace Playground.Persistence.EntityFramework.Repositories
+﻿namespace Playground.Persistence.EntityFramework.Repositories;
+
+using Abstract;
+using Domain.Entities.Aggregates.BuyerAggregate;
+
+internal class BuyerRepository : EFRepository<long, Buyer>, IBuyerRepository
 {
-    using Abstract;
-    using Domain.Entities.Aggregates.BuyerAggregate;
+    public BuyerRepository(AppDbContext appDbContext) : base(appDbContext)
+    { }
 
-    internal class BuyerRepository : EFRepository<long, Buyer>, IBuyerRepository
-    {
-        public BuyerRepository(AppDbContext appDbContext) : base(appDbContext)
-        { }
-
-        public override async Task<Buyer> LoadAsync(long id, CancellationToken cancellationToken) => await DbSet
-            .FindAsync([id], cancellationToken);
-    }
+    public override async Task<Buyer> LoadAsync(long id, CancellationToken cancellationToken) => await DbSet
+        .FindAsync([id], cancellationToken);
 }
