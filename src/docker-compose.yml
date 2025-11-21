@@ -34,7 +34,7 @@ services:
   # https://github.com/lkurzyniec/netcore-boilerplate init db example
   sqlServer:
     container_name: sqlServer
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2025-latest
     ports: 
       - "1433:1433"
     environment:
@@ -61,7 +61,7 @@ services:
       
   rabbitMq:
     container_name: rabbitMq
-    image: rabbitmq:3-management
+    image: rabbitmq:4.2.0-management
     ports:
       - "5672:5672"
       - "15672:15672"
