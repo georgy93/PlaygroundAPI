@@ -6,10 +6,9 @@ using Microsoft.Extensions.Logging;
 
 public static class MigrationsExtensions
 {
-    extension(IHost host)
+    extension<TDbContext>(IHost host) where TDbContext : DbContext
     {
-        public async Task MigrateDataBaseAsync<TDbContext>(Func<TDbContext, IServiceProvider, Task> seedAsync = null)
-            where TDbContext : DbContext
+        public async Task MigrateDataBaseAsync(Func<TDbContext, IServiceProvider, Task> seedAsync = null)
         {
             using var serviceScope = host.Services.CreateScope();
 
@@ -32,6 +31,7 @@ public static class MigrationsExtensions
             catch (Exception ex)
             {
                 logger.LogError(ex, "An error occurred while migrating the database used on context {DbContextName}", dbContextName);
+
                 throw;
             }
         }

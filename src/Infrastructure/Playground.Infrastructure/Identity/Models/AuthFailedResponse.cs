@@ -1,7 +1,6 @@
-﻿namespace Playground.Infrastructure.Identity.Models
+﻿namespace Playground.Infrastructure.Identity.Models;
+
+public record AuthFailedResponse(IEnumerable<string> Errors = null)
 {
-    public record AuthFailedResponse(IEnumerable<string> Errors = null)
-    {
-        public IEnumerable<string> Errors { get; init; } = Errors ?? [];
-    }
+    public IEnumerable<string> Errors { get; init; } = Errors ?? [];
 }

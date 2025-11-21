@@ -1,15 +1,14 @@
-﻿namespace Playground.Infrastructure.HealthCheck
+﻿namespace Playground.Infrastructure.HealthCheck;
+
+public record HealthCheck
 {
-    public record HealthCheck
-    {
-        public string Status { get; init; }
+    public string Status { get; init; }
 
-        public string Component { get; init; }
+    public string Component { get; init; }
 
-        public string Description { get; init; }
+    public string Description { get; init; }
 
-        public TimeSpan Duration { get; init; }
+    public TimeSpan Duration { get; init; }
 
-        public Exception Error { get; init; }
-    }
+    public Exception Error { get; init; }
 }

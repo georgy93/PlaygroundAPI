@@ -2,11 +2,20 @@
 
 public static class CollectionExtensions
 {
-    public static bool IsNullOrEmpty<TSource>(this IEnumerable<TSource> source) => source == null || !source.Any();
+    extension<TSource>(IEnumerable<TSource> source)
+    {
+        public bool IsNullOrEmpty() => source == null || !source.Any();
 
-    public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source) => source ?? [];
+        public IEnumerable<TSource> EmptyIfNull() => source ?? [];
+    }
 
-    public static List<T> EmptyIfNull<T>(this List<T> list) => list ?? [];
+    extension<TSource>(List<TSource> source)
+    {
+        public List<TSource> EmptyIfNull<T>() => source ?? [];
+    }
 
-    public static T[] EmptyIfNull<T>(this T[] arr) => arr ?? [];
+    extension<TSource>(TSource[] source)
+    {
+        public TSource[] EmptyIfNull<T>() => source ?? [];
+    }
 }

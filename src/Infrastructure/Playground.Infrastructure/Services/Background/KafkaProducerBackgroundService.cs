@@ -61,7 +61,12 @@ internal class KafkaProducerBackgroundService : BackgroundService
         {
             var ping = new Ping(rnd.Next(1, 101), DateTime.UtcNow);
 
-            await _producer.ProduceAsync(_topic, new Message<Null, Ping> { Value = ping }, cancellationToken);
+            var message = new Message<Null, Ping>
+            {
+                Value = ping
+            };
+
+            await _producer.ProduceAsync(_topic, message, cancellationToken);
         }
     }
 }

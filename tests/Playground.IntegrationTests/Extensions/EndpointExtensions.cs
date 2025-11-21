@@ -7,19 +7,22 @@ using Xunit;
 
 internal static class EndpointExtensions
 {
-    internal static void ValidateEndpoint<THttpMethodAttribute>(this ControllerBase controller, string endpointName, string url)
-        where THttpMethodAttribute : HttpMethodAttribute
+    extension(ControllerBase controller)
     {
-        var endpointHttpAtribute = controller.GetEndpointMetaData<THttpMethodAttribute>(endpointName);
+        internal void ValidateEndpoint<THttpMethodAttribute>(string endpointName, string url)
+            where THttpMethodAttribute : HttpMethodAttribute
+        {
+            var endpointHttpAtribute = controller.GetEndpointMetaData<THttpMethodAttribute>(endpointName);
 
-        Assert.NotNull(endpointHttpAtribute);
-        Assert.Equal(endpointHttpAtribute.Template, url);
+            Assert.NotNull(endpointHttpAtribute);
+            Assert.Equal(endpointHttpAtribute.Template, url);
+        }
+
+        private THttpMethodAttribute GetEndpointMetaData<THttpMethodAttribute>(string methodName)
+            where THttpMethodAttribute : HttpMethodAttribute
+            => controller
+            .GetType()
+            .GetMethod(methodName)
+            .GetCustomAttribute<THttpMethodAttribute>();
     }
-
-    private static THttpMethodAttribute GetEndpointMetaData<THttpMethodAttribute>(this ControllerBase controller, string methodName)
-        where THttpMethodAttribute : HttpMethodAttribute
-        => controller
-        .GetType()
-        .GetMethod(methodName)
-        .GetCustomAttribute<THttpMethodAttribute>();
 }
