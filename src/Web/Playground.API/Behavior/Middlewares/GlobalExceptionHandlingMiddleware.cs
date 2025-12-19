@@ -73,6 +73,7 @@ public class GlobalExceptionHandlingMiddleware
         if (context.Response.HasStarted)
         {
             _logger.LogWarning("Cannot handle error. The response has already started.");
+
             ExceptionDispatchInfo.Throw(exception);
         }
     }
