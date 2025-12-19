@@ -51,8 +51,7 @@ public class Startup
            .UseCustomHealthChecks("/health")
            .UseAuthentication()
            .UseAuthorization()
-           //.UseMiddleware<GlobalExceptionHandlingMiddleware>()
-           .UseExceptionHandler()
+           .UseExceptionHandler(_ => { })
            .UseEndpoints(endpoints =>
            {
                endpoints.MapControllers();
