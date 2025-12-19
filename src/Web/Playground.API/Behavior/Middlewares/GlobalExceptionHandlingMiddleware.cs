@@ -12,17 +12,14 @@ public class GlobalExceptionHandlingMiddleware
     private readonly RequestDelegate _next;
     private readonly ILogger<GlobalExceptionHandlingMiddleware> _logger;
     private readonly IOptionsMonitor<ErrorHandlingSettings> _errorHandlingSettings;
-    private readonly IActionResultExecutor<ObjectResult> _executor;
     private readonly BusinessExceptionContractResolver _businessExceptionContractResolver;
 
     public GlobalExceptionHandlingMiddleware(RequestDelegate next,
                                              IOptionsMonitor<ErrorHandlingSettings> errorHandlingSettings,
-                                             IActionResultExecutor<ObjectResult> executor,
                                              ILogger<GlobalExceptionHandlingMiddleware> logger)
     {
         _next = next;
         _errorHandlingSettings = errorHandlingSettings;
-        _executor = executor;
         _logger = logger;
         _businessExceptionContractResolver = new BusinessExceptionContractResolver();
     }
@@ -53,7 +50,9 @@ public class GlobalExceptionHandlingMiddleware
 
         var errorResponse = CreateErrorResponse(businessException);
 
-        await context.WriteResultAsync(_executor, errorResponse, businessException.HttpStatusCode);
+        context.Response.StatusCode = businessException.HttpStatusCode;
+
+        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
@@ -64,7 +63,9 @@ public class GlobalExceptionHandlingMiddleware
 
         var errorResponse = CreateDefaultErrorResponse(exception);
 
-        await context.WriteResultAsync(_executor, errorResponse, StatusCodes.Status500InternalServerError);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 
     private void ReThrowIfResponseHasStarted(HttpContext context, Exception exception)

@@ -12,15 +12,11 @@ public class GlobalExceptionHandler : IExceptionHandler
 {
     private readonly ILogger<GlobalExceptionHandler> _logger;
     private readonly IOptionsMonitor<ErrorHandlingSettings> _errorHandlingSettings;
-    private readonly IActionResultExecutor<ObjectResult> _executor;
     private readonly BusinessExceptionContractResolver _businessExceptionContractResolver;
 
-    public GlobalExceptionHandler(IOptionsMonitor<ErrorHandlingSettings> errorHandlingSettings,
-                                  IActionResultExecutor<ObjectResult> executor,
-                                  ILogger<GlobalExceptionHandler> logger)
+    public GlobalExceptionHandler(IOptionsMonitor<ErrorHandlingSettings> errorHandlingSettings, ILogger<GlobalExceptionHandler> logger)
     {
         _errorHandlingSettings = errorHandlingSettings;
-        _executor = executor;
         _logger = logger;
         _businessExceptionContractResolver = new BusinessExceptionContractResolver();
     }
@@ -58,7 +54,9 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         var errorResponse = CreateErrorResponse(businessException);
 
-        await context.WriteResultAsync(_executor, errorResponse, businessException.HttpStatusCode);
+        context.Response.StatusCode = businessException.HttpStatusCode;
+
+        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
@@ -67,7 +65,9 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         var errorResponse = CreateDefaultErrorResponse(exception);
 
-        await context.WriteResultAsync(_executor, errorResponse, StatusCodes.Status500InternalServerError);
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+
+        await context.Response.WriteAsJsonAsync(errorResponse);
     }
 
     private ErrorResponse CreateErrorResponse(BusinessException businessException) => new()
