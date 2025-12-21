@@ -63,6 +63,8 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Elastic.Serilog.Sinks" Version="9.0.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -72,7 +74,6 @@
     <PackageReference Include="Serilog.AspNetCore" Version="10.0.0" />
     <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="10.0.0" />
-    <PackageReference Include="Serilog.Sinks.Elasticsearch" Version="10.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="10.1.0" />
@@ -80,7 +81,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\ApplicationCore\Playground.Application\Playground.Application.csproj" />
-    <ProjectReference Include="..\..\ApplicationCore\Playground.FluentValidations\Playground.FluentValidations.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Playground.Infrastructure\Playground.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Playground.Persistence\Playground.Persistence.csproj" />
   </ItemGroup>

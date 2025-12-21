@@ -3,7 +3,6 @@ namespace Playground.API;
 using Persistence.EntityFramework;
 using Persistence.EntityFramework.Extensions;
 using Serilog;
-using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
 using Utils.Helpers;
 
