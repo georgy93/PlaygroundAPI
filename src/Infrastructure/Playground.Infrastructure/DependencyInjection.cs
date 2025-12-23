@@ -20,7 +20,6 @@ using Polly.Extensions.Http;
 using Refit;
 using Services;
 using Services.Background;
-using System;
 using System.Text;
 
 public static class DependencyInjection

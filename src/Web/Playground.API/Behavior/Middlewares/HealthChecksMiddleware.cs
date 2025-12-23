@@ -2,21 +2,23 @@
 
 using Infrastructure.HealthCheck;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using System.Net.Mime;
-using Utils.Extensions;
+using System.Text.Json;
 
 public static class HealthChecksMiddleware
 {
+    private static readonly JsonSerializerOptions DefaultJsonSerializerOptions = new()
+    {
+        WriteIndented = true
+    };
+
     public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app, PathString healthCheckPath) => app
         .UseHealthChecks(healthCheckPath, new HealthCheckOptions()
         {
             ResponseWriter = async (context, report) =>
             {
-                context.Response.ContentType = MediaTypeNames.Application.Json;
+                var hcReport = HealthCheckHelper.CreateHealthCheckResponse(report);
 
-                var hcReport = HealthCheckHelper.CreateHealthCheckResponse(report).Beautify();
-
-                await context.Response.WriteAsync(hcReport);
+                await context.Response.WriteAsJsonAsync(hcReport, DefaultJsonSerializerOptions, context.RequestAborted);
             }
         });
 }

@@ -3,7 +3,6 @@
 using Microsoft.AspNetCore.Http;
 using System.Text;
 
-// TODO use the better method
 public static class HttpContextExtensions
 {
     extension(HttpContext context)
