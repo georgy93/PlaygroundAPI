@@ -27,9 +27,9 @@ public class GlobalExceptionHandler : IExceptionHandler
             return false;
 
         if (exception is BusinessException businessEx)
-            await HandleBusinessExceptionAsync(httpContext, businessEx);
+            await HandleBusinessExceptionAsync(httpContext, businessEx, cancellationToken);
         else
-            await HandleExceptionAsync(httpContext, exception);
+            await HandleExceptionAsync(httpContext, exception, cancellationToken);
 
         return true;
     }
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler : IExceptionHandler
         return true;
     }
 
-    private async Task HandleBusinessExceptionAsync(HttpContext context, BusinessException businessException)
+    private async Task HandleBusinessExceptionAsync(HttpContext context, BusinessException businessException, CancellationToken cancellationToken)
     {
         var logData = new { context.Request.Path, Error = businessException };
 
@@ -56,10 +56,10 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         context.Response.StatusCode = businessException.HttpStatusCode;
 
-        await context.Response.WriteAsJsonAsync(errorResponse);
+        await context.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
     }
 
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception, CancellationToken cancellationToken)
     {
         _logger.LogError(exception, "{Path}", context.Request.Path);
 
@@ -67,7 +67,7 @@ public class GlobalExceptionHandler : IExceptionHandler
 
         context.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-        await context.Response.WriteAsJsonAsync(errorResponse);
+        await context.Response.WriteAsJsonAsync(errorResponse, cancellationToken);
     }
 
     private ErrorResponse CreateErrorResponse(BusinessException businessException) => new()
