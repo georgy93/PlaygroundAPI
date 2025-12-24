@@ -4,8 +4,6 @@ using DTOs;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Threading;
 
 public class ModelValidationHandler : IExceptionHandler
 {
