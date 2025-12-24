@@ -11,14 +11,17 @@ public static class HealthChecksMiddleware
         WriteIndented = true
     };
 
-    public static IApplicationBuilder UseCustomHealthChecks(this IApplicationBuilder app, PathString healthCheckPath) => app
-        .UseHealthChecks(healthCheckPath, new HealthCheckOptions()
-        {
-            ResponseWriter = async (context, report) =>
+    extension(IApplicationBuilder app)
+    {
+        public IApplicationBuilder UseCustomHealthChecks(PathString healthCheckPath) => app
+            .UseHealthChecks(healthCheckPath, new HealthCheckOptions()
             {
-                var hcReport = HealthCheckHelper.CreateHealthCheckResponse(report);
+                ResponseWriter = async (context, report) =>
+                {
+                    var hcReport = HealthCheckHelper.CreateHealthCheckResponse(report);
 
-                await context.Response.WriteAsJsonAsync(hcReport, DefaultJsonSerializerOptions, context.RequestAborted);
-            }
-        });
+                    await context.Response.WriteAsJsonAsync(hcReport, DefaultJsonSerializerOptions, context.RequestAborted);
+                }
+            });
+    }
 }
