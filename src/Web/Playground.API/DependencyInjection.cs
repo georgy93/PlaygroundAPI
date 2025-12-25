@@ -1,5 +1,6 @@
 ﻿namespace Playground.API;
 
+using Behavior.Filters;
 using Behavior.Middlewares;
 using Behavior.Settings;
 using FluentValidation;
@@ -23,7 +24,10 @@ public static class DependencyInjection
             services.AddExceptionHandler<GlobalExceptionHandler>();
 
             services
-                .AddControllers()
+                .AddControllers(opts =>
+                {
+                    opts.Filters.Add<AutoFluentValidationFilter>();
+                })
                 .AddNewtonsoftJson(jsonOptions =>
                 {
                     jsonOptions.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
