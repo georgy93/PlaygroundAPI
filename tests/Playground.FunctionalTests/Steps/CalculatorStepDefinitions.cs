@@ -1,61 +1,54 @@
-﻿namespace Playground.FunctionalTests.Steps
+﻿namespace Playground.FunctionalTests.Steps;
+
+using Reqnroll;
+
+[Binding]
+public sealed class CalculatorStepDefinitions
 {
-    using TechTalk.SpecFlow;
+    private readonly ScenarioContext _scenarioContext;
 
-    // https://docs.specflow.org/projects/getting-started/en/latest/GettingStarted/Step9.html add report UI
-
-    /* D:\repos\PlaygroundAPI\tests\Playground.FunctionalTests\bin\Debug\net5.0>livingdoc test-assembly Playground.FunctionalTests.dll -t TestExecution.json*/
-
-    [Binding]
-    public sealed class CalculatorStepDefinitions
+    public CalculatorStepDefinitions(ScenarioContext scenarioContext)
     {
-        // For additional details on SpecFlow step definitions see https://go.specflow.org/doc-stepdef
+        _scenarioContext = scenarioContext;
+    }
 
-        private readonly ScenarioContext _scenarioContext;
+    [Given("the first number is (.*)")]
+    public void GivenTheFirstNumberIs(int number)
+    {
+        //TODO: implement arrange (precondition) logic
+        // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
+        // To use the multiline text or the table argument of the scenario,
+        // additional string/Table parameters can be defined on the step definition
+        // method. 
 
-        public CalculatorStepDefinitions(ScenarioContext scenarioContext)
-        {
-            _scenarioContext = scenarioContext;
-        }
+        throw new PendingStepException();
+    }
 
-        [Given("the first number is (.*)")]
-        public void GivenTheFirstNumberIs(int number)
-        {
-            //TODO: implement arrange (precondition) logic
-            // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
-            // To use the multiline text or the table argument of the scenario,
-            // additional string/Table parameters can be defined on the step definition
-            // method. 
+    [Given("the second number is (.*)")]
+    public void GivenTheSecondNumberIs(int number)
+    {
+        //TODO: implement arrange (precondition) logic
+        // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
+        // To use the multiline text or the table argument of the scenario,
+        // additional string/Table parameters can be defined on the step definition
+        // method. 
 
-            _scenarioContext.Pending();
-        }
+        throw new PendingStepException();
+    }
 
-        [Given("the second number is (.*)")]
-        public void GivenTheSecondNumberIs(int number)
-        {
-            //TODO: implement arrange (precondition) logic
-            // For storing and retrieving scenario-specific data see https://go.specflow.org/doc-sharingdata
-            // To use the multiline text or the table argument of the scenario,
-            // additional string/Table parameters can be defined on the step definition
-            // method. 
+    [When("the two numbers are added")]
+    public void WhenTheTwoNumbersAreAdded()
+    {
+        //TODO: implement act (action) logic
 
-            _scenarioContext.Pending();
-        }
+        throw new PendingStepException();
+    }
 
-        [When("the two numbers are added")]
-        public void WhenTheTwoNumbersAreAdded()
-        {
-            //TODO: implement act (action) logic
+    [Then("the result should be (.*)")]
+    public void ThenTheResultShouldBe(int result)
+    {
+        //TODO: implement assert (verification) logic
 
-            _scenarioContext.Pending();
-        }
-
-        [Then("the result should be (.*)")]
-        public void ThenTheResultShouldBe(int result)
-        {
-            //TODO: implement assert (verification) logic
-
-            _scenarioContext.Pending();
-        }
+        throw new PendingStepException();
     }
 }
