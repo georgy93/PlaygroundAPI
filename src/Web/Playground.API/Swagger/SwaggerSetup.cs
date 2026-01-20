@@ -25,9 +25,12 @@ public static class SwaggerSetup
             opt.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
             {
                 Description = "JWT Authorization header using the bearer scheme",
+                BearerFormat = "JWT",
                 Name = HeaderNames.Authorization,
                 In = ParameterLocation.Header,
-                Type = SecuritySchemeType.ApiKey
+                Type = SecuritySchemeType.Http,
+                Scheme = JwtBearerDefaults.AuthenticationScheme
+
             });
             opt.AddSecurityRequirement(x =>
             {
@@ -52,7 +55,7 @@ public static class SwaggerSetup
         })
         .AddSwaggerGenNewtonsoftSupport() // fix performance issue on swagger UI
         .AddSwaggerExamplesFromAssemblyOf<Startup>();
-   
+
 
     private static string GetCommentsPath()
     {
