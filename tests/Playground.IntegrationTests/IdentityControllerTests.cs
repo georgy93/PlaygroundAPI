@@ -42,7 +42,7 @@ public class IdentityControllerTests : IntegrationTest
 
         // Act
         var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, userRegistrationRequest);
-        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>();
+        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>(TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -63,7 +63,7 @@ public class IdentityControllerTests : IntegrationTest
         await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, userRegistrationRequest);
 
         var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, userRegistrationRequest);
-        var authenticationResult = await response.Content.ReadAsAsync<AuthFailedResponse>();
+        var authenticationResult = await response.Content.ReadAsAsync<AuthFailedResponse>(TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -92,7 +92,7 @@ public class IdentityControllerTests : IntegrationTest
         await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, userRegistrationRequest);
 
         var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Login, userLoginRequest);
-        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>();
+        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>(TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -111,7 +111,7 @@ public class IdentityControllerTests : IntegrationTest
 
         // Act
         var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Login, userLoginRequest);
-        var authenticationResult = await response.Content.ReadAsAsync<AuthFailedResponse>();
+        var authenticationResult = await response.Content.ReadAsAsync<AuthFailedResponse>(TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
@@ -140,7 +140,7 @@ public class IdentityControllerTests : IntegrationTest
         await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, userRegistrationRequest);
 
         var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Login, userLoginRequest);
-        var authenticationResult = await response.Content.ReadAsAsync<AuthFailedResponse>();
+        var authenticationResult = await response.Content.ReadAsAsync<AuthFailedResponse>(TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);

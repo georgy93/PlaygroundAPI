@@ -9,7 +9,9 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 public abstract class IntegrationTest : IDisposable
 {
@@ -17,9 +19,12 @@ public abstract class IntegrationTest : IDisposable
     {
         WebApplicationFactory = new CustomWebApplicationFactory();
         TestClient = WebApplicationFactory.CreateClient();
+        TestCancellationToken = TestContext.Current.CancellationToken;
     }
 
     protected HttpClient TestClient { get; }
+
+    protected CancellationToken TestCancellationToken { get; }
 
     protected WebApplicationFactory<Startup> WebApplicationFactory { get; }
 
@@ -38,14 +43,14 @@ public abstract class IntegrationTest : IDisposable
         }
     }
 
-    protected async Task AuthenticateAsync()
+    protected async Task AuthenticateAsync(CancellationToken cancellationToken)
     {
-        var jwt = await GetJwtAsync();
+        var jwt = await GetJwtAsync(cancellationToken);
 
         TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(JwtBearerDefaults.AuthenticationScheme, jwt);
     }
 
-    private async Task<string> GetJwtAsync()
+    private async Task<string> GetJwtAsync(CancellationToken cancellationToken)
     {
         var response = await TestClient.PostAsJsonAsync(ApiRoutes.Identity.Register, new UserRegistrationRequest
         {
@@ -53,7 +58,7 @@ public abstract class IntegrationTest : IDisposable
             Password = "somePassword1234!"
         });
 
-        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>();
+        var authenticationResult = await response.Content.ReadAsAsync<AuthSuccessResponse>(cancellationToken);
 
         return authenticationResult.Token;
     }

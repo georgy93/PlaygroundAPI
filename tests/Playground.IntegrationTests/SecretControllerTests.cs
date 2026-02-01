@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -36,7 +37,7 @@ public sealed class SecretControllerTests : IntegrationTest
         var apiKey = apiKeySettings.Value.Key;
 
         // Act
-        var response = await SendRequestToSecretGetWithApiKeyAsync(apiKey);
+        var response = await SendRequestToSecretGetWithApiKeyAsync(apiKey, TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -50,7 +51,7 @@ public sealed class SecretControllerTests : IntegrationTest
         var wrongApiKey = apiKeySettings.Value.Key + "!@#";
 
         // Act
-        var response = await SendRequestToSecretGetWithApiKeyAsync(wrongApiKey);
+        var response = await SendRequestToSecretGetWithApiKeyAsync(wrongApiKey, TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
@@ -61,16 +62,16 @@ public sealed class SecretControllerTests : IntegrationTest
     {
         // Arrange
         // Act
-        var response = await TestClient.GetAsync(ApiRoutes.Secret.Get);
+        var response = await TestClient.GetAsync(ApiRoutes.Secret.Get, TestCancellationToken);
 
         // Assert
         Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
     }
 
-    private Task<HttpResponseMessage> SendRequestToSecretGetWithApiKeyAsync(string apiKey)
+    private Task<HttpResponseMessage> SendRequestToSecretGetWithApiKeyAsync(string apiKey, CancellationToken cancellationToken)
     {
         TestClient.DefaultRequestHeaders.Add(ApiKeyHeaderName, apiKey);
 
-        return TestClient.GetAsync(ApiRoutes.Secret.Get);
+        return TestClient.GetAsync(ApiRoutes.Secret.Get, cancellationToken);
     }
 }
