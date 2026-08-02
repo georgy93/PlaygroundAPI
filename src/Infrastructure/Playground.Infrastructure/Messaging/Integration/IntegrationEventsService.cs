@@ -37,6 +37,7 @@ internal class IntegrationEventsService : IIntegrationEventsService
                 //properties.DeliveryMode = 2; // persistent
 
                 _logger.LogTrace("Publishing event to RabbitMQ: {Id}", integrationEvent.Id);
+
                 await Task.Delay(1);
                 //await channel.BasicPublishAsync(
                 //    exchange: BROKER_NAME,

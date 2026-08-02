@@ -43,7 +43,7 @@ public static class SwaggerSetup
                     //}
                 };
 
-                return new OpenApiSecurityRequirement()/* { { securityScheme, Array.Empty<string>() } }*/;
+                return []/* { { securityScheme, Array.Empty<string>() } }*/;
             });
             opt.IncludeXmlComments(GetCommentsPath());
 
