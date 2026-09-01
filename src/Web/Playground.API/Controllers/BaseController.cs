@@ -2,6 +2,7 @@
 
 using DTOs;
 using MediatR;
+using Microsoft.AspNetCore.Http.Features;
 using System.Net.Mime;
 
 [ApiController] // this will return automatically error response when model state is invalid
@@ -12,5 +13,5 @@ using System.Net.Mime;
 [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
 public abstract class BaseController : ControllerBase
 {
-    protected IMediator Mediator => HttpContext.Features.Get<IMediator>();
+    protected IMediator Mediator => HttpContext.Features.GetRequiredFeature<IMediator>();
 }
