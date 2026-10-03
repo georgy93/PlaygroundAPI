@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.1.79" />
+    <PackageReference Include="Dapper" Version="2.1.89" />
     <PackageReference Include="Dapper-QueryBuilder" Version="2.0.0" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.0.2" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.11" />
-	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
-	<PackageReference Include="Refit" Version="15.2.0" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="7.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.12" />
+	<PackageReference Include="Refit" Version="16.3.0" />
   </ItemGroup>
 
   <ItemGroup>
